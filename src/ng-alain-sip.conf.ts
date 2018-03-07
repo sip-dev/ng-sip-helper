@@ -23,7 +23,7 @@ const config = [
                 //是否需要输入内容, 并压入%input%变更, 如果没有，取config.input
                 "input": false
             }, {
-                "param": "-- --e=dev -pc=\"proxy.conf.js\"",
+                "param": "-- -e=dev -pc=\"proxy.conf.js\"",
                 "title": "Dev Proxy"
             }, {
                 "param": "-- --hmr -e=hmr",
@@ -31,6 +31,9 @@ const config = [
             }, {
                 "param": "-- --hmr -e=hmr -pc=\"proxy.conf.js\"",
                 "title": "HMR Proxy"
+            }, {
+                "param": "-- --prod -e=prod -pc=\"proxy.conf.js\"",
+                "title": "PROD Proxy"
             }
         ]
     },
