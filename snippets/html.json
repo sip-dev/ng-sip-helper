@@ -1,0 +1,472 @@
+{
+    "sip-minitable": {
+        "prefix": "sip-minitable",
+        "body": [
+            "<sip-minitable [manager]=\"${tableManager}\">",
+            "\t<sip-minicolumn name=\"Status\" title=\"状态\">",
+            "\t\t<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
+            "\t\t\t{{column.getFilterText(data.Status)}}",
+            "\t\t</ng-template>",
+            "\t\t<ng-template #editor let-row=\"row\" let-column=\"column\" let-data=\"data\">",
+            "\t\t\t<nz-input [(ngModel)]=\"data.Status\"></nz-input>",
+            "\t\t</ng-template>",
+            "\t</sip-minicolumn>",
+            "\t<sip-minicolumn name=\"regionName\" title=\"区域\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\"></sip-minicolumn>",
+            "</sip-minitable>$0"
+        ],
+        "description": "minitable"
+    },
+    "sip-minicolumn": {
+        "prefix": "sip-minicolumn",
+        "body": [
+            "<sip-minicolumn name=\"regionName\" title=\"区域\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\"></sip-minicolumn>$0"
+        ],
+        "description": "minicolumn"
+    },
+    "sip-minicolumn-formatter": {
+        "prefix": "sip-minicolumn-formatter",
+        "body": [
+            "<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
+            "\t{{column.getFilterText(data.Status)}}",
+            "</ng-template>$0"
+        ],
+        "description": "minicolumn-formatter"
+    },
+    "sip-minicolumn-editor": {
+        "prefix": "sip-minicolumn-editor",
+        "body": [
+            "<ng-template #editor let-row=\"row\" let-column=\"column\" let-data=\"data\">",
+            "\t<nz-input [(ngModel)]=\"data.Status\"></nz-input>",
+            "</ng-template>$0"
+        ],
+        "description": "minicolumn-editor"
+    },
+    "sip-minicolumn-full": {
+        "prefix": "sip-minicolumn-full",
+        "body": [
+            "<sip-minicolumn name=\"Status\" title=\"状态\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\">",
+            "\t<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
+            "\t\t{{column.getFilterText(data.Status)}}",
+            "\t</ng-template>",
+            "\t<ng-template #editor let-row=\"row\" let-column=\"column\" let-data=\"data\">",
+            "\t\t<nz-input [(ngModel)]=\"data.Status\"></nz-input>",
+            "\t</ng-template>",
+            "</sip-minicolumn>$0"
+        ],
+        "description": "minicolumn-full"
+    },
+    "sip-contextmenu": {
+        "prefix": "sip-contextmenu",
+        "body": [
+            "<sip-contextmenu>",
+            "\t<sip-menu width=\"140px\">",
+            "\t\t<sip-menu-sub title=\"aaaa\" icon=\"anticon anticon-mail\">",
+            "\t\t\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
+            "\t\t\t<sip-menu-item-divider></sip-menu-item-divider>",
+            "\t\t\t<sip-menu-item title=\"aaaa2\" icon=\"anticon anticon-mail\"></sip-menu-item>",
+            "\t\t\t<sip-menu-group title=\"group1\">",
+            "\t\t\t\t<sip-menu-item title=\"group1111\" icon=\"anticon anticon-mail\"></sip-menu-item>",
+            "\t\t\t\t<sip-menu-item title=\"group2222\" icon=\"anticon anticon-mail\"></sip-menu-item>",
+            "\t\t\t</sip-menu-group>",
+            "\t\t</sip-menu-sub>",
+            "\t\t<sip-menu-sub title=\"bbbb\" icon=\"anticon anticon-appstore\"></sip-menu-sub>",
+            "\t</sip-menu>",
+            "</ng-contextmenu>$0"
+        ],
+        "description": "contextmenu"
+    },
+    "sip-contextmenu-tag": {
+        "prefix": "sip-contextmenu-tag",
+        "body": [
+            "<sip-contextmenu>",
+            "</sip-contextmenu>$0"
+        ],
+        "description": "contextmenu-tag"
+    },
+    "sip-menu": {
+        "prefix": "sip-menu",
+        "body": [
+            "<sip-menu width=\"140px\">",
+            "\t<sip-menu-sub title=\"aaaa\" icon=\"anticon anticon-mail\">",
+            "\t\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
+            "\t\t<sip-menu-item-divider></sip-menu-item-divider>",
+            "\t\t<sip-menu-item title=\"aaaa2\" icon=\"anticon anticon-mail\"></sip-menu-item>",
+            "\t\t<sip-menu-group title=\"group1\">",
+            "\t\t\t<sip-menu-item title=\"group1111\" icon=\"anticon anticon-mail\"></sip-menu-item>",
+            "\t\t\t<sip-menu-item title=\"group2222\" icon=\"anticon anticon-mail\"></sip-menu-item>",
+            "\t\t</sip-menu-group>",
+            "\t</sip-menu-sub>",
+            "\t<sip-menu-sub title=\"bbbb\" icon=\"anticon anticon-appstore\"></sip-menu-sub>",
+            "</sip-menu>$0"
+        ],
+        "description": "menu"
+    },
+    "sip-menu-sub": {
+        "prefix": "sip-menu-sub",
+        "body": [
+            "<sip-menu-sub title=\"text\" icon=\"anticon anticon-appstore\">",
+            "\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
+            "</sip-menu-sub>$0"
+        ],
+        "description": "menu-sub"
+    },
+    "sip-menu-group": {
+        "prefix": "sip-menu-group",
+        "body": [
+            "<sip-menu-group title=\"group1\">",
+            "\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
+            "</sip-menu-group>$0"
+        ],
+        "description": "menu-group"
+    },
+    "sip-menu-item": {
+        "prefix": "sip-menu-item",
+        "body": [
+            "<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>$0"
+        ],
+        "description": "menu-item"
+    },
+    "sip-menu-item-divider": {
+        "prefix": "sip-menu-item-divider",
+        "body": [
+            "<sip-menu-item-divider></sip-menu-item-divider>$0"
+        ],
+        "description": "menu-item-divider"
+    },
+    "sip-template": {
+        "prefix": "sip-template",
+        "body": [
+            "<ng-template #tmpl1 [ngIf]=\"(column.isEdit && row.isEdit)\">",
+            "</ng-template>$0"
+        ],
+        "description": "template"
+    },
+    "sip-container": {
+        "prefix": "sip-container",
+        "body": [
+            "<ng-container [ngTemplateOutlet]=\"column.formatter\" [ngTemplateOutletContext]=\"{row:row, column:column, data:row.data}\"></ng-container>$0"
+        ],
+        "description": "container"
+    },
+    "sip-searchConent": {
+        "prefix": "sip-searchConent",
+        "body": [
+            "<sip-searchConent [params]=\"${searchContent}\"></sip-searchConent>$0"
+        ],
+        "description": "searchConent"
+    },
+    "sip-page": {
+        "prefix": "sip-page",
+        "body": [
+            "<sip-page>",
+            "\t<sip-page-header navigator=\"导航标题\">",
+            "\t\t<ng-template #title>页面标题</ng-template>",
+            "\t\t<ng-template #desc>",
+            "\t\t\t页面描述",
+            "\t\t</ng-template>",
+            "\t</sip-page-header>",
+            "\t<sip-page-body>",
+            "\t\t页面内容",
+            "\t</sip-page-body>",
+            "</sip-page>$0"
+        ],
+        "description": "page"
+    },
+    "sip-page-header": {
+        "prefix": "sip-page-header",
+        "body": [
+            "<sip-page-header navigator=\"导航标题\">",
+            "\t<ng-template #title>页面标题</ng-template>",
+            "\t<ng-template #desc>",
+            "\t\t页面描述",
+            "\t</ng-template>",
+            "</sip-page-header>$0"
+        ],
+        "description": "page-header"
+    },
+    "sip-page-body": {
+        "prefix": "sip-page-body",
+        "body": [
+            "<sip-page-body>",
+            "\t页面内容",
+            "</sip-page-body>$0"
+        ],
+        "description": "page-body"
+    },
+    "sip-page-row": {
+        "prefix": "sip-page-row",
+        "body": [
+            "<div nz-row [nzGutter]=\"24\">$0",
+            "</div>"
+        ],
+        "description": "page-row"
+    },
+    "sip-page-col": {
+        "prefix": "sip-page-col",
+        "body": [
+            "<div nz-col [nzXl]=\"18\" [nzMd]=\"16\" >$0",
+            "</div>"
+        ],
+        "description": "page-col"
+    },
+    "sip-page-toolbar": {
+        "prefix": "sip-page-toolbar",
+        "body": [
+            "<sip-page-toolbar>",
+            "\t<button nz-button (click)=\"refresh()\" [nzType]=\"'default'\" class=\"mr-sm\">",
+            "\t\t<i class=\"anticon anticon-reload\"></i>",
+            "\t</button>",
+            "\t<button nz-button (click)=\"add()\" [nzType]=\"'primary'\" class=\"mr-sm\">",
+            "\t\t<i class=\"anticon anticon-plus\"></i><span>新建</span>",
+            "\t</button>",
+            "\t<nz-dropdown [nzTrigger]=\"'hover'\" [nzPlacement]=\"'bottomLeft'\" class=\"mr-sm\">",
+            "\t\t<button nz-button nz-dropdown ><i class=\"fa fa-ellipsis-v mr-sm\"></i><span>更多</span> <i class=\"anticon anticon-down\"></i></button>",
+            "\t\t<ul nz-menu>",
+            "\t\t\t<li nz-menu-item>重启</li>",
+            "\t\t\t<li nz-menu-item><a [routerLink]>修改IP绑定</a></li>",
+            "\t\t\t<li nz-menu-item><a (click)=\"expression\">挂接存储</a></li>",
+            "\t\t\t<li nz-menu-divider></li>",
+            "\t\t\t<li nz-menu-item><a [routerLink]>获取密码</a></li>",
+            "\t\t\t<li nz-menu-item><a (click)=\"expression\">重置密码</a></li>",
+            "\t\t\t<li nz-menu-divider></li>",
+            "\t\t\t<li nz-submenu>",
+            "\t\t\t\t<span title>更多</span>",
+            "\t\t\t\t<ul>",
+            "\t\t\t\t\t<li nz-menu-item><a [routerLink]>迁移实例</a></li>",
+            "\t\t\t\t\t<li nz-menu-item><a (click)=\"expression\">资源标签</a></li>",
+            "\t\t\t\t</ul>",
+            "\t\t\t</li>",
+            "\t\t</ul>",
+            "\t</nz-dropdown>",
+            "\t<nz-input [(ngModel)]=\"searchParams.Content\" (click)=\"search()\" name=\"Content\" [nzType]=\"'search'\" [nzPlaceHolder]=\"'请输入'\"  style=\"width:220px;vertical-align: bottom;\"></nz-input>",
+            "</sip-page-toolbar>$0"
+        ],
+        "description": "page-toolbar"
+    },
+    "sip-modal-header": {
+        "prefix": "sip-modal-header",
+        "body": [
+            "<sip-modal-header>",
+            "    <span>标题 - [ {{params.id}} ]</span>",
+            "</sip-modal-header>"
+        ],
+        "description": "modal-header"
+    },
+    "sip-modal-body": {
+        "prefix": "sip-modal-body",
+        "body": [
+            "$0<sip-modal-body>",
+            "    <div style=\"width:1000px\">",
+            "        <p>对话框的内容</p>",
+            "        <p>对话框的内容</p>",
+            "    </div>",
+            "</sip-modal-body>"
+        ],
+        "description": "modal-body"
+    },
+    "sip-modal-footer": {
+        "prefix": "sip-modal-footer",
+        "body": [
+            "$0<sip-modal-footer>",
+            "    <button nz-button [nzType]=\"'primary'\" [nzSize]=\"'large'\" (click)=\"save(\\$event)\" [nzLoading]=\"false\">",
+            "        提 交",
+            "    </button>",
+            "</sip-modal-footer>"
+        ],
+        "description": "modal-footer"
+    },
+    "sip-access": {
+        "prefix": "sip-access",
+        "body": [
+            "sipAccess=\"${create}\"$0"
+        ],
+        "description": "sipAccess"
+    },
+    "sip-RouterLink": {
+        "prefix": "sip-RouterLink",
+        "body": [
+            "[sipRouterLink]=\"['$0/sip/ui-demo/detail', {}]\""
+        ],
+        "description": "[sipRouterLink]"
+    },
+    "sip-show": {
+        "prefix": "sip-show",
+        "body": [
+            "[sipShow]=\"true"
+        ],
+        "description": "[sipShow]"
+    },
+    "sip-card": {
+        "prefix": "sip-card",
+        "body": [
+            "<sip-card title=\"\" [loading]=\"false\" [bordered]=\"false\" [noHovering]=\"true\" [noPadding]=\"false\">$0",
+            "</sip-card>"
+        ],
+        "description": "<div>"
+    },
+    "sip-form": {
+        "prefix": "sip-form",
+        "body": [
+            "<form nz-form [formGroup]=\"form\">$0",
+            "</form>"
+        ],
+        "description": "<form>"
+    },
+    "sip-form-row": {
+        "prefix": "sip-form-row",
+        "body": [
+            "<div nz-form-item nz-row>$0",
+            "</div>"
+        ],
+        "description": "<form nz-form-item nz-row>"
+    },
+    "sip-form-row-label": {
+        "prefix": "sip-form-row-label",
+        "body": [
+            "<div nz-form-label nz-col [nzSm]=\"4\" [nzXs]=\"24\">",
+            "    <label nz-form-item-required>${label}</label>",
+            "</div>$0"
+        ],
+        "description": "<div nz-form-label>"
+    },
+    "sip-form-row-container": {
+        "prefix": "sip-form-row-container",
+        "body": [
+            "<div nz-form-control nz-col [nzSm]=\"18\" [nzXs]=\"24\">",
+            "   ${container}$0",
+            "</div>"
+        ],
+        "description": "<div nz-form-container>"
+    },
+    "sip-form-validator-container": {
+        "prefix": "sip-form-validator-container",
+        "body": [
+            "<ng-container *ngIf=\"${form}?.\\$${name}.dirty || ${form}?.\\$${name}.touched\">",
+            "   ${container}$0",
+            "</ng-container>"
+        ],
+        "description": "validator-container"
+    },
+    "sip-form-validator": {
+        "prefix": "sip-form-validator",
+        "body": [
+            "<span nz-form-explain *ngIf=\"${form}.\\$${name}.errors?.${required}\">{{${form}.\\$${name}.errors.${required}Text}}</span>$0"
+        ],
+        "description": "validator"
+    },
+    "sip-form-validator-only": {
+        "prefix": "sip-form-validator-only",
+        "body": [
+            "<span nz-form-explain *ngIf=\"(${form}?.\\$${name}.dirty || ${form}?.\\$${name}.touched) && ${form}?.\\$${name}.errors?.${required}\">",
+            "   {{${form}.\\$${name}.errors.${required}Text}}",
+            "</span>$0"
+        ],
+        "description": "validator-only"
+    },
+    "sip-form-input": {
+        "prefix": "sip-form-input",
+        "body": [
+            "<nz-input formControlName=\"${num}\" nzType=\"text\"></nz-input>$0"
+        ],
+        "description": "input"
+    },
+    "sip-form-input-group": {
+        "prefix": "sip-form-input-group",
+        "body": [
+            "<nz-input-group [nzCompact]=\"true\">",
+            "    <nz-select formControlName=\"${name}Prefix\" style=\"width: 25%;\">",
+            "        <nz-option [nzLabel]=\"'+86'\" [nzValue]=\"'+86'\"></nz-option>",
+            "        <nz-option [nzLabel]=\"'+87'\" [nzValue]=\"'+87'\"></nz-option>",
+            "    </nz-select>",
+            "    <input formControlName=\"${name}\" nz-input style=\"width: 75%;\">",
+            "</nz-input-group>$0"
+        ],
+        "description": "input-group"
+    },
+    "sip-form-select": {
+        "prefix": "sip-form-select",
+        "body": [
+            "<nz-select formControlName=\"${name}\" [nzAllowClear]=\"false\" nzShowSearch>",
+            "    <nz-option *ngFor=\"let item of statuList\" [nzLabel]=\"item.text\" [nzValue]=\"item.value\">",
+            "    </nz-option>$0",
+            "</nz-select>"
+        ],
+        "description": "select"
+    },
+    "sip-form-select-multiple": {
+        "prefix": "sip-form-select-multiple",
+        "body": [
+            "<nz-select formControlName=\"${name}\" [nzAllowClear]=\"false\" nzMode=\"multiple\" nzNotFoundContent=\"无法找到\">",
+            "    <nz-option *ngFor=\"let item of statuList\" [nzLabel]=\"item.text\" [nzValue]=\"item.value\">",
+            "    </nz-option>$0",
+            "</nz-select>"
+        ],
+        "description": "select-multiple"
+    },
+    "sip-form-radio-group": {
+        "prefix": "sip-form-radio-group",
+        "body": [
+            "<nz-radio-group formControlName=\"${name}\">",
+            "    <label nz-radio [nzValue]=\"'normal'\">",
+            "        <span>Normal</span>",
+            "    </label>$0",
+            "</nz-radio-group>"
+        ],
+        "description": "radio-group"
+    },
+    "sip-form-radio-group-button": {
+        "prefix": "sip-form-radio-group-button",
+        "body": [
+            "<nz-radio-group formControlName=\"${name}\">",
+            "    <label nz-radio-button [nzValue]=\"'normal'\">",
+            "        <span>Normal</span>",
+            "    </label>$0",
+            "</nz-radio-group>"
+        ],
+        "description": "radio-group-button"
+    },
+    "sip-form-text": {
+        "prefix": "sip-form-text",
+        "body": [
+            "<div nz-form-extra>${text}$0</div>"
+        ],
+        "description": "form-text"
+    },
+    "sip-form-checkbox": {
+        "prefix": "sip-form-checkbox",
+        "body": [
+            "<label nz-checkbox formControlName=\"${name}\">",
+            "    <span>${text}$0</span>",
+            "</label>"
+        ],
+        "description": "checkbox"
+    },
+    "sip-form-datepicker": {
+        "prefix": "sip-form-datepicker",
+        "body": [
+            "<nz-datepicker formControlName=\"${name}\"></nz-datepicker>"
+        ],
+        "description": "datepicker"
+    },
+    "sip-form-textarea": {
+        "prefix": "sip-form-textarea",
+        "body": [
+            "<nz-input formControlName=\"${name}\" nzType=\"textarea\" nzRows=\"4\" nzPlaceHolder=\"\"></nz-input>$0"
+        ],
+        "description": "textarea"
+    },
+    "sip-form-divider": {
+        "prefix": "sip-form-divider",
+        "body": [
+            "<nz-divider nzTitle=\"\" nzDashed></nz-divider>$0"
+        ],
+        "description": "divider"
+    },
+    "sip-form-controlName": {
+        "prefix": "sip-form-controlName",
+        "body": [
+            "formControlName=\"${name}\"$0"
+        ],
+        "description": "controlName"
+    }
+}
