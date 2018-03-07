@@ -2,7 +2,7 @@
   "name": "ngsiphelper",
   "displayName": "ng-sip-helper",
   "description": "Run ng-sip-helper from vscode commandline.",
-  "icon": "images/angular.png",
+  "icon": "images/logo.png",
   "version": "1.0.0",
   "publisher": "winpzs",
   "bugs": {
