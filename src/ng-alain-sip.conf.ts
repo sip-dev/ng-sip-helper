@@ -59,6 +59,39 @@ const config = [
         "builtin": false,
         'children': [
             {
+                "title": "Module >",
+                "command": "sip-module",
+                "path": "%currentPath%",
+                "builtin": true,
+                "input": true,
+                "params": [
+                    {
+                        "param": "--ts --dir",
+                        "title": "创建目录, ts"
+                    },
+                    {
+                        "param": "--ts --routing --dir",
+                        "title": "创建目录, ts, Routing"
+                    },
+                    {
+                        "param": "--ts",
+                        "title": "ts"
+                    },
+                    {
+                        "param": "--ts --routing",
+                        "title": "ts, Routing"
+                    },
+                    {
+                        "param": "--routing",
+                        "title": "Routing"
+                    },
+                    {
+                        "param": "--spec",
+                        "title": "spec"
+                    }
+                ]
+            },
+            {
                 "title": "Page >",
                 "command": "sip-page",
                 "path": "%currentPath%",
