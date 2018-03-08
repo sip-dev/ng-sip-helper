@@ -1,6 +1,12 @@
 ## ng-sip-helper Changelog
 
-# 1.0.0 (2018-3-x)
+# 1.0.1 (2018-3-8)
+
+* Initial Version
+  * Fix Module Config
+  * Add Serve Prod Mode
+
+# 1.0.0 (2018-3-6)
 
 * Initial Version
   * Created extension pack
