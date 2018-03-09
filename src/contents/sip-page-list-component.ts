@@ -86,7 +86,9 @@ export class ${className} extends SipPage {
     tableManager: MinitableManager<any> = new MinitableManager<any>({
         // connstr: 'iaas',
         // sqlId: 'iaas_Instance.List.GetByOwnerID',
+        // restFun: (p) => { },
         multiSelect: true,
+        autoLoad: false,
         datas: this.nzdata,
         onSearch: (searchParams: object) => {
             Lib.extend(searchParams, {

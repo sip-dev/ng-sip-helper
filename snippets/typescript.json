@@ -91,6 +91,7 @@
             "\tconnstr: 'iaas',",
             "\tsqlId: 'iaas_Instance.List.GetByOwnerID',",
             "\tmultiSelect: true,",
+            "\tautoLoad: true,",
             "\t//datas: this.nzdata,",
             "\tonSearch: (searchParams: object) => {",
             "\t\tLib.extend(searchParams, {",

@@ -1,5 +1,10 @@
 ## ng-sip-helper Changelog
 
+# 1.0.2 (2018-3-x)
+
+* Initial Version
+  * OPT MinitableManager Tmpl
+
 # 1.0.1 (2018-3-8)
 
 * Initial Version
