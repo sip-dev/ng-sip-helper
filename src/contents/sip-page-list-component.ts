@@ -258,14 +258,14 @@ export class ${className} extends SipPage {
                     </nz-alert>
                 </div>
                 <sip-minitable [manager]="tableManager">
-                    <sip-minicolumn name="num" title="编号">
+                    <sip-minicolumn name="num" title="编号" width="80px">
                         <ng-template #formatter let-row="row" let-column="column" let-data="data">
                             <a [sipRouterLink]="['/sip/ui-demo/detail', {id:data.num}]">{{data.num}}</a>
                             <i class="fa fa-desktop ml-sm"></i>
                         </ng-template>
                     </sip-minicolumn>
                     <sip-minicolumn name="name" title="名称" [sortable]="true" sortOrder="desc"></sip-minicolumn>
-                    <sip-minicolumn name="status" title="状态">
+                    <sip-minicolumn name="status" title="状态" width="80px">
                         <ng-template #formatter let-row="row" let-column="column" let-data="data">
                             <nz-badge [nzStatus]="data.status" class="mr-sm"></nz-badge>
                             {{column.getFilterText(data.status)}}
@@ -277,10 +277,10 @@ export class ${className} extends SipPage {
                             </nz-select>
                         </ng-template>
                     </sip-minicolumn>
-                    <sip-minicolumn name="region" title="区域" [sortable]="true"></sip-minicolumn>
-                    <sip-minicolumn name="ip" title="IP" [sortable]="true"></sip-minicolumn>
-                    <sip-minicolumn name="spec" title="系统/规格" [sortable]="true"></sip-minicolumn>
-                    <sip-minicolumn name="user" title="创建人" [sortable]="true"></sip-minicolumn>
+                    <sip-minicolumn name="region" title="区域" [sortable]="true" width="80px"></sip-minicolumn>
+                    <sip-minicolumn name="ip" title="IP" [sortable]="true" width="100px"></sip-minicolumn>
+                    <sip-minicolumn name="spec" title="系统/规格" [sortable]="true" width="80px"></sip-minicolumn>
+                    <sip-minicolumn name="user" title="创建人" [sortable]="true" width="100px"></sip-minicolumn>
                     <sip-minicolumn name="date" title="创建时间" [sortable]="true" width="100px"></sip-minicolumn>
                 </sip-minitable>
             </ng-template>
