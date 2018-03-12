@@ -201,7 +201,7 @@ export class ${className} extends SipPage {
             <ng-template #body>
                 <!-- 操作栏 -->
                 <sip-page-toolbar>
-                    <button nz-button [nzType]="'default'" class="mr-sm">
+                    <button nz-button [nzType]="'default'" class="mr-sm" (click)="tableManager.refresh()">
                         <i class="anticon anticon-reload"></i>
                     </button>
                     <button nz-button (click)="add()" [nzType]="'primary'" class="mr-sm">
