@@ -106,7 +106,7 @@ export class ${className} extends SipPage {
                 ],
                 onFilter: (p) => {
                     let values = p.values;
-                    this.tableManager.search({ status: status });
+                    this.tableManager.search({ status: values.join(',') });
                 }
             }
         },

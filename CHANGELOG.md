@@ -1,4 +1,7 @@
 ## ng-sip-helper Changelog
+# 1.0.4 (2018-3-x)
+
+* OPT: PageList MinitableManager tmpl
 
 # 1.0.3 (2018-3-12)
 
