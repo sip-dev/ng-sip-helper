@@ -298,7 +298,7 @@
     "sip-def-rest-sql": {
         "prefix": "sip-def-rest-sql",
         "body": [
-            "@SipRestSqlDef<${Class}>({",
+            "@SipRestSqlDef<${Class}[]>({",
             "    sqlType: SipRestSqlType.List,",
             "    connstr: 'iaas',",
             "    sqlId: 'Iaas_Instance.List.GetByOwnerID',",
@@ -310,7 +310,7 @@
             "})",
             "${getList}: SipRestSqlFunction<{",
             "    \"content\"?: string",
-            "}, ${Class}>;$0"
+            "}, ${Class}[]>;$0"
         ],
         "description": "@SipRestSqlDef"
     },
