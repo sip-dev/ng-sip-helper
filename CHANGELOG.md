@@ -2,6 +2,7 @@
 # 1.0.4 (2018-3-x)
 
 * OPT: PageList MinitableManager tmpl
+* OPT: sip-def-rest-sql
 
 # 1.0.3 (2018-3-12)
 
