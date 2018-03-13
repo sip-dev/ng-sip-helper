@@ -1,5 +1,6 @@
 ## ng-sip-helper Changelog
-# 1.0.4 (2018-3-x)
+
+# 1.0.4 (2018-3-13)
 
 * OPT: PageList MinitableManager tmpl
 * OPT: sip-def-rest-sql
