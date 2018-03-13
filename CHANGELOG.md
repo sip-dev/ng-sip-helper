@@ -4,6 +4,7 @@
 * OPT: PageList MinitableManager tmpl
 * OPT: sip-def-rest-sql
 * Change: SipFormGroup
+* ADD: preview
 
 # 1.0.3 (2018-3-12)
 
