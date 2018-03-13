@@ -578,6 +578,11 @@ const config = [
                 "title": "设 置",
                 "command": "config",
                 "builtin": true
+            },
+            {
+                "title": "preview",
+                "command": "sip-preview",
+                "builtin": true
             }
         ]
     }

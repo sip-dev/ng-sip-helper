@@ -55,6 +55,10 @@
       {
         "command": "ngsiphelper.region",
         "title": "Region Block"
+      },
+      {
+        "command": "ngsiphelper.preview",
+        "title": "ng-sip-preview"
       }
     ],
     "keybindings": [
@@ -63,6 +67,11 @@
         "key": "ctrl+k ctrl+h",
         "mac": "cmd+k cmd+h",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "ngsiphelper.preview",
+        "key": "ctrl+k ctrl+v",
+        "mac": "cmd+k cmd+v"
       }
     ],
     "menus": {
