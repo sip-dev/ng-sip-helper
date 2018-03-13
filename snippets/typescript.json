@@ -482,13 +482,15 @@
     },
     "sip-form-group": {
         "prefix": "sip-form-group",
-        "body": [
-            "@SipFormGroup(new ${Test}(), {",
+        "body": ["@SipFormGroup<${ThisClass}>(function () {",
+            "    return new ${Model}();",
+            "}, function () {",
+            "    return {",
             "        num: [SipValidators.rangeLength(1, 20)],",
             "        name: [SipValidators.required]",
-            "    })",
-            "${form}: ISipFormGroup<${Test}>;$0"
-        ],
+            "    };",
+            "})",
+            "form: ISipFormGroup<${Model}>;$0"],
         "description": "form-group"
     }
 }

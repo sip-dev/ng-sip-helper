@@ -48,19 +48,23 @@ export class ${className} extends SipPage {
         console.log('_show');
     }
 
-    @SipFormGroup({
-        "num": "",
-        "name": "",
-        "status": "success",
-        "region": "测试云",
-        "ip": "",
-        "spec": "2核2G",
-        "user": "test",
-        "date": "2017-11-15"
-    }, {
+    @SipFormGroup<${className}>(function () {
+        return {
+            "num": "",
+            "name": "",
+            "status": "success",
+            "region": "测试云",
+            "ip": "",
+            "spec": "2核2G",
+            "user": "test",
+            "date": "2017-11-15"
+        };
+    }, function () {
+        return {
             num: [SipValidators.rangeLength(1, 20)],
             name: [SipValidators.required]
-        })
+        };
+    })
     form: ISipFormGroup<any>;
 
     statuList = [
