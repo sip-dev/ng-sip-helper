@@ -41,6 +41,17 @@
         ],
         "description": "minicolumn-editor"
     },
+    "sip-minicolumn-title": {
+        "prefix": "sip-minicolumn-title",
+        "body": [
+            "<ng-template #title let-column=\"column\">",
+            "    <span>",
+            "        <a [sipRouterLink]=\"['/ui-demo/list-detail']\">{{column?.title}}</a>",
+            "    </span>",
+            "</ng-template>$0"
+        ],
+        "description": "minicolumn-title"
+    },
     "sip-minicolumn-full": {
         "prefix": "sip-minicolumn-full",
         "body": [

@@ -1,5 +1,9 @@
 ## ng-sip-helper Changelog
 
+# 1.0.5 (2018-3-x)
+
+* ADD: html sip-minicolumn-title
+
 # 1.0.4 (2018-3-13)
 
 * OPT: PageList MinitableManager tmpl
