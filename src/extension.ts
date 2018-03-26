@@ -82,14 +82,14 @@ export function activate(context: ExtensionContext) {
 
         let workFile = path.resolve(_getRootPath(), 'ngsiphelper-preview.html');
         let inFile = path.resolve(context.extensionPath, 'html/preview.html');
-        if (!fs.existsSync(workFile)){
+        if (!fs.existsSync(workFile)) {
             let content = fs.readFileSync(inFile, 'utf-8');
             fs.writeFileSync(workFile, content, 'utf-8');
         }
 
         let uri = Uri.parse(`file:///${_getRootPath()}/ngsiphelper-preview.html`);
         commands.executeCommand('vscode.previewHtml', uri, 1, 'preview');
-    
+
     }));
 
     let _fileName = '', _curFile = '';
@@ -196,7 +196,29 @@ export function activate(context: ExtensionContext) {
                 sipGenerate(new SipComponentEx(), gParam);
                 break;
             case 'sip-module':
-                sipGenerate(new SipModule(), gParam);
+                if (gParam.shared) {
+                    gParam.shared = false;
+                    let name = gParam.name;
+                    gParam.name += '-shared';
+                    gParam.dir = true;
+                    gParam.ts = true;
+                    sipGenerate(new SipModule(), gParam).then((p)=>{
+                        let moduleFile = p.fileName;
+                        let tPathM = path.join(gParam.path, gParam.name);
+                        gParam.name = name;
+                        gParam.dir = false;
+                        gParam.path = path.join(tPathM, 'models');
+                        sipGenerate(new SipClass(), gParam);
+                        gParam.path = path.join(tPathM, 'services');
+                        sipGenerate(new SipServiceEx(), gParam).then((p)=>{
+                            gParam.module = true;
+                            gParam.path = p.fileName;
+                            gParam.moduleFile = moduleFile;
+                            new SipRegModule().generate(gParam);
+                        });
+                    });
+                } else
+                    sipGenerate(new SipModule(), gParam);
                 break;
             case 'sip-service':
                 sipGenerate(new SipService(), gParam);
@@ -239,8 +261,8 @@ export function activate(context: ExtensionContext) {
                 break;
         }
     };
-    let sipGenerate = (genObj: ContentBase, p: any, args?: any) => {
-        openFile(genObj.generate(p));
+    let sipGenerate = (genObj: ContentBase, p: any, args?: any): PromiseLike<TextDocument> => {
+        return openFile(genObj.generate(p));
     };
     let sipRegmodlue = (genObj: ContentBase, p: any) => {
         if (IsDirectory(_curFile)) {

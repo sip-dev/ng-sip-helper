@@ -86,6 +86,10 @@ const config = [
                         "title": "Routing"
                     },
                     {
+                        "param": "--shared",
+                        "title": "Shared, Service, Model"
+                    },
+                    {
                         "param": "--spec",
                         "title": "spec"
                     }

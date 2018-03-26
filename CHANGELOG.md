@@ -3,6 +3,7 @@
 # 1.0.5 (2018-3-x)
 
 * ADD: html sip-minicolumn-title
+* 添加：注册module --shared, 创建shared模块（包涵：Shared, Service, Model）
 
 # 1.0.4 (2018-3-13)
 
