@@ -86,7 +86,7 @@ export class ${className} extends SipPage {
     tableManager: MinitableManager<any> = new MinitableManager<any>({
         // connstr: 'iaas',
         // sqlId: 'iaas_Instance.List.GetByOwnerID',
-        // restFun: (p) => { },
+        // restFun: (p) => { return this._productSrv.getPageList(null, p); },
         multiSelect: true,
         autoLoad: false,
         datas: this.nzdata,
