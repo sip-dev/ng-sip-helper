@@ -4,6 +4,7 @@
 
 * 添加: html模板：sip-minicolumn-title
 * 添加：注册module --shared, 创建shared模块（包涵：Shared, Service, Model）
+* FIX: sip-contextmenu snippet
 
 # 1.0.4 (2018-3-13)
 

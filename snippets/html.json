@@ -82,7 +82,7 @@
             "\t\t</sip-menu-sub>",
             "\t\t<sip-menu-sub title=\"bbbb\" icon=\"anticon anticon-appstore\"></sip-menu-sub>",
             "\t</sip-menu>",
-            "</ng-contextmenu>$0"
+            "</sip-contextmenu>$0"
         ],
         "description": "contextmenu"
     },
