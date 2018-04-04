@@ -28,6 +28,7 @@ import { SipComponentEx } from './contents/sip-component-ex';
 import { SipDirectiveEx } from './contents/sip-directive-ex';
 
 let stringify = require('json-stable-stringify');
+var jsonic = require('jsonic');
 
 function getCurrentPath(args): string {
     return args && args.fsPath ? args.fsPath : (window.activeTextEditor ? window.activeTextEditor.document.fileName : '');
@@ -413,7 +414,7 @@ export function activate(context: ExtensionContext) {
 
     let getConfig = (): IConfig[] => {
         let fsPath = path.join(_getRootPath(), './ng-alain-sip.conf.json');
-        return (!fs.existsSync(fsPath)) ? require('./ng-alain-sip.conf') : JSON.parse(fs.readFileSync(fsPath, 'utf-8'));
+        return (!fs.existsSync(fsPath)) ? require('./ng-alain-sip.conf') : jsonic(fs.readFileSync(fsPath, 'utf-8'));
     };
 
     let setConfig = () => {
@@ -438,7 +439,7 @@ export function activate(context: ExtensionContext) {
     let npm = () => {
         let fsPath = path.join(_getRootPath(), './package.json');
         if (!fs.existsSync(fsPath)) return;
-        let packageJson = JSON.parse(fs.readFileSync(fsPath, 'utf-8'));
+        let packageJson = jsonic(fs.readFileSync(fsPath, 'utf-8'));
         let scripts = packageJson.scripts;
         let scriptList = Object.keys(scripts).map(key => {
             return {
@@ -494,7 +495,7 @@ export function activate(context: ExtensionContext) {
             document.getText(textEditor.selection);
         try {
 
-            text = jsonToClass(JSON.parse(text), fsFile);
+            text = jsonToClass(jsonic(text), fsFile);
             edit.replace(isEmpty ? new Range(new Position(0, 0), new Position(100000, 100000)) :
                 textEditor.selection, text);
         } catch (e) {

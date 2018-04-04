@@ -1,5 +1,9 @@
 ## ng-sip-helper Changelog
 
+# 1.0.6 (2018-4-x)
+
+* 添加: jsonic 代替 JSON.parse，增强容错
+
 # 1.0.5 (2018-4-2)
 
 * 添加: html模板：sip-minicolumn-title
