@@ -104,7 +104,7 @@
     "run-in-terminal": "^0.0.3",
     "rxjs": "^5.0.3",
     "typescript": "^2.0.0",
-    "vscode": "^1.1.0"
+    "vscode": "^1.1.14"
   },
   "dependencies": {
     "json-stable-stringify": "^1.0.1",
