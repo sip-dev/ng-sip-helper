@@ -235,7 +235,7 @@ export class ${className} extends SipPage {
                                     <button nz-button><i class="anticon anticon-plus mr-sm"></i>添加网卡</button>
                                 </ng-template>
                                 <ng-template #body>
-                                    <nz-table #nzTable class="simple-table" [nzDataSource]="nzdata" [nzIsPagination]="false"   [nzBordered]="true" [nzSize]="'middle'">
+                                    <nz-table #nzTable class="simple-table" [nzData]="nzdata" [nzShowPagination]="false"   [nzBordered]="true" [nzSize]="'middle'">
                                         <thead nz-thead>
                                             <tr>
                                                 <th nz-th class="text-center">网络名称</th>
@@ -268,7 +268,7 @@ export class ${className} extends SipPage {
                                         </nz-button-group>
                                     </ng-template>
                                     <ng-template #body>
-                                        <nz-table #nzTable class="simple-table" [nzDataSource]="inboxdata" [nzIsPagination]="false"   [nzBordered]="true" [nzSize]="'middle'">
+                                        <nz-table #nzTable class="simple-table" [nzData]="inboxdata" [nzShowPagination]="false"   [nzBordered]="true" [nzSize]="'middle'">
                                             <thead nz-thead>
                                                 <tr>
                                                     <th nz-th class="text-center">名称</th>
