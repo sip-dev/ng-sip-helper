@@ -112,7 +112,7 @@ export class ${className} extends SipPage {
                             <label nz-form-item-required>num</label>
                         </div>
                         <div nz-form-control nz-col [nzSm]="18" [nzXs]="24">
-                            <nz-input formControlName="num"></nz-input>
+                            <input nz-input formControlName="num">
                             <ng-container *ngIf="form?.$num.dirty || form?.$num.touched">
                                 <span nz-form-explain *ngIf="form.$num.errors?.rangeLength">{{form.$num.errors.rangeLengthText}}</span>
                             </ng-container>
@@ -123,7 +123,7 @@ export class ${className} extends SipPage {
                             <label nz-form-item-required>name</label>
                         </div>
                         <div nz-form-control nz-col [nzSm]="18" [nzXs]="24">
-                            <nz-input formControlName="name"></nz-input>
+                            <input nz-input formControlName="name">
                             <span nz-form-explain *ngIf="(form?.$name.dirty || form?.$name.touched) && form?.$name.errors?.required">
                                 {{form.$name.errors.requiredText}}
                             </span>
@@ -161,7 +161,7 @@ export class ${className} extends SipPage {
                             <label>ip</label>
                         </div>
                         <div nz-form-control nz-col [nzSm]="18" [nzXs]="24">
-                            <nz-input formControlName="ip" nzType="text"></nz-input>
+                            <input nz-input formControlName="ip" type="text">
                         </div>
                     </div>
                     <div nz-form-item nz-row>
