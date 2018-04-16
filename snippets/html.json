@@ -310,7 +310,7 @@
     "sip-card": {
         "prefix": "sip-card",
         "body": [
-            "<sip-card title=\"\" [loading]=\"false\" [bordered]=\"false\" [noHovering]=\"true\" [noPadding]=\"false\">$0",
+            "<sip-card title=\"\" [loading]=\"false\" [bordered]=\"false\" [hoverable]=\"false\">$0",
             "</sip-card>"
         ],
         "description": "<div>"
