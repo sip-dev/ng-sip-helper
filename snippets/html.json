@@ -159,12 +159,12 @@
         ],
         "description": "container"
     },
-    "sip-searchConent": {
-        "prefix": "sip-searchConent",
+    "sip-search-conent": {
+        "prefix": "sip-search-conent",
         "body": [
-            "<sip-searchConent [params]=\"${searchContent}\"></sip-searchConent>$0"
+            "<sip-search-conent [params]=\"${searchContent}\"></sip-search-conent>$0"
         ],
-        "description": "searchConent"
+        "description": "<sip-search-conent>"
     },
     "sip-page": {
         "prefix": "sip-page",

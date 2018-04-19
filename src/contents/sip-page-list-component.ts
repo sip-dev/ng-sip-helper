@@ -247,7 +247,7 @@ export class ${className} extends SipPage {
                         </ul>
                     </nz-dropdown>
 
-                    <sip-searchConent [params]="searchContent"></sip-searchConent>
+                    <sip-search-conent [params]="searchContent"></sip-search-conent>
                 </sip-page-toolbar>
 
                 <div class="mb-md">
