@@ -1,9 +1,10 @@
 ## ng-sip-helper Changelog
 
-# 1.0.6 (2018-4-x)
+# 1.1.0 (2018-4-x)
 
 * 添加: jsonic 代替 JSON.parse，增强容错
 * 添加：支持重构后的sip-card
+* 更新: 支持sip-alain 0.3.0，大版本改变
 
 # 1.0.5 (2018-4-2)
 
