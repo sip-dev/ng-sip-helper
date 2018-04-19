@@ -418,6 +418,18 @@
         ],
         "description": "<sip-card-grid>"
     },
+    "sip-card-tab": {
+        "prefix": "sip-card-tab",
+        "body": [
+            "<sip-card-tab>",
+            "\t<nz-tabset nzSize=\"default\">",
+            "\t\t<nz-tab nzTitle=\"tab1\"></nz-tab>",
+            "\t\t<nz-tab nzTitle=\"tab2\"></nz-tab>",
+            "\t</nz-tabset>",
+            "</sip-card-tab>$0"
+        ],
+        "description": "<sip-card-tab>"
+    },
     "sip-form": {
         "prefix": "sip-form",
         "body": [
