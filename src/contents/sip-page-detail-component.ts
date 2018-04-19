@@ -116,10 +116,10 @@ export class ${className} extends SipPage {
                     <div nz-row [nzGutter]="16">
                         <div nz-col [nzMd]="16">
                             <sip-card>
-                                <ng-template #title>
+                                <sip-card-title>
                                     <i class="anticon anticon-area-chart mr-sm"></i>监控指标
-                                </ng-template>
-                                <ng-template #extra>
+                                </sip-card-title>
+                                <sip-card-extra>
                                     <button nz-button class="mr-sm"><i class="anticon anticon-reload"></i></button>
                                     <nz-button-group>
                                         <button nz-button>1小时</button>
@@ -137,20 +137,20 @@ export class ${className} extends SipPage {
                                             <li nz-menu-item>网络</li>
                                         </ul>
                                     </nz-dropdown>
-                                </ng-template>
-                                <ng-template #body>
+                                </sip-card-extra>
+                                <sip-card-body>
                                     <div class="mb-lg">
                                         <bar height="300" title="销售额趋势" [data]="salesData"></bar>
                                     </div>
                                     
                                     <bar height="300" title="销售额趋势01" [data]="salesData"></bar>
-                                </ng-template>
+                                </sip-card-body>
                             </sip-card>
                         </div>
                         <div nz-col [nzMd]="8" >
                             <sip-card>
-                                <ng-template #title><i class="anticon anticon-credit-card mr-sm"></i>基本信息</ng-template>
-                                <ng-template #body>								
+                                <sip-card-title><i class="anticon anticon-credit-card mr-sm"></i>基本信息</sip-card-title>
+                                <sip-card-body>								
                                     <form nz-form>
                                         <div nz-form-item nz-row>
                                             <div nz-form-label nz-col [nzSpan]="5">
@@ -218,7 +218,7 @@ export class ${className} extends SipPage {
                                             </div>
                                         </div>
                                     </form>
-                                </ng-template>
+                                </sip-card-body>
                             </sip-card>
                         </div>
                     </div>
@@ -230,11 +230,11 @@ export class ${className} extends SipPage {
                     <div nz-row [nzGutter]="16">
                         <div nz-col [nzSpan]="16">
                             <sip-card>
-                                <ng-template #title><i class="anticon anticon-wifi mr-sm"></i>网卡</ng-template>
-                                <ng-template #extra>
+                                <sip-card-title><i class="anticon anticon-wifi mr-sm"></i>网卡</sip-card-title>
+                                <sip-card-extra>
                                     <button nz-button><i class="anticon anticon-plus mr-sm"></i>添加网卡</button>
-                                </ng-template>
-                                <ng-template #body>
+                                </sip-card-extra>
+                                <sip-card-body>
                                     <nz-table #nzTable class="simple-table" [nzData]="nzdata" [nzShowPagination]="false"   [nzBordered]="true" [nzSize]="'middle'">
                                         <thead nz-thead>
                                             <tr>
@@ -257,17 +257,17 @@ export class ${className} extends SipPage {
                                             </tr>
                                         </tbody>
                                     </nz-table>
-                                </ng-template>
+                                </sip-card-body>
                             </sip-card>
                             <sip-card>
-                                    <ng-template #title><i class="fa fa-inbox mr-sm"></i>存储卷</ng-template>
-                                    <ng-template #extra>
+                                    <sip-card-title><i class="fa fa-inbox mr-sm"></i>存储卷</sip-card-title>
+                                    <sip-card-extra>
                                         <nz-button-group >
                                             <button nz-button (click)="customCompModel()" ><i class="anticon anticon-reload"></i></button>
                                             <button nz-button (click)="customCompModel()" ><i class="anticon anticon-plus mr-sm"></i>挂接</button>
                                         </nz-button-group>
-                                    </ng-template>
-                                    <ng-template #body>
+                                    </sip-card-extra>
+                                    <sip-card-body>
                                         <nz-table #nzTable class="simple-table" [nzData]="inboxdata" [nzShowPagination]="false"   [nzBordered]="true" [nzSize]="'middle'">
                                             <thead nz-thead>
                                                 <tr>
@@ -296,14 +296,14 @@ export class ${className} extends SipPage {
                                                 </tr>
                                             </tbody>
                                         </nz-table>
-                                    </ng-template>
+                                    </sip-card-body>
                                 </sip-card>
                             
                         </div>
                         <div nz-col [nzSpan]="8">
                             <sip-card>
-                                <ng-template #title><i class="anticon anticon-credit-card mr-sm"></i>设备信息</ng-template>
-                                <ng-template #body>
+                                <sip-card-title><i class="anticon anticon-credit-card mr-sm"></i>设备信息</sip-card-title>
+                                <sip-card-body>
                                     <form nz-form>
                                         <div nz-form-item nz-row>
                                             <div nz-form-label nz-col [nzSpan]="5">
@@ -330,7 +330,7 @@ export class ${className} extends SipPage {
                                             </div>
                                         </div>
                                     </form>
-                                </ng-template>
+                                </sip-card-body>
                             </sip-card>	
                         </div>
                     </div>
@@ -339,8 +339,8 @@ export class ${className} extends SipPage {
             <nz-tab>
                 <ng-template #nzTabHeading>消费情况</ng-template>
                 <div nz-row>
-                    <sip-card [bordered]="false" [noHovering]="true" >
-                        <ng-template #body>
+                    <sip-card [bordered]="false" [hoverable]="false" >
+                        <sip-card-body>
                             <div nz-row [nzGutter]="16">
                                 <div nz-col [nzSpan]="12">
                                     <div class="page-header">
@@ -368,7 +368,7 @@ export class ${className} extends SipPage {
                                     </div>
                                 </div>
                             </div>
-                        </ng-template>
+                        </sip-card-body>
                     </sip-card>
                 </div>
             </nz-tab>

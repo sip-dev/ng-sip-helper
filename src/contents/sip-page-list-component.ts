@@ -198,7 +198,7 @@ export class ${className} extends SipPage {
     <sip-page-body>
         <!-- 卡片 -->
         <sip-card [bordered]="false">
-            <ng-template #body>
+            <sip-card-body>
                 <!-- 操作栏 -->
                 <sip-page-toolbar>
                     <button nz-button [nzType]="'default'" class="mr-sm" (click)="tableManager.refresh()">
@@ -283,7 +283,7 @@ export class ${className} extends SipPage {
                     <sip-minicolumn name="user" title="创建人" [sortable]="true" width="100px"></sip-minicolumn>
                     <sip-minicolumn name="date" title="创建时间" [sortable]="true" width="100px"></sip-minicolumn>
                 </sip-minitable>
-            </ng-template>
+            </sip-card-body>
         </sip-card>
     </sip-page-body>
 </sip-page>`;

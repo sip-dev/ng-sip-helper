@@ -310,10 +310,113 @@
     "sip-card": {
         "prefix": "sip-card",
         "body": [
-            "<sip-card title=\"\" [loading]=\"false\" [bordered]=\"false\" [hoverable]=\"false\">$0",
-            "</sip-card>"
+            "<sip-card [bordered]=\"true\" [hoverable]=\"false\" [loading]=\"false\" [bodyStyle]=\"\" [type]=\"\">",
+            "\t<sip-card-title>title</sip-card-title>",
+            "\t<sip-card-extra>",
+            "\t\t<a href=\"javascript:void(0)\">extra</a>",
+            "\t</sip-card-extra>",
+            "\t<sip-card-body>",
+            "\t\tsip-card-body",
+            "\t</sip-card-body>",
+            "\t<sip-card-action>act1</sip-card-action>",
+            "\t<sip-card-action>act2</sip-card-action>",
+            "\t<sip-card-action>act3</sip-card-action>",
+            "</sip-card>$0"
         ],
-        "description": "<div>"
+        "description": "<sip-card>"
+    },
+    "sip-card-title": {
+        "prefix": "sip-card-title",
+        "body": [
+            "<sip-card-title>${title}</sip-card-title>$0"
+        ],
+        "description": "<sip-card-title>"
+    },
+    "sip-card-extra": {
+        "prefix": "sip-card-extra",
+        "body": [
+            "<sip-card-extra>",
+            "\t<a href=\"javascript:void(0)\">extra</a>",
+            "</sip-card-extra>"
+        ],
+        "description": "<sip-card-extra>"
+    },
+    "sip-card-body": {
+        "prefix": "sip-card-body",
+        "body": [
+            "<sip-card-body>",
+            "\t$0sip-card-body",
+            "</sip-card-body>"
+        ],
+        "description": "<sip-card-body>"
+    },
+    "sip-card-action": {
+        "prefix": "sip-card-action",
+        "body": [
+            "<sip-card-action>",
+            "\t$0action",
+            "</sip-card-action>"
+        ],
+        "description": "<sip-card-action>"
+    },
+    "sip-card-cover": {
+        "prefix": "sip-card-cover",
+        "body": [
+            "<sip-card-cover>",
+            "\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
+            "</sip-card-cover>"
+        ],
+        "description": "<sip-card-cover>"
+    },
+    "sip-card-meta": {
+        "prefix": "sip-card-meta",
+        "body": [
+            "<sip-card-meta>",
+            "\t<sip-card-meta-title>$0title</sip-card-meta-title>",
+            "\t<!-- <sip-card-meta-avatar>",
+            "\t\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
+            "\t</sip-card-meta-avatar> -->",
+            "\t<sip-card-meta-desc>desc</sip-card-meta-desc>",
+            "</sip-card-meta>"
+        ],
+        "description": "<sip-card-meta>"
+    },
+    "sip-card-meta-full": {
+        "prefix": "sip-card-meta-full",
+        "body": [
+            "<sip-card [bordered]=\"true\">",
+            "\t<sip-card-cover>",
+            "\t\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
+            "\t</sip-card-cover>",
+            "\t<sip-card-meta>",
+            "\t\t<sip-card-meta-title>title</sip-card-meta-title>",
+            "\t\t<!-- <sip-card-meta-avatar>",
+            "\t\t\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
+            "\t\t</sip-card-meta-avatar> -->",
+            "\t\t<sip-card-meta-desc>desc</sip-card-meta-desc>",
+            "\t</sip-card-meta>",
+            "</sip-card>$0"
+        ],
+        "description": "<sip-card-meta>"
+    },
+    "sip-card-grid": {
+        "prefix": "sip-card-grid",
+        "body": [
+            "<sip-card-grid [gridStyle]=\"{width:'50%', textAlign: 'center'}\">grid1</sip-card-grid>"
+        ],
+        "description": "<sip-card-grid>"
+    },
+    "sip-card-grid-full": {
+        "prefix": "sip-card-grid-full",
+        "body": [
+            "<sip-card [bordered]=\"true\">",
+            "\t<sip-card-grid [gridStyle]=\"{width:'50%', textAlign: 'center'}\">grid1</sip-card-grid>",
+            "\t<sip-card-grid>grid2</sip-card-grid>",
+            "\t<sip-card-grid>grid3</sip-card-grid>",
+            "\t<sip-card-grid>grid3</sip-card-grid>",
+            "</sip-card>$0"
+        ],
+        "description": "<sip-card-grid>"
     },
     "sip-form": {
         "prefix": "sip-form",
