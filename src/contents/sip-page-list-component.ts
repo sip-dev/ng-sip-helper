@@ -17,7 +17,7 @@ export class SipPageListComponent extends SipComponent {
         let style = !this.isStyle(params) ? `styles: []` : `styleUrls: ['./${name}.${prefix}.${styleEx}']`;
 
         let content = `import { Component, ViewContainerRef, forwardRef } from '@angular/core';
-import { SipPage, SipNgInit, SipBusinessComponent, SipAccess, SipAccessManager, Lib, SipAccessItem, MinitableManager } from 'sip-alain';
+import { SipPage, SipNgInit, SipBusinessComponent, SipAccess, SipAccessManager, Lib, SipAccessItem, SipMinitableManager } from 'sip-alain';
 
 @Component({
     selector: 'sip-${name}',
@@ -83,7 +83,7 @@ export class ${className} extends SipPage {
     };
 
     /**table管理器 */
-    tableManager: MinitableManager<any> = new MinitableManager<any>({
+    tableManager: SipMinitableManager<any> = new SipMinitableManager<any>({
         // connstr: 'iaas',
         // sqlId: 'iaas_Instance.List.GetByOwnerID',
         // restFun: (p) => { return this._productSrv.getPageList(null, p); },

@@ -87,7 +87,7 @@
         "prefix": "sip-tablemanager",
         "body": [
             "/**table管理器 */",
-            "${tableManager}$0: MinitableManager<${any}> = new MinitableManager<${any}>({",
+            "${tableManager}$0: SipMinitableManager<${any}> = new SipMinitableManager<${any}>({",
             "\tconnstr: 'iaas',",
             "\tsqlId: 'iaas_Instance.List.GetByOwnerID',",
             "\tmultiSelect: true,",
@@ -148,7 +148,7 @@
             "\t}",
             "});"
         ],
-        "description": "MinitableManager"
+        "description": "SipMinitableManager"
     },
     "sip-evnet-var": {
         "prefix": "sip-evnet-var",
