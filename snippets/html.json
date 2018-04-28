@@ -52,8 +52,8 @@
         ],
         "description": "minicolumn-title"
     },
-    "sip-minicolumn-full": {
-        "prefix": "sip-minicolumn-full",
+    "sip-minicolumn.full": {
+        "prefix": "sip-minicolumn.full",
         "body": [
             "<sip-minicolumn name=\"Status\" title=\"状态\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\">",
             "\t<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
@@ -64,7 +64,7 @@
             "\t</ng-template>",
             "</sip-minicolumn>$0"
         ],
-        "description": "minicolumn-full"
+        "description": "<minicolumn>...</minicolumn>"
     },
     "sip-contextmenu": {
         "prefix": "sip-contextmenu",
@@ -307,10 +307,44 @@
         ],
         "description": "[sipShow]"
     },
+    "sip-tabset": {
+        "prefix": "sip-tabset",
+        "body": [
+            "<sip-tabset>",
+            "\t$0",
+            "</sip-tabset>"
+        ],
+        "description": "<sip-tabset ...>"
+    },
+    "sip-tabset.normal": {
+        "prefix": "sip-tabset.normal",
+        "body": [
+            "<sip-tabset>",
+            "\t<sip-tabset-header>",
+            "\t\t<sip-tabset-title>$0tab11</sip-tabset-title>",
+            "\t\t<sip-tabset-title>tab21</sip-tabset-title>",
+            "\t</sip-tabset-header>",
+            "\t<sip-tabset-body>",
+            "\t\t<sip-tabset-content>content11</sip-tabset-content>",
+            "\t\t<sip-tabset-content>content21</sip-tabset-content>",
+            "\t</sip-tabset-body>",
+            "</sip-tabset>"
+        ],
+        "description": "<sip-tabset>..header..body..</sip-tabset>"
+    },
     "sip-card": {
         "prefix": "sip-card",
         "body": [
             "<sip-card [bordered]=\"true\" [hoverable]=\"false\" [loading]=\"false\" [bodyStyle]=\"\" [type]=\"\">",
+            "\t$0",
+            "</sip-card>"
+        ],
+        "description": "<sip-card>"
+    },
+    "sip-card.full": {
+        "prefix": "sip-card.full",
+        "body": [
+            "<sip-card [bordered]=\"true\" [hoverable]=\"false\" [loading]=\"false\">",
             "\t<sip-card-title>title</sip-card-title>",
             "\t<sip-card-extra>",
             "\t\t<a href=\"javascript:void(0)\">extra</a>",
@@ -323,7 +357,7 @@
             "\t<sip-card-action>act3</sip-card-action>",
             "</sip-card>$0"
         ],
-        "description": "<sip-card>"
+        "description": "<sip-card>..header..body.</sip-card>"
     },
     "sip-card-title": {
         "prefix": "sip-card-title",
@@ -381,8 +415,8 @@
         ],
         "description": "<sip-card-meta>"
     },
-    "sip-card-meta-full": {
-        "prefix": "sip-card-meta-full",
+    "sip-card-meta.full": {
+        "prefix": "sip-card-meta.full",
         "body": [
             "<sip-card [bordered]=\"true\">",
             "\t<sip-card-cover>",
@@ -397,7 +431,7 @@
             "\t</sip-card-meta>",
             "</sip-card>$0"
         ],
-        "description": "<sip-card-meta>"
+        "description": "<sip-card>..meta..cover.</sip-card>"
     },
     "sip-card-grid": {
         "prefix": "sip-card-grid",
@@ -406,8 +440,8 @@
         ],
         "description": "<sip-card-grid>"
     },
-    "sip-card-grid-full": {
-        "prefix": "sip-card-grid-full",
+    "sip-card-grid.full": {
+        "prefix": "sip-card-grid.full",
         "body": [
             "<sip-card [bordered]=\"true\">",
             "\t<sip-card-grid [gridStyle]=\"{width:'50%', textAlign: 'center'}\">grid1</sip-card-grid>",
@@ -416,17 +450,31 @@
             "\t<sip-card-grid>grid3</sip-card-grid>",
             "</sip-card>$0"
         ],
-        "description": "<sip-card-grid>"
+        "description": "<sip-card>..grid1..grid2...</sip-card>"
     },
     "sip-card-tab": {
         "prefix": "sip-card-tab",
         "body": [
             "<sip-card-tab>",
-            "\t<nz-tabset nzSize=\"default\">",
-            "\t\t<nz-tab nzTitle=\"tab1\"></nz-tab>",
-            "\t\t<nz-tab nzTitle=\"tab2\"></nz-tab>",
-            "\t</nz-tabset>",
             "</sip-card-tab>$0"
+        ],
+        "description": "<sip-card-tab>"
+    },
+    "sip-card-tab.full": {
+        "prefix": "sip-card-tab.full",
+        "body": [
+            "<sip-card-tab>",
+            "\t<sip-tabset>",
+            "\t\t<sip-tabset-header>",
+            "\t\t\t<sip-tabset-title>$0tab11</sip-tabset-title>",
+            "\t\t\t<sip-tabset-title>tab21</sip-tabset-title>",
+            "\t\t</sip-tabset-header>",
+            "\t\t<sip-tabset-body>",
+            "\t\t\t<sip-tabset-content>content11</sip-tabset-content>",
+            "\t\t\t<sip-tabset-content>content21</sip-tabset-content>",
+            "\t\t</sip-tabset-body>",
+            "\t</sip-tabset>",
+            "</sip-card-tab>"
         ],
         "description": "<sip-card-tab>"
     },
