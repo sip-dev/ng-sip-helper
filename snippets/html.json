@@ -147,17 +147,45 @@
     "sip-template": {
         "prefix": "sip-template",
         "body": [
-            "<ng-template #tmpl1 [ngIf]=\"(column.isEdit && row.isEdit)\">",
+            "<ng-template>",
             "</ng-template>$0"
         ],
         "description": "template"
     },
+    "sip-template-outlet": {
+        "prefix": "sip-template-outlet",
+        "body": [
+            "[ngTemplateOutlet]=\"${tmpl1}\" [ngTemplateOutletContext]=\"{row:row, column:column, data:row.data}\"$0"
+        ],
+        "description": "[ngTemplateOutlet]"
+    },
+    "sip-template-if": {
+        "prefix": "sip-template-if",
+        "body": [
+            "[ngIf]=\"${isOk}\"$0"
+        ],
+        "description": "[ngIf]"
+    },
+    "sip-template-for": {
+        "prefix": "sip-template-for",
+        "body": [
+            "ngFor let-${item} [ngForOf]=\"${list}\""
+        ],
+        "description": "ngFor"
+    },
     "sip-container": {
         "prefix": "sip-container",
         "body": [
-            "<ng-container [ngTemplateOutlet]=\"column.formatter\" [ngTemplateOutletContext]=\"{row:row, column:column, data:row.data}\"></ng-container>$0"
+            "<ng-container></ng-container>$0"
         ],
         "description": "container"
+    },
+    "sip-container-outlet": {
+        "prefix": "sip-container-outlet",
+        "body": [
+            "[ngTemplateOutlet]=\"column.formatter\" [ngTemplateOutletContext]=\"{row:row, column:column, data:row.data}\"$0"
+        ],
+        "description": "container-outlet"
     },
     "sip-search-conent": {
         "prefix": "sip-search-conent",
