@@ -7,3 +7,5 @@ src/**
 .gitignore
 tsconfig.json
 vsc-extension-quickstart.md
+!webview/generate/dist/**
+webview/**

@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 let argv = require('yargs-parser');
 
-import { ExtensionContext, commands, window, QuickPickItem, Terminal, workspace, env, TextDocument, Extension, Range, Position, Uri } from 'vscode';
+import { ExtensionContext, commands, window, QuickPickItem, Terminal, workspace, env, TextDocument, Extension, Range, Position, Uri, ViewColumn } from 'vscode';
 import { SipPageComponent } from './contents/sip-page-component';
 import { SipModalComponent } from './contents/sip-modal-component';
 import { Lib } from './lib';
@@ -77,20 +77,20 @@ export function activate(context: ExtensionContext) {
         }
     });
     context.subscriptions.push(commands.registerCommand('ngsiphelper.preview', (args) => {
-        // let curPath = _curFile = getCurrentPath(args),
-        //     defaultName = path.basename(curPath);
-        // let fileName = defaultName.split('.')[0];
 
-        let workFile = path.resolve(_getRootPath(), 'ngsiphelper-preview.html');
-        let inFile = path.resolve(context.extensionPath, 'html/preview.html');
-        if (!fs.existsSync(workFile)) {
-            let content = fs.readFileSync(inFile, 'utf-8');
-            fs.writeFileSync(workFile, content, 'utf-8');
-        }
-
-        let uri = Uri.parse(`file:///${_getRootPath()}/ngsiphelper-preview.html`);
-        commands.executeCommand('vscode.previewHtml', uri, 1, 'preview');
-
+        let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
+        let htmlPath = path.dirname(htmlFile);
+        const panel = window.createWebviewPanel('sipgenerate', 'sipgenerate', ViewColumn.One, {
+            enableScripts:true,
+            retainContextWhenHidden:true,
+            localResourceRoots:[Uri.file(htmlPath)]
+        });
+        let html = fs.readFileSync(htmlFile, 'utf-8');
+        let basePath = Uri.file(htmlPath).with({
+            scheme: "vscode-resource"
+        }).toString();
+        html = html.replace('<base href=".">', `<base href="${basePath}/">`)
+        panel.webview.html = html;
     }));
 
     let _fileName = '', _curFile = '';
