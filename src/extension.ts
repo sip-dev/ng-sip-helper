@@ -1,31 +1,31 @@
 'use strict';
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
+import { ExtensionContext, Position, Range, Terminal, TextDocument, Uri, ViewColumn, commands, window, workspace } from 'vscode';
+import { CalcPath, ContentBase, FindModuleFile, FindPathUpward, FindUpwardModuleFiles, IsDirectory, IsEmptyDirectory, MakeClassName } from './contents/content-base';
+import { SipClass } from './contents/sip-class';
+import { SipComponent } from './contents/sip-component';
+import { SipComponentEx } from './contents/sip-component-ex';
+import { SipDirective } from './contents/sip-directive';
+import { SipDirectiveEx } from './contents/sip-directive-ex';
+import { SipEnum } from './contents/sip-enum';
+import { SipGuard } from './contents/sip-guard';
+import { SipInterface } from './contents/sip-interface';
+import { SipModalComponent } from './contents/sip-modal-component';
+import { SipModalFormComponent } from './contents/sip-modal-form-component';
+import { SipModule } from './contents/sip-module';
+import { SipPageComponent } from './contents/sip-page-component';
+import { SipPageDetailComponent } from './contents/sip-page-detail-component';
+import { SipPageFormComponent } from './contents/sip-page-form-component';
+import { SipPageListComponent } from './contents/sip-page-list-component';
+import { SipPipe } from './contents/sip-pipe';
+import { SipRegModule } from './contents/sip-reg-module';
+import { SipService } from './contents/sip-service';
+import { SipServiceEx } from './contents/sip-service-ex';
+import { Lib } from './lib';
 
 let argv = require('yargs-parser');
 
-import { ExtensionContext, commands, window, QuickPickItem, Terminal, workspace, env, TextDocument, Extension, Range, Position, Uri, ViewColumn } from 'vscode';
-import { SipPageComponent } from './contents/sip-page-component';
-import { SipModalComponent } from './contents/sip-modal-component';
-import { Lib } from './lib';
-import { SipClass } from './contents/sip-class';
-import { ContentBase, IsInRootPath, FindPathUpward, CalcPath, FindModuleFile, FindUpwardModuleFiles, _FindUpwardModuleFiles, IsDirectory, IsEmptyDirectory, MakeClassName } from './contents/content-base';
-import { SipModule } from './contents/sip-module';
-import { SipService } from './contents/sip-service';
-import { SipDirective } from './contents/sip-directive';
-import { SipPipe } from './contents/sip-pipe';
-import { SipGuard } from './contents/sip-guard';
-import { SipInterface } from './contents/sip-interface';
-import { SipEnum } from './contents/sip-enum';
-import { SipComponent } from './contents/sip-component';
-import { SipRegModule } from './contents/sip-reg-module';
-import { SipPageListComponent } from './contents/sip-page-list-component';
-import { SipModalFormComponent } from './contents/sip-modal-form-component';
-import { SipPageFormComponent } from './contents/sip-page-form-component';
-import { SipPageDetailComponent } from './contents/sip-page-detail-component';
-import { SipServiceEx } from './contents/sip-service-ex';
-import { SipComponentEx } from './contents/sip-component-ex';
-import { SipDirectiveEx } from './contents/sip-directive-ex';
 
 let stringify = require('json-stable-stringify');
 var jsonic = require('jsonic');
@@ -77,20 +77,48 @@ export function activate(context: ExtensionContext) {
         }
     });
     context.subscriptions.push(commands.registerCommand('ngsiphelper.preview', (args) => {
+        let curPath = getCurrentPath(args);
 
         let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
         let htmlPath = path.dirname(htmlFile);
         const panel = window.createWebviewPanel('sipgenerate', 'sipgenerate', ViewColumn.One, {
-            enableScripts:true,
-            retainContextWhenHidden:true,
-            localResourceRoots:[Uri.file(htmlPath)]
+            enableScripts: true,
+            retainContextWhenHidden: true,
+            localResourceRoots: [Uri.file(htmlPath)]
         });
+        const webview = panel.webview;
         let html = fs.readFileSync(htmlFile, 'utf-8');
         let basePath = Uri.file(htmlPath).with({
             scheme: "vscode-resource"
         }).toString();
-        html = html.replace('<base href=".">', `<base href="${basePath}/">`)
-        panel.webview.html = html;
+        html = html.replace('<base href=".">', `<base href="${basePath}/"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>const vscode = acquireVsCodeApi();</script>`)
+        webview.html = html;
+        let sendMsg = function (msg: string, data?: any) {
+            webview.postMessage({ command: msg, data: data })
+            return msg + '_receive';
+        };
+        let revieMsg = function (msg: string, data?: any) {
+            return sendMsg(msg + '_receive', data);
+        };
+        webview.onDidReceiveMessage(message => {
+            switch (message.command) {
+                case 'options':
+                    let isDir = IsDirectory(curPath);
+                    let fileName = path.basename(curPath);
+                    let defaultName = isDir ? fileName : fileName.split('.')[0];
+                    let opt = {
+                        path: isDir ? curPath : path.dirname(curPath),
+                        file: isDir ? '' : curPath,
+                        isDir: isDir,
+                        defaultName: defaultName,
+                        fileName: isDir ? '' : fileName,
+                        extensionPath: context.extensionPath
+                    };
+                    console.log(opt);
+                    revieMsg('options', opt);
+                    return;
+            }
+        }, undefined, context.subscriptions);
     }));
 
     let _fileName = '', _curFile = '';
@@ -203,7 +231,7 @@ export function activate(context: ExtensionContext) {
                     gParam.name += '-shared';
                     gParam.dir = true;
                     gParam.ts = true;
-                    sipGenerate(new SipModule(), gParam).then((p)=>{
+                    sipGenerate(new SipModule(), gParam).then((p) => {
                         let moduleFile = p.fileName;
                         let tPathM = path.join(gParam.path, gParam.name);
                         gParam.name = name;
@@ -211,7 +239,7 @@ export function activate(context: ExtensionContext) {
                         gParam.path = path.join(tPathM, 'models');
                         sipGenerate(new SipClass(), gParam);
                         gParam.path = path.join(tPathM, 'services');
-                        sipGenerate(new SipServiceEx(), gParam).then((p)=>{
+                        sipGenerate(new SipServiceEx(), gParam).then((p) => {
                             gParam.module = true;
                             gParam.path = p.fileName;
                             gParam.moduleFile = moduleFile;
