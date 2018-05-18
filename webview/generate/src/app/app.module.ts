@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { GenerateComponent } from './generate/generate.component';
 import { SharedModule } from './shared/shared.module';
 import { StartupService } from './core/services/startup.service';
+import { GenrateTmplComponent } from './genrate-tmpl/genrate-tmpl.component';
 
 export function StartupServiceFactory(startupService: StartupService): Function {
     return () => startupService.load();
@@ -17,7 +18,8 @@ export function StartupServiceFactory(startupService: StartupService): Function 
 @NgModule({
     declarations: [
         AppComponent,
-        GenerateComponent
+        GenerateComponent,
+        GenrateTmplComponent
     ],
     imports: [
         BrowserModule,
@@ -40,7 +42,8 @@ export function StartupServiceFactory(startupService: StartupService): Function 
     ],
     exports: [
         CoreModule,
-        GenerateComponent
+        GenerateComponent,
+        GenrateTmplComponent
     ]
 })
 export class AppModule {

@@ -21,7 +21,7 @@ export class GenerateService {
     files: IFileItem[] = [{
         input: 'user',
         fileName:'{input}-list.{type}',
-        path: '{fileName}',
+        path: '{input}-list',
         type: 'component',
         typeInfo: { ts: true, spec: true, html: true, style: true, styleType: "less" },
         importToModue: 'user.module',
@@ -31,7 +31,7 @@ export class GenerateService {
     {
         input: 'user',
         fileName:'{input}-form.{type}',
-        path: '{fileName}',
+        path: '{input}-form',
         type: 'component',
         typeInfo: { ts: true, spec: true, html: true, style: true, styleType: "less" },
         importToModue: 'user.module',
@@ -52,11 +52,11 @@ export class GenerateService {
     curFile: IFileItem;
 
     activeFice(file: IFileItem) {
+        this.curFile = file;
         if (!file) return;
         this.files.forEach((p) => {
             p.active = (p == file);
         });
-        this.curFile = file;
         this.curTypeInfo = TYPES[file.type];
     }
 

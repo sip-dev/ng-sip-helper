@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                模板列表
+                <ng-template #removeAllContent>
+                    <div sipCancelclick>
+                        确定要清空模板列表吗？
+                        <a href="javascript:void(0)" class="card-link" (click)="removeAll();removeAllPop.close()">确定</a>
+                        <a href="javascript:void(0)" class="card-link" (click)="removeAllPop.close()">取消</a>
+                    </div>
+                </ng-template>
+                <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent" popoverTitle="清空" #removeAllPop="ngbPopover"
+                    container="body" placement="right">清空</a>
+            </div>
+            <div class="card-body" *ngIf="isShowAddForm">
+                <form>
+                    <div class="form-group">
+                        <label class="col-form-label">input：</label>
+                        <input type="input" class="form-control" name="addfileName" [(ngModel)]="addFileItem.input">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">模板：</label>
+                        <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="addFileItem.type" (ngModelChange)="changeType()">
+                            <option *ngFor="let type of typeList" value="{{type}}">{{type}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label"></label>
+                        <button type="button" class="btn btn-primary" (click)="add()">确定</button>
+                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="isShowAddForm = false">取消</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body" *ngIf="!hasTmpl">
+                暂无模板数据。
+            </div>
+            <ul class="list-group list-group-flush" *ngIf="hasTmpl">
+                <li class="list-group-item" *ngFor="let file of tmpls" [class.active]="tmpl.active" (click)="activeFice(file)">
+                    <ng-template #removeContent>
+                        <div style="width:180px;color:black !important;" sipCancelclick>
+                            确定要删除吗？
+                            <a href="javascript:void(0)" class="card-link" (click)="remove(tmpl);removePop.close()">确定</a>
+                            <a href="javascript:void(0)" class="card-link" (click)="removePop.close()">取消</a>
+                        </div>
+                    </ng-template>
+                    <a class="float-right" href="javascript:void(0)" [ngbPopover]="removeContent" popoverTitle="删除" #removePop="ngbPopover" placement="top"
+                        container="body">删除</a>
+                    <sip-popclose [pops]="[removePop]"></sip-popclose>
+                    <ng-template #tipFileNameContent>{{getFileFullName(tmpl)}}</ng-template>
+                    <a href="javascript:void(0)" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">{{getFileFullName(file)}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col">
+        
+    </div>
+    <!-- <sip-popclose [pops]="[helpPop, removeAllPop]"></sip-popclose> -->
+</div>

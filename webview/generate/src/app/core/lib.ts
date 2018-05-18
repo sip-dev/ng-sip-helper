@@ -116,5 +116,6 @@ export interface IVscodeOption {
 
 export interface ITmplItem {
   title: string;
-  tmpls: IFileItem[];
+  active?: boolean;
+  files: IFileItem[];
 }
