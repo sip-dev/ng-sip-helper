@@ -1,4 +1,4 @@
-import { Inject, Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { VscodeMessageService } from './vscode-message.service';
 
 /**
@@ -12,7 +12,7 @@ export class StartupService {
     load(): Promise<any> {
         
         return new Promise((resolve, reject) => {
-            this._vsMsg.startUP(function(){ resolve(); });
+            this._vsMsg._startUP(function(){ resolve(); });
         });
     }
 }

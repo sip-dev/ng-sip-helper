@@ -9,8 +9,20 @@ ul.list-group>li.active>a {
     max-width:800px !important;
 }
 
+.tooltip-inner {
+    max-width:800px !important;
+}
+
 textarea {
     white-space: nowrap;
+}
+
+a.file-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    padding-right: 23px;
 }
 /* .popover-header {
     color: black;

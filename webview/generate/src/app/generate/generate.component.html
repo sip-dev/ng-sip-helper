@@ -5,7 +5,7 @@
                 文件列表
                 <ng-template #removeAllContent>
                     <div sipCancelclick>
-                        确定要清空吗？
+                        确定要清空文件列表吗？
                         <a href="javascript:void(0)" class="card-link" (click)="removeAll();removeAllPop.close()">确定</a>
                         <a href="javascript:void(0)" class="card-link" (click)="removeAllPop.close()">取消</a>
                     </div>
@@ -16,32 +16,29 @@
             </div>
             <div class="card-body" *ngIf="isShowAddForm">
                 <form>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">input：</label>
-                        <div class="col-sm-10">
-                            <input type="input" class="form-control" name="addfileName" [(ngModel)]="addFileItem.input">
-                        </div>
+                    <div class="form-group">
+                        <label class="col-form-label">input：</label>
+                        <input type="input" class="form-control" name="addfileName" [(ngModel)]="addFileItem.input">
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">模板：</label>
-                        <div class="col-sm-10">
-                            <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="addFileItem.type" (ngModelChange)="changeType()">
-                                <option *ngFor="let type of typeList" value="{{type}}">{{type}}</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label class="col-form-label">模板：</label>
+                        <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="addFileItem.type" (ngModelChange)="changeType()">
+                            <option *ngFor="let type of typeList" value="{{type}}">{{type}}</option>
+                        </select>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label"></label>
-                        <div class="col-sm-10">
-                            <button type="button" class="btn btn-primary" (click)="add()">确定</button>
-                            <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="isShowAddForm = false">取消</button>
-                        </div>
+                    <div class="form-group">
+                        <label class="col-form-label"></label>
+                        <button type="button" class="btn btn-primary" (click)="add()">确定</button>
+                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="isShowAddForm = false">取消</button>
                     </div>
                 </form>
             </div>
-            <ul class="list-group list-group-flush">
+            <div class="card-body" *ngIf="!isShowAddForm && !hasFile">
+                暂无文件数据，请
+                <a href="javascript:void(0)" class="card-link" (click)="isShowAddForm = true">添加</a>。
+            </div>
+            <ul class="list-group list-group-flush" *ngIf="hasFile">
                 <li class="list-group-item" *ngFor="let file of files" [class.active]="file.active" (click)="activeFice(file)">
-                    <a href="javascript:void(0)">{{getFileFullName(file)}}</a>
                     <ng-template #removeContent>
                         <div style="width:180px;color:black !important;" sipCancelclick>
                             确定要删除吗？
@@ -52,6 +49,8 @@
                     <a class="float-right" href="javascript:void(0)" [ngbPopover]="removeContent" popoverTitle="删除" #removePop="ngbPopover" placement="top"
                         container="body">删除</a>
                     <sip-popclose [pops]="[removePop]"></sip-popclose>
+                    <ng-template #tipFileNameContent>{{getFileFullName(file)}}</ng-template>
+                    <a href="javascript:void(0)" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">{{getFileFullName(file)}}</a>
                 </li>
             </ul>
         </div>
@@ -62,9 +61,12 @@
                 文件信息
                 <ng-template #helpContent>
                     <div class="alert alert-primary" style="width:540px;" role="alert" sipCancelclick>
-                        <div><b>{{ '{' }}变量{{ '}' }}</b>：引用变量</div>
-                        <div style="margin-top: 10px;"><b>{{ '{' }}#变量{{ '}' }}</b>：首字母为大写，如：user-list.component转换成UserListComponent</div>
-                        <div style="margin-top: 10px;"><b>可用变量</b>：{{vars}}</div>
+                        <div>
+                            <b>{{ '{' }}变量{{ '}' }}</b>：引用变量</div>
+                        <div style="margin-top: 10px;">
+                            <b>{{ '{' }}#变量{{ '}' }}</b>：首字母为大写，如：user-list.component转换成UserListComponent</div>
+                        <div style="margin-top: 10px;">
+                            <b>可用变量</b>：{{vars}}</div>
                     </div>
                     <a href="javascript:void(0)" class="card-link" (click)="helpPop.close()">关闭</a>
                 </ng-template>
@@ -97,15 +99,15 @@
                             <input type="input" class="form-control" name="finput" [(ngModel)]="curFile.input">
                         </div>
                         <div class="form-group">
-                            <label class="col-form-label">文件名 (fileName)：</label>
+                            <label class="col-form-label">fileName：</label>
                             <input type="input" class="form-control" name="fileName" [(ngModel)]="curFile.fileName">
                         </div>
                         <div class="form-group">
-                            <label class="col-form-label">路径 (path)：</label>
+                            <label class="col-form-label">path：</label>
                             <input type="input" class="form-control" name="filePath" [(ngModel)]="curFile.path">
                         </div>
                         <div class="form-group">
-                            <label class="col-form-label">类型 (type)：</label>
+                            <label class="col-form-label">type：</label>
                             <select class="form-control form-control-sm" name="genType" [(ngModel)]="curFile.type" (ngModelChange)="changeType()">
                                 <option *ngFor="let type of typeList" value="{{type}}">{{type}}</option>
                             </select>
@@ -135,13 +137,13 @@
                             </div>
                         </div>
                         <div class="form-group" *ngIf="curTypeInfo.importToModue">
-                            <label class="col-form-label">注册到module (importToModue)：</label>
+                            <label class="col-form-label">importToModue：</label>
                             <input name="importToModue" type="input" class="form-control" [(ngModel)]="curFile.importToModue" [ngbTypeahead]="searchImportM"
                                 (focus)="focusImportM.next($event.target.value)" (click)="clickImportM.next($event.target.value)"
                                 #instImportM="ngbTypeahead" />
                         </div>
                         <div class="form-group" *ngIf="curTypeInfo.importToRouting">
-                            <label class="col-form-label">注册到routing (importToRouting)：</label>
+                            <label class="col-form-label">importToRouting：</label>
                             <input name="importToRouting" type="input" class="form-control" [(ngModel)]="curFile.importToRouting" [ngbTypeahead]="searchImportR"
                                 (focus)="focusImportR.next($event.target.value)" (click)="clickImportR.next($event.target.value)"
                                 #instImportR="ngbTypeahead" />

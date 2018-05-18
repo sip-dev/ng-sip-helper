@@ -77,7 +77,7 @@ export function activate(context: ExtensionContext) {
         }
     });
     context.subscriptions.push(commands.registerCommand('ngsiphelper.preview', (args) => {
-        let curPath = getCurrentPath(args);
+        let curPath = args ? getCurrentPath(args) : _curFile;
 
         let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
         let htmlPath = path.dirname(htmlFile);
@@ -91,7 +91,7 @@ export function activate(context: ExtensionContext) {
         let basePath = Uri.file(htmlPath).with({
             scheme: "vscode-resource"
         }).toString();
-        html = html.replace('<base href=".">', `<base href="${basePath}/"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>const vscode = acquireVsCodeApi();</script>`)
+        html = html.replace('<base href=".">', `<base href="${basePath}/"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>const vscode = acquireVsCodeApi();window.isVscodeMode = true;</script>`)
         webview.html = html;
         let sendMsg = function (msg: string, data?: any) {
             webview.postMessage({ command: msg, data: data })
@@ -101,22 +101,36 @@ export function activate(context: ExtensionContext) {
             return sendMsg(msg + '_receive', data);
         };
         webview.onDidReceiveMessage(message => {
+            let data = message.data;
             switch (message.command) {
                 case 'options':
                     let isDir = IsDirectory(curPath);
                     let fileName = path.basename(curPath);
-                    let defaultName = isDir ? fileName : fileName.split('.')[0];
+                    let input = isDir ? fileName : fileName.split('.')[0];
                     let opt = {
                         path: isDir ? curPath : path.dirname(curPath),
                         file: isDir ? '' : curPath,
                         isDir: isDir,
-                        defaultName: defaultName,
+                        input: input,
                         fileName: isDir ? '' : fileName,
+                        workspaceRoot: _getRootPath(),
                         extensionPath: context.extensionPath
                     };
-                    console.log(opt);
+                    console.log('opt', opt);
                     revieMsg('options', opt);
-                    return;
+                    break;
+                case 'saveFile':
+                    console.log('saveFile', data);
+                    break;
+                case 'importToModule':
+                    console.log('importToModule', data);
+                    break;
+                case 'importToRouting':
+                    console.log('importToRouting', data);
+                    break;
+                case 'close':
+                    panel.dispose();
+                    break;
             }
         }, undefined, context.subscriptions);
     }));

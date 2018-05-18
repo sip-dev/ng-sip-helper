@@ -103,3 +103,18 @@ export function MakePascalCasingName(name: string) {
   if (_varFindRegex.test(name)) return name;
   return name.replace(/\b(\w)|\s(\w)/g, function (m) { return m.toUpperCase(); }).replace(/[^a-z0-9]/gi, '');
 }
+
+export interface IVscodeOption {
+  path?: string;
+  file?: string;
+  isDir?: boolean;
+  input?: string;
+  fileName?: string;
+  workspaceRoot?: string;
+  extensionPath?: string;
+}
+
+export interface ITmplItem {
+  title: string;
+  tmpls: IFileItem[];
+}

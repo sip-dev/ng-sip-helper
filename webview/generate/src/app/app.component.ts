@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IVscodeOption } from './core/lib';
 import { VscodeMessageService } from './core/services/vscode-message.service';
 
 @Component({
@@ -10,14 +11,7 @@ export class AppComponent {
   title = 'app';
   navIndex = 1;
 
-  vscodeOptions: {
-    path?: string;
-    file?: string;
-    isDir?: boolean;
-    defaultName?: string;
-    fileName?: string;
-    extensionPath?: string;
-  };
+  vscodeOptions: IVscodeOption;
 
   constructor(vsMsg: VscodeMessageService) {
     this.vscodeOptions = vsMsg.options;
