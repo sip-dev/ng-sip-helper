@@ -7,7 +7,7 @@
                     <div sipCancelclick>
                         确定要清空模板列表吗？
                         <a href="javascript:void(0)" class="card-link" (click)="removeAll();removeAllPop.close()">确定</a>
-                        <a href="javascript:void(0)" class="card-link" (click)="removeAllPop.close()">取消</a>
+                        <a href="javascript:void(0)" class="card-link" (click)="report();removeAllPop.close()">取消</a>
                     </div>
                 </ng-template>
                 <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent"
@@ -43,7 +43,7 @@
                 无文件数据。
             </div>
             <ul class="list-group list-group-flush" *ngIf="hasTmpl">
-                <li class="list-group-item" *ngFor="let file of curTmpl.files" [class.active]="file.active" (click)="activeFice(file)">
+                <li class="list-group-item" *ngFor="let file of curTmpl.files" [class.active]="file.active" (click)="activeFile(file)">
                     <ng-template #removeContent>
                         <div style="width:180px;color:black !important;" sipCancelclick>
                             确定要删除吗？

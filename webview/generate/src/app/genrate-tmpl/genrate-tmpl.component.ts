@@ -26,6 +26,7 @@ export class GenrateTmplComponent {
 
     activeTmpl(tmpl: ITmplItem) {
         this._tmplSrv.activeTmpl(tmpl);
+        this.activeFile(tmpl.files[0]);
     }
 
     add(tmpl: ITmplItem): ITmplItem {
@@ -41,7 +42,7 @@ export class GenrateTmplComponent {
     }
 
 
-    activeFice(file: IFileItem) {
+    activeFile(file: IFileItem) {
         if (!file) return;
         this.curTmpl.files.forEach((p) => {
             p.active = (p == file);
@@ -62,9 +63,13 @@ export class GenrateTmplComponent {
         if (file.active) {
             let len = files.length;
             if (len <= index)
-                this.activeFice(files[len - 1]);
+                this.activeFile(files[len - 1]);
             else
-                this.activeFice(files[index]);
+                this.activeFile(files[index]);
         }
+    }
+
+    report(){
+        console.log(JSON.stringify(this.tmpls));
     }
 }
