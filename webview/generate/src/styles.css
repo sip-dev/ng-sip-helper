@@ -22,7 +22,8 @@ a.file-title {
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
-    padding-right: 23px;
+    width: 80%;
+    position: absolute;
 }
 /* .popover-header {
     color: black;

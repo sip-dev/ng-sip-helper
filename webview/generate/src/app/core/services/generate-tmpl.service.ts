@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ITmplItem } from '../lib';
+import { ITmplItem, getDefaultTmpl } from '../lib';
 
 @Injectable()
 export class GenerateTmplService {
@@ -8,7 +8,7 @@ export class GenerateTmplService {
     curTmpl:ITmplItem;
 
     activeTmpl(tmpl: ITmplItem) {
-        this.curTmpl = tmpl;
+        this.curTmpl = tmpl || getDefaultTmpl();
         if (!tmpl) return;
         this.tmpls.forEach((p) => {
             p.active = (p == tmpl);

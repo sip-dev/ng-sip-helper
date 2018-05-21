@@ -119,3 +119,7 @@ export interface ITmplItem {
   active?: boolean;
   files: IFileItem[];
 }
+
+export const getDefaultTmpl = function (): ITmplItem {
+  return { title: '', active: false, files: [] };
+}

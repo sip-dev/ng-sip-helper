@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ITmplItem } from '../core/lib';
+import { IFileItem, ITmplItem, getFileFullName } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
+import { VscodeMessageService } from '../core/services/vscode-message.service';
 
 @Component({
     selector: 'sip-genrate-tmpl',
@@ -9,22 +10,22 @@ import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 })
 export class GenrateTmplComponent {
 
-    constructor(private _tmplSrv: GenerateTmplService) {}
+    constructor(private _tmplSrv: GenerateTmplService, private _vsMsg: VscodeMessageService) { }
 
     get tmpls(): ITmplItem[] {
         return this._tmplSrv.tmpls;
     }
 
-    get hasTmpl():boolean{
+    get hasTmpl(): boolean {
         return this.tmpls && this.tmpls.length > 0;
-      }
-    
-    get curTmpl():ITmplItem{
+    }
+
+    get curTmpl(): ITmplItem {
         return this._tmplSrv.curTmpl;
     }
 
     activeTmpl(tmpl: ITmplItem) {
-       this._tmplSrv.activeTmpl(tmpl);
+        this._tmplSrv.activeTmpl(tmpl);
     }
 
     add(tmpl: ITmplItem): ITmplItem {
@@ -37,5 +38,33 @@ export class GenrateTmplComponent {
 
     removeAll() {
         this._tmplSrv.removeAll();
+    }
+
+
+    activeFice(file: IFileItem) {
+        if (!file) return;
+        this.curTmpl.files.forEach((p) => {
+            p.active = (p == file);
+        });
+    }
+
+    getFileFullName(file: IFileItem) {
+        file.input = this._vsMsg.input;
+        return getFileFullName(file);
+    }
+
+    removeFile(file:IFileItem){
+        let files = this.curTmpl.files;
+        let index = files.indexOf(file);
+        if (index >= 0) {
+            files.splice(index, 1);
+        }
+        if (file.active) {
+            let len = files.length;
+            if (len <= index)
+                this.activeFice(files[len - 1]);
+            else
+                this.activeFice(files[index]);
+        }
     }
 }

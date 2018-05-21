@@ -39,7 +39,7 @@ export class GenerateComponent {
     return this.genSrv.files;
   };
 
-  get hasFile():boolean{
+  get hasFile(): boolean {
     return this.files && this.files.length > 0;
   }
 
@@ -47,7 +47,15 @@ export class GenerateComponent {
     return this.genSrv.curFile;
   };
 
+  public get input(): string {
+    return this._vsMsg.input;
+  }
+  public set input(p: string) {
+    this._vsMsg.input = p;
+  }
+
   getFileFullName(file: IFileItem) {
+    file.input = this.input;
     return getFileFullName(file);
   }
 
@@ -68,7 +76,7 @@ export class GenerateComponent {
         break;
     }
     if (!hasContentType) this.editContentType = 0;
-    return this.genSrv.activeFice(file);
+    return this.genSrv.activeFile(file);
   }
 
   changeType() {
@@ -81,10 +89,10 @@ export class GenerateComponent {
     let addFileItem = this.addFileItem;
     this.genSrv.add(addFileItem);
     this.addFileItem = getDefaultFile();
-    this.isShowAddForm = false;
+    this.showFormType = 'list';
   }
 
-  isShowAddForm = false;
+  showFormType = 'list';
 
   remove(file: IFileItem) {
     this.genSrv.remove(file);
@@ -92,6 +100,12 @@ export class GenerateComponent {
 
   removeAll() {
     this.genSrv.removeAll();
+  }
+
+  tmplTitle = "";
+  saveToTmpl() {
+    this.genSrv.saveToTmpl(this.tmplTitle);
+    this.showFormType = 'list';
   }
 
   @ViewChild('instImportM') instImportM: NgbTypeahead;

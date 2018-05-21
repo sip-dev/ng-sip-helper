@@ -41,11 +41,19 @@ export class VscodeMessageService {
         return environment.isVscode ? obs.pipe(vscode_msg(msg, data)) : obs;
     }
 
+    public get input(): string {
+        return this.options.input;
+    }
+    public set input(p: string) {
+        this.options.input = p;
+    }
+
     private _inited = false;
     _startUP(callback: () => void) {
         if (this._inited) { callback(); return }
         this._sendMsg('options').subscribe((p) => {
             this.options = p || {};
+            this.options.input || (this.options.input = 'demo');
             callback();
         });
     }
@@ -53,9 +61,9 @@ export class VscodeMessageService {
     close() {
         this._sendMsg('close').subscribe();
     }
-    
-    saveFile(name:string, content:string): Observable<any>{
-        return this._sendMsg('saveFile', {name:name, content:content});
+
+    saveFile(name: string, content: string): Observable<any> {
+        return this._sendMsg('saveFile', { name: name, content: content });
     }
 
 }

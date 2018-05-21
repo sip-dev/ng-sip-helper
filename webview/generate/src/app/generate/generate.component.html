@@ -12,32 +12,34 @@
                 </ng-template>
                 <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent" popoverTitle="清空" #removeAllPop="ngbPopover"
                     container="body" placement="right">清空</a>
-                <a href="javascript:void(0)" class="card-link float-right" (click)="isShowAddForm = true">生成</a>
-                <a href="javascript:void(0)" class="card-link float-right" (click)="isShowAddForm = true">保存为模板</a>
-                <a href="javascript:void(0)" class="card-link float-right" (click)="isShowAddForm = true">添加</a>
+                <a href="javascript:void(0)" class="card-link float-right" (click)="showFormType = 'build'">生成</a>
+                <a href="javascript:void(0)" class="card-link float-right" (click)="showFormType = 'savetmpl'">保存为模板</a>
             </div>
-            <div class="card-body" *ngIf="isShowAddForm">
+            <div class="card-body" *ngIf="showFormType == 'savetmpl'">
                 <form>
                     <div class="form-group">
-                        <label class="col-form-label">input：</label>
-                        <input type="input" class="form-control" name="addfileName" [(ngModel)]="addFileItem.input">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">模板：</label>
-                        <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="addFileItem.type" (ngModelChange)="changeType()">
-                            <option *ngFor="let type of typeList" value="{{type}}">{{type}}</option>
-                        </select>
+                        <label class="col-form-label">模板名称：</label>
+                        <input type="input" class="form-control" name="tmplTitle" [(ngModel)]="tmplTitle">
                     </div>
                     <div class="form-group">
                         <label class="col-form-label"></label>
-                        <button type="button" class="btn btn-primary" (click)="add()">确定</button>
-                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="isShowAddForm = false">取消</button>
+                        <button type="button" class="btn btn-primary" (click)="saveToTmpl()">保存为模板</button>
+                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
                     </div>
                 </form>
             </div>
-            <div class="card-body" *ngIf="!isShowAddForm && !hasFile">
-                暂无文件数据，请
-                <a href="javascript:void(0)" class="card-link" (click)="isShowAddForm = true">添加</a>。
+            <div class="card-body" *ngIf="showFormType == 'build'">
+                <form>
+                    <div class="form-group">
+                        <label class="col-form-label">input：</label>
+                        <input type="input" class="form-control" name="input" [(ngModel)]="input">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label"></label>
+                        <button type="button" class="btn btn-primary" (click)="add()">生成</button>
+                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
+                    </div>
+                </form>
             </div>
             <ul class="list-group list-group-flush" *ngIf="hasFile">
                 <li class="list-group-item" *ngFor="let file of files" [class.active]="file.active" (click)="activeFice(file)">
@@ -55,6 +57,21 @@
                     <a href="javascript:void(0)" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">{{getFileFullName(file)}}</a>
                 </li>
             </ul>
+            <div class="card-body" *ngIf="showFormType == 'list'">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col-sm-8 my-1">
+                            <label class="sr-only" for="inlineFormInputName">Name</label>
+                            <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="addFileItem.type" (ngModelChange)="changeType()">
+                                <option *ngFor="let type of typeList" value="{{type}}">{{type}}</option>
+                            </select>
+                        </div>
+                        <div class="col-auto my-1">
+                            <button type="submit" class="btn btn-primary" (click)="add()">添加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div class="col">
@@ -96,10 +113,10 @@
             <div class="card-body" style="padding-top: 4px;">
                 <form>
                     <div *ngIf="editContentType == 0">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="col-form-label">input：</label>
                             <input type="input" class="form-control" name="finput" [(ngModel)]="curFile.input">
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="col-form-label">fileName：</label>
                             <input type="input" class="form-control" name="fileName" [(ngModel)]="curFile.fileName">
