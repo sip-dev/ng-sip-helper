@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IFileItem, IGenTypeInfo, STYLES, TYPES, getDefaultFile } from '../lib';
+import { IFileItem, IGenTypeInfo, ITmplItem, STYLES, TYPES, cloneFile, getDefaultFile } from '../lib';
 import { GenerateTmplService } from './generate-tmpl.service';
 
 @Injectable()
@@ -19,46 +19,17 @@ export class GenerateService {
     typeList: any[];
     curTypeInfo: IGenTypeInfo;
 
-    files: IFileItem[] = [{
-        input: 'user',
-        fileName: '{input}-list.{type}',
-        path: '{input}-list',
-        type: 'component',
-        typeInfo: { ts: true, spec: true, html: true, style: true, styleType: "less" },
-        importToModue: 'user.module',
-        importToRouting: 'user-routing.module',
-        active: false
-    },
-    {
-        input: 'user',
-        fileName: '{input}-form.{type}',
-        path: '{input}-form',
-        type: 'component',
-        typeInfo: { ts: true, spec: true, html: true, style: true, styleType: "less" },
-        importToModue: 'user.module',
-        importToRouting: 'user-routing.module',
-        active: false
-    },
-    {
-        input: 'user',
-        fileName: '{input}.{type}',
-        path: '',
-        type: 'module',
-        typeInfo: { ts: true, spec: true },
-        importToModue: '../app.module',
-        importToRouting: 'user-routing.module',
-        active: false
-    }];
+    files: IFileItem[] = [];
 
     curFile: IFileItem;
 
     activeFile(file: IFileItem) {
         this.curFile = file || getDefaultFile();
+        this.curTypeInfo = TYPES[this.curFile.type];
         if (!file) return;
         this.files.forEach((p) => {
             p.active = (p == file);
         });
-        this.curTypeInfo = TYPES[file.type];
     }
 
     changeType() {
@@ -68,24 +39,18 @@ export class GenerateService {
     }
 
     add(addFileItem: IFileItem): IFileItem {
-        let type = addFileItem.type;
-        let typeInfo = Object.assign({}, TYPES[addFileItem.type]);
-        let file: IFileItem = {
-            input: addFileItem.input,
-            fileName: '{input}.{type}',
-            path: '{fileName}',
-            type: type,
-            typeInfo: typeInfo,
-            importToModue: '',
-            active: false,
-            tsContent: '',
-            specContent: '',
-            htmlContent: '',
-            styleContent: ''
-        };
+        let file = cloneFile(addFileItem);
         this.files.push(file);
         this.activeFile(file);
         return file;
+    }
+
+    addFromTmpl(tmpl: ITmplItem) {
+        let files = tmpl.files.map((p) => { return cloneFile(p); });
+        if (files.length == 0) return;
+        let len = this.files.length;
+        this.files = this.files.concat(files);
+        this.activeFile(this.files[len]);
     }
 
     remove(file: IFileItem) {
@@ -110,7 +75,7 @@ export class GenerateService {
 
     saveToTmpl(title: string) {
         let files = this.files.slice().map((p) => {
-            return Object.assign({}, p);
+            return cloneFile(p);
         });
         this._genTmplSrv.add({
             title: title,

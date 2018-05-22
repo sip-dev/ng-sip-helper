@@ -108,10 +108,11 @@ export function activate(context: ExtensionContext) {
                     let fileName = path.basename(curPath);
                     let input = isDir ? fileName : fileName.split('.')[0];
                     let opt = {
-                        path: isDir ? curPath : path.dirname(curPath),
-                        file: isDir ? '' : curPath,
+                        curPath: isDir ? curPath : path.dirname(curPath),
+                        curfile: isDir ? '' : curPath,
                         isDir: isDir,
                         input: input,
+                        prefix: 'app',
                         fileName: isDir ? '' : fileName,
                         workspaceRoot: _getRootPath(),
                         extensionPath: context.extensionPath

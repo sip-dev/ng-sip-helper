@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IVscodeOption } from '../lib';
+import { IVscodeOption, SetVarObject } from '../lib';
 
 declare const vscode: any;
 
@@ -48,12 +48,21 @@ export class VscodeMessageService {
         this.options.input = p;
     }
 
+    public get prefix(): string {
+        return this.options.prefix;
+    }
+    public set prefix(p: string) {
+        this.options.prefix = p;
+    }
+
     private _inited = false;
     _startUP(callback: () => void) {
         if (this._inited) { callback(); return }
         this._sendMsg('options').subscribe((p) => {
             this.options = p || {};
             this.options.input || (this.options.input = 'demo');
+            this.options.prefix || (this.options.prefix = 'app');
+            SetVarObject(this.options);
             callback();
         });
     }

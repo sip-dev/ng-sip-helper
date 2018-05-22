@@ -2,7 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
-import { IFileItem, IGenTypeInfo, VARS, getDefaultFile, getFileFullName } from '../core/lib';
+import { IFileItem, IGenTypeInfo, ITmplItem, VARS, getFileFullName } from '../core/lib';
+import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
 @Component({
@@ -12,8 +13,9 @@ import { VscodeMessageService } from '../core/services/vscode-message.service';
 })
 export class GenerateComponent {
 
-  constructor(public genSrv: GenerateService, private _vsMsg: VscodeMessageService) {
-    this.addFileItem.input = this._vsMsg.options.input;
+  constructor(public genSrv: GenerateService,
+    private _genTmplSrv: GenerateTmplService,
+    private _vsMsg: VscodeMessageService) {
   }
 
   vars: string = VARS.join(', ');
@@ -54,6 +56,13 @@ export class GenerateComponent {
     this._vsMsg.input = p;
   }
 
+  public get prefix(): string {
+    return this._vsMsg.prefix;
+  }
+  public set prefix(p: string) {
+    this._vsMsg.prefix = p;
+  }
+
   getFileFullName(file: IFileItem) {
     file.input = this.input;
     return getFileFullName(file);
@@ -83,13 +92,12 @@ export class GenerateComponent {
     this.genSrv.changeType();
   }
 
-  addFileItem: IFileItem = getDefaultFile();
 
   add() {
-    let addFileItem = this.addFileItem;
-    this.genSrv.add(addFileItem);
-    this.addFileItem = getDefaultFile();
-    this.showFormType = 'list';
+    let index = ~~this.tmplIndex;
+    let tmpl = this.tmpls[index];
+    if (tmpl)
+      this.genSrv.addFromTmpl(tmpl);
   }
 
   showFormType = 'list';
@@ -100,6 +108,11 @@ export class GenerateComponent {
 
   removeAll() {
     this.genSrv.removeAll();
+  }
+
+  tmplIndex: string = "0";
+  get tmpls(): ITmplItem[] {
+    return this._genTmplSrv.tmpls;
   }
 
   tmplTitle = "";

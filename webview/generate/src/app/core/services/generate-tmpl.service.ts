@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ITmplItem, getDefaultTmpl } from '../lib';
+import { DEFAULT_TMPLS, ITmplItem, cloneTmpl, getDefaultTmpl } from '../lib';
 
 @Injectable()
 export class GenerateTmplService {
+    
+    constructor(){
+        this.tmpls = DEFAULT_TMPLS.map((p)=>{ return cloneTmpl(p); });
+        this.activeTmpl(this.tmpls[0]);
+    }
 
-    tmpls: ITmplItem[] = [];
+    tmpls: ITmplItem[];
     curTmpl:ITmplItem;
 
     activeTmpl(tmpl: ITmplItem) {
