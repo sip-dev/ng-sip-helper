@@ -76,8 +76,18 @@ export function activate(context: ExtensionContext) {
             })
         }
     });
+    let mkdirSync = function (fsPath: string) {
+        let pathParent = path.dirname(fsPath);
+        if (!fs.existsSync(pathParent)) mkdirSync(pathParent);
+        fs.mkdirSync(fsPath);
+    };
     context.subscriptions.push(commands.registerCommand('ngsiphelper.preview', (args) => {
         let curPath = args ? getCurrentPath(args) : _curFile;
+        let isDir = IsDirectory(curPath);
+        let fileName = path.basename(curPath);
+        let curFile = isDir ? '' : curPath;
+        curPath = isDir ? curPath : path.dirname(curPath);
+        let isLinux: boolean = curPath.indexOf('/') >= 0;
 
         let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
         let htmlPath = path.dirname(htmlFile);
@@ -93,46 +103,77 @@ export function activate(context: ExtensionContext) {
         }).toString();
         html = html.replace('<base href=".">', `<base href="${basePath}/"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>const vscode = acquireVsCodeApi();window.isVscodeMode = true;</script>`)
         webview.html = html;
-        let sendMsg = function (msg: string, data?: any) {
-            webview.postMessage({ command: msg, data: data })
+        let sendMsg = function (id: string, msg: string, data?: any, err?: any) {
+            webview.postMessage({ id: id, command: msg, data: data, err: err })
             return msg + '_receive';
         };
-        let revieMsg = function (msg: string, data?: any) {
-            return sendMsg(msg + '_receive', data);
+        let receiveMsg = function (id: string, msg: string, data?: any, err?: any) {
+            return sendMsg(id, msg + '_receive', data, err);
         };
+        let workspaceRoot = _getRootPath();
         webview.onDidReceiveMessage(message => {
             let data = message.data;
-            switch (message.command) {
+            let cmd = message.command;
+            let id = message.id;
+            switch (cmd) {
                 case 'options':
-                    let isDir = IsDirectory(curPath);
-                    let fileName = path.basename(curPath);
                     let input = isDir ? fileName : fileName.split('.')[0];
                     let opt = {
-                        curPath: isDir ? curPath : path.dirname(curPath),
-                        curfile: isDir ? '' : curPath,
+                        curPath: curPath,
+                        curFile: curFile,
                         isDir: isDir,
+                        isLinux: isLinux,
                         input: input,
                         prefix: 'app',
                         fileName: isDir ? '' : fileName,
-                        workspaceRoot: _getRootPath(),
-                        extensionPath: context.extensionPath
+                        workspaceRoot: workspaceRoot,
+                        extensionPath: context.extensionPath,
+                        modules: FindUpwardModuleFiles(workspaceRoot, curPath).map(file => path.relative(curPath, file))
                     };
-                    console.log('opt', opt);
-                    revieMsg('options', opt);
+                    receiveMsg(id, cmd, opt);
                     break;
+                case 'saveConfig':
+                    data.content = stringify(JSON.parse(data.content), { space: '    ' });
+                    data.flag = 'w';
                 case 'saveFile':
-                    console.log('saveFile', data);
+                    /**data:{ file: 'demo/demo.ts', content: 'content', basePath:'' } */
+                    let file: string = path.join(data.basePath || curPath, data.file);
+                    let retFile = path.relative(workspaceRoot, file);
+                    let overWrite = data.flag && data.flag.indexOf('w') >= 0;
+                    if (file && (overWrite || !fs.existsSync(file))) {
+                        try {
+                            let content: string = data.content;
+                            let fsPath = path.dirname(file);
+                            if (!fs.existsSync(fsPath)) {
+                                mkdirSync(fsPath);
+                            }
+                            fs.writeFile(file, content, { encoding: 'utf-8', flag:'w' }, (err) => {
+                                receiveMsg(id, cmd, [retFile, err ? err.message : '成功'].join(', '));
+                            });
+                        } catch (e) {
+                            receiveMsg(id, cmd, [retFile, e.message].join(', '));
+
+                        }
+                    } else
+                        receiveMsg(id, cmd, [retFile, '文件已存在！'].join(', '));
+                    break;
+                case 'readFile':
+                    let readFile: string = path.join(data.basePath || curPath, data.file);
+                    let readContent: string = '';
+                    if (readFile && fs.existsSync(readFile)) {
+                        readContent = fs.readFileSync(readFile, 'utf-8');
+                    }
+                    receiveMsg(id, cmd, readContent);
                     break;
                 case 'importToModule':
-                    console.log('importToModule', data);
                     break;
                 case 'importToRouting':
-                    console.log('importToRouting', data);
                     break;
                 case 'close':
                     panel.dispose();
                     break;
             }
+            // console.log(cmd, data);
         }, undefined, context.subscriptions);
     }));
 

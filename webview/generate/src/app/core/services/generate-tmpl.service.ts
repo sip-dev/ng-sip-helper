@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
-import { DEFAULT_TMPLS, ITmplItem, cloneTmpl, getDefaultTmpl } from '../lib';
+import { CloneTmpl, DEFAULT_TMPLS, GetDefaultTmpl, ITmplItem } from '../lib';
+import { VscodeMessageService } from './vscode-message.service';
 
 @Injectable()
 export class GenerateTmplService {
-    
-    constructor(){
-        this.tmpls = DEFAULT_TMPLS.map((p)=>{ return cloneTmpl(p); });
+
+    constructor(private _vsMsg: VscodeMessageService) {
+        let config  = this._vsMsg.config;
+        this.tmpls = config ? config.tmpls : DEFAULT_TMPLS.map((p) => { return CloneTmpl(p); });
         this.activeTmpl(this.tmpls[0]);
+        if (!config) this._save();
     }
 
     tmpls: ITmplItem[];
-    curTmpl:ITmplItem;
+    curTmpl: ITmplItem;
+
+    private _save() {
+        this._vsMsg.saveConfig(this.tmpls).subscribe();
+    }
 
     activeTmpl(tmpl: ITmplItem) {
-        this.curTmpl = tmpl || getDefaultTmpl();
+        this.curTmpl = tmpl || GetDefaultTmpl();
         if (!tmpl) return;
         this.tmpls.forEach((p) => {
             p.active = (p == tmpl);
@@ -23,6 +30,7 @@ export class GenerateTmplService {
     add(tmpl: ITmplItem): ITmplItem {
         this.tmpls.push(tmpl);
         this.activeTmpl(tmpl);
+        this._save();
         return tmpl;
     }
 
@@ -32,6 +40,7 @@ export class GenerateTmplService {
         if (index >= 0) {
             tmpls.splice(index, 1);
         }
+        this._save();
         if (tmpl == this.curTmpl) {
             let len = tmpls.length;
             if (len <= index)
@@ -43,6 +52,7 @@ export class GenerateTmplService {
 
     removeAll() {
         this.tmpls = [];
+        this._save();
         this.activeTmpl(null);
     }
 }

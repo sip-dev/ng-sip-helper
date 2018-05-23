@@ -3,17 +3,19 @@
         <div class="card">
             <div class="card-header">
                 文件列表
-                <ng-template #removeAllContent>
-                    <div sipCancelclick>
-                        确定要清空文件列表吗？
-                        <a href="javascript:void(0)" class="card-link" (click)="removeAll();removeAllPop.close()">确定</a>
-                        <a href="javascript:void(0)" class="card-link" (click)="removeAllPop.close()">取消</a>
-                    </div>
-                </ng-template>
-                <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent" popoverTitle="清空" #removeAllPop="ngbPopover"
-                    container="body" placement="right">清空</a>
-                <a href="javascript:void(0)" class="card-link float-right" (click)="showFormType = 'build'">生成</a>
-                <a href="javascript:void(0)" class="card-link float-right" (click)="showFormType = 'savetmpl'">保存为模板</a>
+                <span [style.display]="hasFile ? '' : 'none'">
+                    <ng-template #removeAllContent>
+                        <div sipCancelclick>
+                            确定要清空文件列表吗？
+                            <a href="javascript:void(0)" class="card-link" (click)="removeAll();removeAllPop.close()">确定</a>
+                            <a href="javascript:void(0)" class="card-link" (click)="removeAllPop.close()">取消</a>
+                        </div>
+                    </ng-template>
+                    <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent"
+                        popoverTitle="清空" #removeAllPop="ngbPopover" container="body" placement="right">清空</a>
+                    <!-- <a href="javascript:void(0)" class="card-link float-right" (click)="generating = 0;showFormType = 'build'">生成</a> -->
+                    <a href="javascript:void(0)" class="card-link float-right" (click)="showFormType = 'savetmpl'">保存为模板</a>
+                </span>
             </div>
             <div class="card-body" *ngIf="showFormType == 'savetmpl'">
                 <form>
@@ -28,24 +30,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card-body" *ngIf="showFormType == 'build'">
-                <form>
-                    <div class="form-group">
-                        <label class="col-form-label">input：</label>
-                        <input type="input" class="form-control" name="input" [(ngModel)]="input">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">prefix：</label>
-                        <input type="input" class="form-control" name="input" [(ngModel)]="prefix">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label"></label>
-                        <button type="button" class="btn btn-primary" (click)="add()">生成</button>
-                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
-                    </div>
-                </form>
-            </div>
-            <ul class="list-group list-group-flush" *ngIf="hasFile">
+            <ul class="list-group list-group-flush" *ngIf="generating == 0 && hasFile">
                 <li class="list-group-item" *ngFor="let file of files" [class.active]="file.active" (click)="activeFice(file)">
                     <ng-template #removeContent>
                         <div style="width:180px;color:black !important;" sipCancelclick>
@@ -61,20 +46,51 @@
                     <a href="javascript:void(0)" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">{{getFileFullName(file)}}</a>
                 </li>
             </ul>
-            <div class="card-body" *ngIf="showFormType == 'list'">
+            <div class="card-body" *ngIf="showFormType == 'add'">
                 <form>
                     <div class="form-row align-items-center">
                         <div class="col-sm-8 my-1">
                             <label class="sr-only" for="inlineFormInputName">模板：</label>
-                            <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="tmplIndex" (ngModelChange)="changeType()">
+                            <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="tmplIndex">
+                                <option value="-1">选择模板</option>
                                 <option *ngFor="let tmpl of tmpls;let i=index" value="{{i}}">{{tmpl.title}}</option>
                             </select>
                         </div>
                         <div class="col-auto my-1">
                             <button type="submit" class="btn btn-primary" (click)="add()">添加</button>
+                            <button type="submit" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
                         </div>
                     </div>
                 </form>
+            </div>
+            <div *ngIf="showFormType == 'build'">
+                <div class="card-body" *ngIf="generating == 0">
+                    <form>
+                        <div class="form-row align-items-center">
+                            <div class="col-sm-8 my-1">
+                                <label class="sr-only">input：</label>
+                                <input type="input" class="form-control" name="input" [(ngModel)]="input">
+                            </div>
+                            <div class="col-auto my-1">
+                                    <button type="button" class="btn btn-primary" (click)="generate()">生成</button>
+                                    <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <ul class="list-group list-group-flush" *ngIf="generating > 0">
+                    <li class="list-group-item" *ngFor="let item of genReports" [class.list-group-item-success]="(item||'').indexOf('成功')>=0"
+                        [class.list-group-item-danger]="(item||'').indexOf('成功')<0">{{item}}</li>
+                    <li class="list-group-item" *ngIf="generating == 2">
+                        生成完成！！
+                        <a class="card-link" href="javascript:void(0)" (click)="generating = 0; showFormType = 'list'">返回列表</a>
+                        <a class="card-link" href="javascript:void(0)" (click)="close()">完成</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body" *ngIf="showFormType == 'list'">
+                <button type="submit" class="btn btn-primary" (click)="showFormType = 'add'">添加文件</button>
+                <button type="submit" class="btn btn-danger" style="margin-left: 10px;" *ngIf="hasFile" (click)="generating = 0;showFormType = 'build'">生成文件</button>
             </div>
         </div>
     </div>
@@ -112,15 +128,10 @@
                 <li class="nav-item" *ngIf="curFile.typeInfo.style">
                     <a class="nav-link" [class.active]="editContentType == 4" (click)="editContentType = 4" href="javascript:void(0)">{{curFile.typeInfo.styleType}}</a>
                 </li>
-
             </ul>
             <div class="card-body" style="padding-top: 4px;">
                 <form>
                     <div *ngIf="editContentType == 0">
-                        <!-- <div class="form-group">
-                            <label class="col-form-label">input：</label>
-                            <input type="input" class="form-control" name="finput" [(ngModel)]="curFile.input">
-                        </div> -->
                         <div class="form-group">
                             <label class="col-form-label">fileName：</label>
                             <input type="input" class="form-control" name="fileName" [(ngModel)]="curFile.fileName">

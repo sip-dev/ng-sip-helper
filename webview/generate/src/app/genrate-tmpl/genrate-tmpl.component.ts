@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IFileItem, ITmplItem, getFileFullName } from '../core/lib';
+import { IFileItem, ITmplItem, GetFileFullName } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
 
@@ -51,7 +51,7 @@ export class GenrateTmplComponent {
 
     getFileFullName(file: IFileItem) {
         file.input = this._vsMsg.input;
-        return getFileFullName(file);
+        return GetFileFullName(file);
     }
 
     removeFile(file:IFileItem){

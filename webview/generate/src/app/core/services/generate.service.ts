@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { IFileItem, IGenTypeInfo, ITmplItem, STYLES, TYPES, cloneFile, getDefaultFile } from '../lib';
+import { GetFileFullList, IFileItem, IGenTypeInfo, ITmplItem, STYLES, TYPES, CloneFile, GetDefaultFile } from '../lib';
 import { GenerateTmplService } from './generate-tmpl.service';
+import { VscodeMessageService } from './vscode-message.service';
 
 @Injectable()
 export class GenerateService {
 
-    constructor(private _genTmplSrv: GenerateTmplService) {
+    constructor(
+        private _genTmplSrv: GenerateTmplService,
+        private _vsMsg: VscodeMessageService) {
         let typeList = [];
         Object.keys(TYPES).forEach((p) => {
             typeList.push(p);
@@ -24,7 +27,7 @@ export class GenerateService {
     curFile: IFileItem;
 
     activeFile(file: IFileItem) {
-        this.curFile = file || getDefaultFile();
+        this.curFile = file || GetDefaultFile();
         this.curTypeInfo = TYPES[this.curFile.type];
         if (!file) return;
         this.files.forEach((p) => {
@@ -39,14 +42,14 @@ export class GenerateService {
     }
 
     add(addFileItem: IFileItem): IFileItem {
-        let file = cloneFile(addFileItem);
+        let file = CloneFile(addFileItem);
         this.files.push(file);
         this.activeFile(file);
         return file;
     }
 
     addFromTmpl(tmpl: ITmplItem) {
-        let files = tmpl.files.map((p) => { return cloneFile(p); });
+        let files = tmpl.files.map((p) => { return CloneFile(p); });
         if (files.length == 0) return;
         let len = this.files.length;
         this.files = this.files.concat(files);
@@ -75,11 +78,32 @@ export class GenerateService {
 
     saveToTmpl(title: string) {
         let files = this.files.slice().map((p) => {
-            return cloneFile(p);
+            return CloneFile(p);
         });
         this._genTmplSrv.add({
             title: title,
             files: files
         })
+    }
+
+    genReports: string[] = [];
+    generating = 0;
+    generate() {
+        this.genReports = [];
+        this.generating = 1;
+        let saveList = [];
+        this.files.forEach((file) => {
+            saveList = saveList.concat(GetFileFullList(file));
+        });
+        let count = saveList.length;
+        saveList.forEach((file) => {
+            this._vsMsg.saveFile(file.fileName, file.content).subscribe((res) => {
+                this.genReports.push(res || (file.fileName + '生成成功！！'));
+                count--;
+                if (count == 0) {
+                    this.generating = 2;
+                }
+            });
+        });
     }
 }

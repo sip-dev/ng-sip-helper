@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IVscodeOption, SetVarObject } from '../lib';
+import { IConfig, ITmplItem, IVscodeOption, SetVarObject } from '../lib';
 
 declare const vscode: any;
+
+let _msgId = 0;
 
 export const vscode_msg = (msg: string, data?: any) => <T>(source: Observable<T>) => {
     return new Observable<T>(observer => {
@@ -12,12 +14,14 @@ export const vscode_msg = (msg: string, data?: any) => <T>(source: Observable<T>
                 if (!environment.isVscode) {
                     observer.next(null); return;
                 }
-                vscode.postMessage({ command: msg, data: data });
+                let id = (_msgId++);
+                if (_msgId == 999) _msgId = 0;
+                vscode.postMessage({ id: id, command: msg, data: data });
                 let msg_receive = msg + '_receive';
                 let fn = function (event) {
                     const message = event.data;
                     let command = message.command;
-                    if (command == msg_receive) {
+                    if (message.id == id) {
                         window.removeEventListener('message', fn);
                         observer.next(message.data);
                     }
@@ -59,11 +63,28 @@ export class VscodeMessageService {
     _startUP(callback: () => void) {
         if (this._inited) { callback(); return }
         this._sendMsg('options').subscribe((p) => {
-            this.options = p || {};
-            this.options.input || (this.options.input = 'demo');
-            this.options.prefix || (this.options.prefix = 'app');
-            SetVarObject(this.options);
-            callback();
+            this.options = Object.assign({
+                curPath: "d:\\root\\demo",
+                curFile: "",
+                isDir: true,
+                isLinux: false,
+                input: 'demo',
+                prefix: 'app',
+                fileName: '',
+                workspaceRoot: 'd:\\root',
+                extensionPath: 'd:\\temp\\extension',
+                modules: []
+            }, p);
+            this.options.modules = this.options.modules.slice();
+            this.readConfig().subscribe((p: string) => {
+                let config: IConfig = p ? JSON.parse(p) : null;
+                this.config = config;
+                if (config){
+                    this.options.prefix = config.prefix;
+                }
+                SetVarObject(this.options);
+                callback();
+            });
         });
     }
 
@@ -71,8 +92,40 @@ export class VscodeMessageService {
         this._sendMsg('close').subscribe();
     }
 
-    saveFile(name: string, content: string): Observable<any> {
-        return this._sendMsg('saveFile', { name: name, content: content });
+    /**
+     * 保存文件
+     * @param file 文件名称（相对basePath，如：demo/demo.ts）
+     * @param content 保存内容
+     * @param basePath 默认为当前路径
+     * @param flag 'w'
+     * @example saveFile('name1111', 'test11112').subscribe()
+     */
+    saveFile(file: string, content: string, basePath?: string, flag?:string): Observable<string> {
+        return this._sendMsg('saveFile', { basePath: basePath, file: file, content: content, flag:flag });
+    }
+
+    readFile(file: string, basePath?: string): Observable<string> {
+        return this._sendMsg('readFile', { basePath: basePath, file: file });
+    }
+
+    private _config: IConfig;
+    public get config(): IConfig {
+        return this._config;
+    }
+    public set config(p: IConfig) {
+        this._config = p;
+    }
+
+    saveConfig(tmpls: ITmplItem[]): Observable<string> {
+        var config: IConfig = this.config = {
+            prefix: this.prefix,
+            tmpls: tmpls
+        };
+        return this._sendMsg('saveConfig', { basePath: this.options.workspaceRoot, file: 'ng-sip-helper.conf.json', content: JSON.stringify(config) });
+    }
+
+    readConfig(): Observable<string> {
+        return this.readFile('ng-sip-helper.conf.json', this.options.workspaceRoot);
     }
 
 }

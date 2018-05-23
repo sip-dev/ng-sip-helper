@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
-import { IFileItem, IGenTypeInfo, ITmplItem, VARS, getFileFullName } from '../core/lib';
+import { GetFileFullName, IFileItem, IGenTypeInfo, ITmplItem, VARS } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
@@ -65,7 +65,7 @@ export class GenerateComponent {
 
   getFileFullName(file: IFileItem) {
     file.input = this.input;
-    return getFileFullName(file);
+    return GetFileFullName(file);
   }
 
   activeFice(file: IFileItem) {
@@ -92,12 +92,13 @@ export class GenerateComponent {
     this.genSrv.changeType();
   }
 
-
   add() {
     let index = ~~this.tmplIndex;
+    if (index < 0) return;
     let tmpl = this.tmpls[index];
     if (tmpl)
       this.genSrv.addFromTmpl(tmpl);
+    this.showFormType = 'list';
   }
 
   showFormType = 'list';
@@ -110,17 +111,40 @@ export class GenerateComponent {
     this.genSrv.removeAll();
   }
 
-  tmplIndex: string = "0";
+  tmplIndex: string = "-1";
   get tmpls(): ITmplItem[] {
     return this._genTmplSrv.tmpls;
   }
 
   tmplTitle = "";
   saveToTmpl() {
+    if (!this.tmplTitle) return;
     this.genSrv.saveToTmpl(this.tmplTitle);
     this.showFormType = 'list';
   }
 
+  get genReports(): string[] {
+    return this.genSrv.genReports;
+  }
+
+  get generating():number{
+    return this.genSrv.generating;
+  }
+
+  set generating(p:number){
+    this.genSrv.generating = p;
+  }
+
+  generate() {
+    if (!this.input) return;
+    this.genSrv.generate();
+  }
+
+  close(){
+    this._vsMsg.close();
+  }
+
+  modules = this._vsMsg.options.modules;
   @ViewChild('instImportM') instImportM: NgbTypeahead;
   focusImportM = new Subject<string>();
   clickImportM = new Subject<string>();
@@ -130,8 +154,8 @@ export class GenerateComponent {
       distinctUntilChanged(),
       merge(this.focusImportM),
       merge(this.clickImportM.pipe(filter(() => !this.instImportM.isPopupOpen()))),
-      map(term => (term === '' ? states
-        : states.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+      map(term => (term === '' ? this.modules
+        : this.modules.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
     );
 
 
@@ -144,8 +168,8 @@ export class GenerateComponent {
       distinctUntilChanged(),
       merge(this.focusImportR),
       merge(this.clickImportR.pipe(filter(() => !this.instImportR.isPopupOpen()))),
-      map(term => (term === '' ? states
-        : states.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+      map(term => (term === '' ? this.modules
+        : this.modules.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
     );
 }
 
