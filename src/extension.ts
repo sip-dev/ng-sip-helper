@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ExtensionContext, Position, Range, Terminal, TextDocument, Uri, ViewColumn, commands, window, workspace } from 'vscode';
-import { CalcPath, ContentBase, FindModuleFile, FindPathUpward, FindUpwardModuleFiles, IsDirectory, IsEmptyDirectory, MakeClassName } from './contents/content-base';
+import { CalcImportPath, CalcPath, ContentBase, FindModuleFile, FindPathUpward, FindUpwardModuleFiles, IsDirectory, IsEmptyDirectory, MakeClassName, PushToImport, PushToModuleDeclarations, PushToModuleEntryComponents, PushToModuleExports, PushToModuleImports, PushToModuleProviders, PushToModuleRouting } from './contents/content-base';
 import { SipClass } from './contents/sip-class';
 import { SipComponent } from './contents/sip-component';
 import { SipComponentEx } from './contents/sip-component-ex';
@@ -82,11 +82,11 @@ export function activate(context: ExtensionContext) {
         fs.mkdirSync(fsPath);
     };
     context.subscriptions.push(commands.registerCommand('ngsiphelper.preview', (args) => {
-        let curPath = args ? getCurrentPath(args) : _curFile;
-        let isDir = IsDirectory(curPath);
-        let fileName = path.basename(curPath);
-        let curFile = isDir ? '' : curPath;
-        curPath = isDir ? curPath : path.dirname(curPath);
+        let inputFile = args ? getCurrentPath(args) : _curFile;
+        let isDir = IsDirectory(inputFile);
+        let fileName = path.basename(inputFile);
+        let curFile = isDir ? '' : inputFile;
+        let curPath = isDir ? inputFile : path.dirname(inputFile);
         let isLinux: boolean = curPath.indexOf('/') >= 0;
 
         let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
@@ -128,7 +128,7 @@ export function activate(context: ExtensionContext) {
                         fileName: isDir ? '' : fileName,
                         workspaceRoot: workspaceRoot,
                         extensionPath: context.extensionPath,
-                        modules: FindUpwardModuleFiles(workspaceRoot, curPath).map(file => path.relative(curPath, file))
+                        modules: FindUpwardModuleFiles(workspaceRoot, inputFile).map(file => ['@{curPath}', path.relative(curPath, file)].join(isLinux?"/":"\\"))
                     };
                     receiveMsg(id, cmd, opt);
                     break;
@@ -147,12 +147,11 @@ export function activate(context: ExtensionContext) {
                             if (!fs.existsSync(fsPath)) {
                                 mkdirSync(fsPath);
                             }
-                            fs.writeFile(file, content, { encoding: 'utf-8', flag:'w' }, (err) => {
+                            fs.writeFile(file, content, { encoding: 'utf-8', flag: 'w' }, (err) => {
                                 receiveMsg(id, cmd, [retFile, err ? err.message : '成功'].join(', '));
                             });
                         } catch (e) {
                             receiveMsg(id, cmd, [retFile, e.message].join(', '));
-
                         }
                     } else
                         receiveMsg(id, cmd, [retFile, '文件已存在！'].join(', '));
@@ -166,6 +165,55 @@ export function activate(context: ExtensionContext) {
                     receiveMsg(id, cmd, readContent);
                     break;
                 case 'importToModule':
+                    /**data: 
+                     * {
+                     *      file:'', module:'', basePath:'', className:'',
+                     *      regOpt:{
+                     *       moduleExport?: boolean;
+                     *       moduleImport?: boolean;
+                     *       moduleDeclaration?: boolean;
+                     *       moduleEntryComponent?: boolean;
+                     *       moduleProvider?: boolean;
+                     *       moduleRouting?: boolean;
+                     *       routePath:string;
+                     *   }
+                     * } */
+                    let regFile: string = path.join(data.basePath || curPath, data.file);
+                    let regFilePath:string = path.dirname(regFile);
+                    let retRegFile = path.relative(workspaceRoot, regFile);
+                    let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
+                    let regImportFile:string = CalcImportPath(regModuleFile, regFile);;
+                    let regClassName = data.className;
+                    try {
+                        if (fs.existsSync(regFile) && fs.existsSync(regModuleFile)) {
+                            let regContent = fs.readFileSync(regModuleFile, 'utf-8');
+                            let regOpt = data.regOpt;
+                            regContent = PushToImport(regContent, regClassName, regImportFile);
+                            if (regOpt.moduleImport){
+                                regContent = PushToModuleImports(regContent, regClassName);
+                            }
+                            if (regOpt.moduleProvider){
+                                regContent = PushToModuleProviders(regContent, regClassName);
+                            }
+                            if (regOpt.moduleDeclaration){
+                                regContent = PushToModuleDeclarations(regContent, regClassName);
+                            }
+                            if (regOpt.moduleExport){
+                                regContent = PushToModuleExports(regContent, regClassName);
+                            }
+                            if (regOpt.moduleEntryComponent){
+                                regContent = PushToModuleEntryComponents(regContent, regClassName);
+                            }
+                            if (regOpt.moduleRouting){
+                                regContent = PushToModuleRouting(regContent, regOpt.routePath || '', regClassName, regImportFile, regOpt.isModule);
+                            }
+                            fs.writeFileSync(regModuleFile, regContent, 'utf-8');
+                            receiveMsg(id, cmd, ['注册', retRegFile, '成功'].join(', '));
+                        } else
+                            receiveMsg(id, cmd, ['注册', retRegFile, '文件不存在！'].join(', '));
+                    } catch (e) {
+                        receiveMsg(id, cmd, ['注册', retRegFile, e.message].join(', '));
+                    }
                     break;
                 case 'importToRouting':
                     break;

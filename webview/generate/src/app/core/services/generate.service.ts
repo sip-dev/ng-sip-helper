@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GetFileFullList, IFileItem, IGenTypeInfo, ITmplItem, STYLES, TYPES, CloneFile, GetDefaultFile } from '../lib';
+import { CloneFile, GetDefaultFile, GetFileFullList, IFileItem, IGenTypeInfo, ITmplItem, STYLES, TYPES } from '../lib';
 import { GenerateTmplService } from './generate-tmpl.service';
 import { VscodeMessageService } from './vscode-message.service';
 
@@ -91,19 +91,78 @@ export class GenerateService {
     generate() {
         this.genReports = [];
         this.generating = 1;
-        let saveList = [];
+        let saveList: {
+            fileName: string;
+            content?: string;
+            className?: string;
+            isModule?:boolean;
+            isImportToModue?: boolean;
+            importToModue?: string;
+            isImportToRouting?: boolean;
+            importToRouting?: string;
+            typeInfo?: any;
+            routePath?:string;
+        }[] = [];
         this.files.forEach((file) => {
             saveList = saveList.concat(GetFileFullList(file));
         });
-        let count = saveList.length;
+        let count = 0;
         saveList.forEach((file) => {
+            count++;
             this._vsMsg.saveFile(file.fileName, file.content).subscribe((res) => {
                 this.genReports.push(res || (file.fileName + '生成成功！！'));
-                count--;
-                if (count == 0) {
-                    this.generating = 2;
-                }
+                setTimeout(() => {
+                    count--;
+                    if (count == 0) {
+                        this._generateImportToModule(saveList);
+                    }
+                });
             });
         });
+    }
+
+    private _generateImportToModule(saveList: {
+        fileName: string;
+        content?: string;
+        className?: string;
+        isImportToModue?: boolean;
+        importToModue?: string;
+        isImportToRouting?: boolean;
+        importToRouting?: string;
+        routePath?:string;
+        isModule?:boolean;
+        typeInfo?: any;
+    }[]) {
+        let count = 0;
+        let has = false;
+        saveList.forEach((file) => {
+            if (file.isImportToModue && file.importToModue) {
+                has = true;
+                count++;
+                this._vsMsg.importToModule(file.fileName, file.importToModue, file.className, file.typeInfo).subscribe((res) => {
+                    this.genReports.push(res || (file.fileName + '注册成功！！'));
+                    setTimeout(() => {
+                        count--;
+                        if (count == 0) {
+                            this.generating = 2;
+                        }
+                    });
+                });
+            }
+            if (file.isImportToRouting && file.importToRouting) {
+                has = true;
+                count++;
+                this._vsMsg.importToModule(file.fileName, file.importToRouting, file.className, { moduleRouting: true, routePath:file.routePath, isModule:file.isModule }).subscribe((res) => {
+                    this.genReports.push(res || (file.fileName + '注册成功！！'));
+                    setTimeout(() => {
+                        count--;
+                        if (count == 0) {
+                            this.generating = 2;
+                        }
+                    });
+                });
+            }
+        });
+        if (!has) this.generating = 2;
     }
 }

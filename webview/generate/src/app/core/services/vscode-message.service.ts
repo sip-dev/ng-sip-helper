@@ -79,7 +79,7 @@ export class VscodeMessageService {
             this.readConfig().subscribe((p: string) => {
                 let config: IConfig = p ? JSON.parse(p) : null;
                 this.config = config;
-                if (config){
+                if (config) {
                     this.options.prefix = config.prefix;
                 }
                 SetVarObject(this.options);
@@ -100,8 +100,8 @@ export class VscodeMessageService {
      * @param flag 'w'
      * @example saveFile('name1111', 'test11112').subscribe()
      */
-    saveFile(file: string, content: string, basePath?: string, flag?:string): Observable<string> {
-        return this._sendMsg('saveFile', { basePath: basePath, file: file, content: content, flag:flag });
+    saveFile(file: string, content: string, basePath?: string, flag?: string): Observable<string> {
+        return this._sendMsg('saveFile', { basePath: basePath, file: file, content: content, flag: flag });
     }
 
     readFile(file: string, basePath?: string): Observable<string> {
@@ -126,6 +126,19 @@ export class VscodeMessageService {
 
     readConfig(): Observable<string> {
         return this.readFile('ng-sip-helper.conf.json', this.options.workspaceRoot);
+    }
+
+    importToModule(file: string, moduleFile: string, className: string, regOpt: {
+        moduleExport?: boolean;
+        moduleImport?: boolean;
+        moduleDeclaration?: boolean;
+        moduleEntryComponent?: boolean;
+        moduleProvider?: boolean;
+        moduleRouting?:boolean;
+        routePath?:string;
+        isModule?:boolean;
+    }, basePath?: string): Observable<string> {
+        return this._sendMsg('importToModule', { basePath: basePath, file: file, moduleFile: moduleFile, className: className, regOpt: regOpt });
     }
 
 }
