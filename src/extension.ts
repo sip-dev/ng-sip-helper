@@ -3,25 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ExtensionContext, Position, Range, Terminal, TextDocument, Uri, ViewColumn, commands, window, workspace } from 'vscode';
 import { CalcImportPath, CalcPath, ContentBase, FindModuleFile, FindPathUpward, FindUpwardModuleFiles, IsDirectory, IsEmptyDirectory, MakeClassName, PushToImport, PushToModuleDeclarations, PushToModuleEntryComponents, PushToModuleExports, PushToModuleImports, PushToModuleProviders, PushToModuleRouting } from './contents/content-base';
-import { SipClass } from './contents/sip-class';
-import { SipComponent } from './contents/sip-component';
-import { SipComponentEx } from './contents/sip-component-ex';
-import { SipDirective } from './contents/sip-directive';
-import { SipDirectiveEx } from './contents/sip-directive-ex';
-import { SipEnum } from './contents/sip-enum';
-import { SipGuard } from './contents/sip-guard';
-import { SipInterface } from './contents/sip-interface';
-import { SipModalComponent } from './contents/sip-modal-component';
-import { SipModalFormComponent } from './contents/sip-modal-form-component';
-import { SipModule } from './contents/sip-module';
-import { SipPageComponent } from './contents/sip-page-component';
-import { SipPageDetailComponent } from './contents/sip-page-detail-component';
-import { SipPageFormComponent } from './contents/sip-page-form-component';
-import { SipPageListComponent } from './contents/sip-page-list-component';
-import { SipPipe } from './contents/sip-pipe';
 import { SipRegModule } from './contents/sip-reg-module';
-import { SipService } from './contents/sip-service';
-import { SipServiceEx } from './contents/sip-service-ex';
 import { Lib } from './lib';
 
 let argv = require('yargs-parser');
@@ -329,86 +311,6 @@ export function activate(context: ExtensionContext) {
             case 'sip-generate':
                 commands.executeCommand('ngsiphelper.sipgenerate');
                 break;
-            // case 'ng-generate':
-            //     let generateConfigs: IConfig[] = require('./ng-generate.conf');
-            //     showQuickPick(generateConfigs, rootPath, args);
-            //     break;
-            case 'sip-page':
-                sipGenerate(new SipPageComponent(), gParam);
-                break;
-            case 'sip-page-list':
-                sipGenerate(new SipPageListComponent(), gParam);
-                break;
-            case 'sip-page-form':
-                sipGenerate(new SipPageFormComponent(), gParam);
-                break;
-            case 'sip-page-detail':
-                sipGenerate(new SipPageDetailComponent(), gParam);
-                break;
-            case 'sip-modal':
-                sipGenerate(new SipModalComponent(), gParam);
-                break;
-            case 'sip-modal-form':
-                sipGenerate(new SipModalFormComponent(), gParam);
-                break;
-            case 'sip-component':
-                sipGenerate(new SipComponent(), gParam);
-                break;
-            case 'sip-component-ex':
-                sipGenerate(new SipComponentEx(), gParam);
-                break;
-            case 'sip-module':
-                if (gParam.shared) {
-                    gParam.shared = false;
-                    let name = gParam.name;
-                    gParam.name += '-shared';
-                    gParam.dir = true;
-                    gParam.ts = true;
-                    sipGenerate(new SipModule(), gParam).then((p) => {
-                        let moduleFile = p.fileName;
-                        let tPathM = path.join(gParam.path, gParam.name);
-                        gParam.name = name;
-                        gParam.dir = false;
-                        gParam.path = path.join(tPathM, 'models');
-                        sipGenerate(new SipClass(), gParam);
-                        gParam.path = path.join(tPathM, 'services');
-                        sipGenerate(new SipServiceEx(), gParam).then((p) => {
-                            gParam.module = true;
-                            gParam.path = p.fileName;
-                            gParam.moduleFile = moduleFile;
-                            new SipRegModule().generate(gParam);
-                        });
-                    });
-                } else
-                    sipGenerate(new SipModule(), gParam);
-                break;
-            case 'sip-service':
-                sipGenerate(new SipService(), gParam);
-                break;
-            case 'sip-service-ex':
-                sipGenerate(new SipServiceEx(), gParam);
-                break;
-            case 'sip-directive':
-                sipGenerate(new SipDirective(), gParam);
-                break;
-            case 'sip-directive-ex':
-                sipGenerate(new SipDirectiveEx(), gParam);
-                break;
-            case 'sip-pipe':
-                sipGenerate(new SipPipe(), gParam);
-                break;
-            case 'sip-guard':
-                sipGenerate(new SipGuard(), gParam);
-                break;
-            case 'sip-interface':
-                sipGenerate(new SipInterface(), gParam);
-                break;
-            case 'sip-class':
-                sipGenerate(new SipClass(), gParam);
-                break;
-            case 'sip-enum':
-                sipGenerate(new SipEnum(), gParam);
-                break;
             case 'sip-regmodlue':
                 sipRegmodlue(new SipRegModule(), gParam);
                 break;
@@ -422,9 +324,6 @@ export function activate(context: ExtensionContext) {
                 }
                 break;
         }
-    };
-    let sipGenerate = (genObj: ContentBase, p: any, args?: any): PromiseLike<TextDocument> => {
-        return openFile(genObj.generate(p));
     };
     let sipRegmodlue = (genObj: ContentBase, p: any) => {
         if (IsDirectory(_curFile)) {

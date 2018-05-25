@@ -332,7 +332,7 @@
                     "className": "@{#fileName}",
                     "fileName": "@{input}.@{type}",
                     "htmlContent": "",
-                    "importToModue": "",
+                    "importToModue": "./@{input}.@{type}.ts",
                     "input": "demo",
                     "path": "",
                     "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  it('should create an instance', () => {\n    const directive = new @{className}();\n    expect(directive).toBeTruthy();\n  });\n});\n",
