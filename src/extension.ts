@@ -48,13 +48,19 @@ export interface IParam {
 }
 
 export interface IConfig {
+    prefix: string;
+    commands: IConfigCommand[];
+    templates: any[];
+}
+
+export interface IConfigCommand {
     command: string;
     title: string;
     terminal: string;
     input: boolean;
     path: string;
     builtin: boolean;
-    children: IConfig[];
+    children: IConfigCommand[];
     params: IParam[];
 }
 
@@ -128,13 +134,16 @@ export function activate(context: ExtensionContext) {
                         fileName: isDir ? '' : fileName,
                         workspaceRoot: workspaceRoot,
                         extensionPath: context.extensionPath,
-                        modules: FindUpwardModuleFiles(workspaceRoot, inputFile).map(file => ['@{curPath}', path.relative(curPath, file)].join(isLinux?"/":"\\"))
+                        modules: FindUpwardModuleFiles(workspaceRoot, inputFile).map(file => ['@{curPath}', path.relative(curPath, file)].join(isLinux ? "/" : "\\"))
                     };
                     receiveMsg(id, cmd, opt);
                     break;
                 case 'saveConfig':
-                    data.content = stringify(JSON.parse(data.content), { space: '    ' });
-                    data.flag = 'w';
+                    saveConfigTmpls(JSON.parse(data.templates));
+                    break;
+                case 'readConfig':
+                    receiveMsg(id, cmd, JSON.stringify(getConfig()));
+                    break;
                 case 'saveFile':
                     /**data:{ file: 'demo/demo.ts', content: 'content', basePath:'' } */
                     let file: string = path.join(data.basePath || curPath, data.file);
@@ -179,32 +188,32 @@ export function activate(context: ExtensionContext) {
                      *   }
                      * } */
                     let regFile: string = path.join(data.basePath || curPath, data.file);
-                    let regFilePath:string = path.dirname(regFile);
+                    let regFilePath: string = path.dirname(regFile);
                     let retRegFile = path.relative(workspaceRoot, regFile);
                     let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
-                    let regImportFile:string = CalcImportPath(regModuleFile, regFile);;
+                    let regImportFile: string = CalcImportPath(regModuleFile, regFile);;
                     let regClassName = data.className;
                     try {
                         if (fs.existsSync(regFile) && fs.existsSync(regModuleFile)) {
                             let regContent = fs.readFileSync(regModuleFile, 'utf-8');
                             let regOpt = data.regOpt;
                             regContent = PushToImport(regContent, regClassName, regImportFile);
-                            if (regOpt.moduleImport){
+                            if (regOpt.moduleImport) {
                                 regContent = PushToModuleImports(regContent, regClassName);
                             }
-                            if (regOpt.moduleProvider){
+                            if (regOpt.moduleProvider) {
                                 regContent = PushToModuleProviders(regContent, regClassName);
                             }
-                            if (regOpt.moduleDeclaration){
+                            if (regOpt.moduleDeclaration) {
                                 regContent = PushToModuleDeclarations(regContent, regClassName);
                             }
-                            if (regOpt.moduleExport){
+                            if (regOpt.moduleExport) {
                                 regContent = PushToModuleExports(regContent, regClassName);
                             }
-                            if (regOpt.moduleEntryComponent){
+                            if (regOpt.moduleEntryComponent) {
                                 regContent = PushToModuleEntryComponents(regContent, regClassName);
                             }
-                            if (regOpt.moduleRouting){
+                            if (regOpt.moduleRouting) {
                                 regContent = PushToModuleRouting(regContent, regOpt.routePath || '', regClassName, regImportFile, regOpt.isModule);
                             }
                             fs.writeFileSync(regModuleFile, regContent, 'utf-8');
@@ -233,7 +242,7 @@ export function activate(context: ExtensionContext) {
 
         _calcRootPath(curPath);
 
-        let configs = getConfig();
+        let configs = getConfig().commands;
 
         showQuickPick(configs, _getRootPath(), args);
 
@@ -272,7 +281,7 @@ export function activate(context: ExtensionContext) {
             return r;
         }) : Promise.resolve<any>(null);
     };
-    let send_builtin = (config: IConfig, args, params: string, fsPath: string, inputText: string) => {
+    let send_builtin = (config: IConfigCommand, args, params: string, fsPath: string, inputText: string) => {
         let p = argv(params || '');
         let rootPath = _getRootPath();
         let gParam = Object.assign({
@@ -300,10 +309,10 @@ export function activate(context: ExtensionContext) {
             case 'sip-generate':
                 commands.executeCommand('ngsiphelper.sipgenerate');
                 break;
-            case 'ng-generate':
-                let generateConfigs: IConfig[] = require('./ng-generate.conf');
-                showQuickPick(generateConfigs, rootPath, args);
-                break;
+            // case 'ng-generate':
+            //     let generateConfigs: IConfig[] = require('./ng-generate.conf');
+            //     showQuickPick(generateConfigs, rootPath, args);
+            //     break;
             case 'sip-page':
                 sipGenerate(new SipPageComponent(), gParam);
                 break;
@@ -467,12 +476,12 @@ export function activate(context: ExtensionContext) {
         if (IsEmptyDirectory(delInfo.dir))
             fs.rmdirSync(delInfo.dir);
     };
-    let showQuickPick = (configs: IConfig[], parentPath: string, args) => {
+    let showQuickPick = (configs: IConfigCommand[], parentPath: string, args) => {
         let picks = configs.map(item => item.title);
 
         window.showQuickPick(picks).then((title) => {
             if (!title) return;
-            let config: IConfig = configs.find(item => item.title == title);
+            let config: IConfigCommand = configs.find(item => item.title == title);
             if (!config) return;
             let path = config.path ? config.path : parentPath;
             let children = config.children;
@@ -487,7 +496,7 @@ export function activate(context: ExtensionContext) {
         });
 
     };
-    let showParamsQuickPick = (config: IConfig, path: string, args) => {
+    let showParamsQuickPick = (config: IConfigCommand, path: string, args) => {
         let params = config.params;
 
         let doneFn = (param: IParam) => {
@@ -510,7 +519,7 @@ export function activate(context: ExtensionContext) {
         });
     };
 
-    let send_command = (name: string, path: string, cmd: string, params: string, input: boolean, args, config: IConfig, inputText = '') => {
+    let send_command = (name: string, path: string, cmd: string, params: string, input: boolean, args, config: IConfigCommand, inputText = '') => {
         if (!input) {
             path = getVarText(path, {
                 args: args,
@@ -543,14 +552,14 @@ export function activate(context: ExtensionContext) {
         }
     };
 
-
-    let getConfig = (): IConfig[] => {
-        let fsPath = path.join(_getRootPath(), './ng-sip-helper.cmds.json');
-        return (!fs.existsSync(fsPath)) ? require('./ng-alain-sip.conf') : jsonic(fs.readFileSync(fsPath, 'utf-8'));
+    let getConfig = (): IConfig => {
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.config.json');
+        let fsDefaultConfig = fs.readFileSync(path.join(context.extensionPath, 'default.config.json'), 'utf-8');
+        return (!fs.existsSync(fsPath)) ? jsonic(fsDefaultConfig) : jsonic(fs.readFileSync(fsPath, 'utf-8'));
     };
 
     let setConfig = () => {
-        let fsPath = path.join(_getRootPath(), './ng-sip-helper.cmds.json');
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.config.json');
         if (!fs.existsSync(fsPath))
             saveDefaultConfig();
 
@@ -559,13 +568,19 @@ export function activate(context: ExtensionContext) {
             window.showTextDocument(textDocument).then((editor) => {
             });
         });
-
     };
 
     let saveDefaultConfig = () => {
-        let fsPath = path.join(_getRootPath(), './ng-sip-helper.cmds.json');
-        let json = stringify(require('./ng-alain-sip.conf'), { space: '    ' });
-        fs.writeFileSync(fsPath, json, 'utf-8');
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.config.json');
+        let fsDefaultConfig = fs.readFileSync(path.join(context.extensionPath, 'default.config.json'), 'utf-8');
+        fs.writeFileSync(fsPath, fsDefaultConfig, 'utf-8');
+    };
+
+    let saveConfigTmpls = (templates: any[]) => {
+        let config = getConfig();
+        config.templates = templates;
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.config.json');
+        fs.writeFileSync(fsPath, stringify(config, { space: '    ' }), 'utf-8');
     };
 
     let npm = () => {

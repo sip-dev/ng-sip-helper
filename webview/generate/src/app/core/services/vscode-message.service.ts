@@ -117,15 +117,11 @@ export class VscodeMessageService {
     }
 
     saveConfig(tmpls: ITmplItem[]): Observable<string> {
-        var config: IConfig = this.config = {
-            prefix: this.prefix,
-            tmpls: tmpls
-        };
-        return this._sendMsg('saveConfig', { basePath: this.options.workspaceRoot, file: 'ng-sip-helper.tmpls.json', content: JSON.stringify(config) });
+        return this._sendMsg('saveConfig', { templates: JSON.stringify(tmpls) });
     }
 
     readConfig(): Observable<string> {
-        return this.readFile('ng-sip-helper.tmpls.json', this.options.workspaceRoot);
+        return this._sendMsg('readConfig');
     }
 
     importToModule(file: string, moduleFile: string, className: string, regOpt: {
