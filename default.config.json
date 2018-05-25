@@ -306,7 +306,7 @@
                     "className": "@{#fileName}",
                     "fileName": "@{input}-routing.@{type}",
                     "htmlContent": "",
-                    "importToModue": "",
+                    "importToModue": "./@{input}.@{type}.ts",
                     "input": "demo",
                     "path": "@{input}",
                     "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  let testRoutingModule: @{className};\n\n  beforeEach(() => {\n    testRoutingModule = new @{className}();\n  });\n\n  it('should create an instance', () => {\n    expect(testRoutingModule).toBeTruthy();\n  });\n});\n",
