@@ -81,7 +81,7 @@ export function activate(context: ExtensionContext) {
         if (!fs.existsSync(pathParent)) mkdirSync(pathParent);
         fs.mkdirSync(fsPath);
     };
-    context.subscriptions.push(commands.registerCommand('ngsiphelper.preview', (args) => {
+    context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate', (args) => {
         let inputFile = args ? getCurrentPath(args) : _curFile;
         let isDir = IsDirectory(inputFile);
         let fileName = path.basename(inputFile);
@@ -91,7 +91,7 @@ export function activate(context: ExtensionContext) {
 
         let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
         let htmlPath = path.dirname(htmlFile);
-        const panel = window.createWebviewPanel('sipgenerate', 'sipgenerate', ViewColumn.One, {
+        const panel = window.createWebviewPanel('sipgenerate', 'sip-generate', ViewColumn.One, {
             enableScripts: true,
             retainContextWhenHidden: true,
             localResourceRoots: [Uri.file(htmlPath)]
@@ -297,8 +297,8 @@ export function activate(context: ExtensionContext) {
             case 'region':
                 commands.executeCommand('ngsiphelper.region');
                 break;
-            case 'sip-preview':
-                commands.executeCommand('ngsiphelper.preview');
+            case 'sip-generate':
+                commands.executeCommand('ngsiphelper.sipgenerate');
                 break;
             case 'ng-generate':
                 let generateConfigs: IConfig[] = require('./ng-generate.conf');
@@ -545,12 +545,12 @@ export function activate(context: ExtensionContext) {
 
 
     let getConfig = (): IConfig[] => {
-        let fsPath = path.join(_getRootPath(), './ng-alain-sip.conf.json');
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.cmds.json');
         return (!fs.existsSync(fsPath)) ? require('./ng-alain-sip.conf') : jsonic(fs.readFileSync(fsPath, 'utf-8'));
     };
 
     let setConfig = () => {
-        let fsPath = path.join(_getRootPath(), './ng-alain-sip.conf.json');
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.cmds.json');
         if (!fs.existsSync(fsPath))
             saveDefaultConfig();
 
@@ -563,7 +563,7 @@ export function activate(context: ExtensionContext) {
     };
 
     let saveDefaultConfig = () => {
-        let fsPath = path.join(_getRootPath(), './ng-alain-sip.conf.json');
+        let fsPath = path.join(_getRootPath(), './ng-sip-helper.cmds.json');
         let json = stringify(require('./ng-alain-sip.conf'), { space: '    ' });
         fs.writeFileSync(fsPath, json, 'utf-8');
     };

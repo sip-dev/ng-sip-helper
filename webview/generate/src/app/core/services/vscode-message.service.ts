@@ -121,11 +121,11 @@ export class VscodeMessageService {
             prefix: this.prefix,
             tmpls: tmpls
         };
-        return this._sendMsg('saveConfig', { basePath: this.options.workspaceRoot, file: 'ng-sip-helper.conf.json', content: JSON.stringify(config) });
+        return this._sendMsg('saveConfig', { basePath: this.options.workspaceRoot, file: 'ng-sip-helper.tmpls.json', content: JSON.stringify(config) });
     }
 
     readConfig(): Observable<string> {
-        return this.readFile('ng-sip-helper.conf.json', this.options.workspaceRoot);
+        return this.readFile('ng-sip-helper.tmpls.json', this.options.workspaceRoot);
     }
 
     importToModule(file: string, moduleFile: string, className: string, regOpt: {
