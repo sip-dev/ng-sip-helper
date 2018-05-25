@@ -291,7 +291,7 @@
                     "path": "@{input}",
                     "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  let testModule: @{className};\n\n  beforeEach(() => {\n    testModule = new @{className}();\n  });\n\n  it('should create an instance', () => {\n    expect(testModule).toBeTruthy();\n  });\n});\n",
                     "styleContent": "",
-                    "tsContent": "import { NgModule } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\nimport { @{#input}RoutingModule } from './${input}-routing.module';\n\n@NgModule({\n  imports: [\n    CommonModule,\n    @{#input}RoutingModule\n  ],\n  declarations: []\n})\nexport class @{className} { }\n",
+                    "tsContent": "import { NgModule } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\nimport { @{#input}RoutingModule } from './@{input}-routing.module';\n\n@NgModule({\n  imports: [\n    CommonModule,\n    @{#input}RoutingModule\n  ],\n  declarations: []\n})\nexport class @{className} { }\n",
                     "type": "module",
                     "typeInfo": {
                         "importToModue": true,
@@ -415,6 +415,8 @@
                     "tsContent": "export interface @{className} {\n}\n\n",
                     "type": "interface",
                     "typeInfo": {
+                        "importToModue": true,
+                        "moduleProvider": true,
                         "ts": true
                     }
                 }

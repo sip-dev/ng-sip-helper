@@ -48,7 +48,7 @@ export const TYPES: IGenType = {
     'directive': { ts: true, spec: true, importToModue: true, moduleDeclaration: true, moduleExport: true },
     'pipe': { ts: true, spec: true, importToModue: true, moduleDeclaration: true, moduleExport: true },
     'class': { ts: true, spec: true },
-    'guard': { ts: true, spec: true },
+    'guard': { ts: true, spec: true, importToModue: true, moduleProvider: true, moduleExport: true },
     'interface': { ts: true },
     'enum': { ts: true }
 };

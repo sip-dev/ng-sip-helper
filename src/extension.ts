@@ -191,32 +191,8 @@ export function activate(context: ExtensionContext) {
                     let regFilePath: string = path.dirname(regFile);
                     let retRegFile = path.relative(workspaceRoot, regFile);
                     let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
-                    let regImportFile: string = CalcImportPath(regModuleFile, regFile);;
-                    let regClassName = data.className;
                     try {
-                        if (fs.existsSync(regFile) && fs.existsSync(regModuleFile)) {
-                            let regContent = fs.readFileSync(regModuleFile, 'utf-8');
-                            let regOpt = data.regOpt;
-                            regContent = PushToImport(regContent, regClassName, regImportFile);
-                            if (regOpt.moduleImport) {
-                                regContent = PushToModuleImports(regContent, regClassName);
-                            }
-                            if (regOpt.moduleProvider) {
-                                regContent = PushToModuleProviders(regContent, regClassName);
-                            }
-                            if (regOpt.moduleDeclaration) {
-                                regContent = PushToModuleDeclarations(regContent, regClassName);
-                            }
-                            if (regOpt.moduleExport) {
-                                regContent = PushToModuleExports(regContent, regClassName);
-                            }
-                            if (regOpt.moduleEntryComponent) {
-                                regContent = PushToModuleEntryComponents(regContent, regClassName);
-                            }
-                            if (regOpt.moduleRouting) {
-                                regContent = PushToModuleRouting(regContent, regOpt.routePath || '', regClassName, regImportFile, regOpt.isModule);
-                            }
-                            fs.writeFileSync(regModuleFile, regContent, 'utf-8');
+                        if (regModule(regFile, regModuleFile, data.className, data.regOpt)) {
                             receiveMsg(id, cmd, ['注册', retRegFile, '成功'].join(', '));
                         } else
                             receiveMsg(id, cmd, ['注册', retRegFile, '文件不存在！'].join(', '));
@@ -233,6 +209,50 @@ export function activate(context: ExtensionContext) {
             // console.log(cmd, data);
         }, undefined, context.subscriptions);
     }));
+
+    let regModule = (file: string, moduleFile: string, className: string, regOpt: {
+        moduleExport?: boolean;
+        moduleImport?: boolean;
+        moduleDeclaration?: boolean;
+        moduleEntryComponent?: boolean;
+        moduleProvider?: boolean;
+        moduleRouting?: boolean;
+        routePath: string;
+        isModule?: boolean;
+    }): boolean => {
+        let workspaceRoot = _getRootPath();
+        let regFile: string = file;
+        let regFilePath: string = path.dirname(regFile);
+        let regModuleFile: string = moduleFile;
+        let regImportFile: string = CalcImportPath(regModuleFile, regFile);;
+        let regClassName = className;
+
+        if (fs.existsSync(regFile) && fs.existsSync(regModuleFile)) {
+            let regContent = fs.readFileSync(regModuleFile, 'utf-8');
+            regContent = PushToImport(regContent, regClassName, regImportFile);
+            if (regOpt.moduleImport) {
+                regContent = PushToModuleImports(regContent, regClassName);
+            }
+            if (regOpt.moduleProvider) {
+                regContent = PushToModuleProviders(regContent, regClassName);
+            }
+            if (regOpt.moduleDeclaration) {
+                regContent = PushToModuleDeclarations(regContent, regClassName);
+            }
+            if (regOpt.moduleExport) {
+                regContent = PushToModuleExports(regContent, regClassName);
+            }
+            if (regOpt.moduleEntryComponent) {
+                regContent = PushToModuleEntryComponents(regContent, regClassName);
+            }
+            if (regOpt.moduleRouting) {
+                regContent = PushToModuleRouting(regContent, regOpt.routePath || '', regClassName, regImportFile, regOpt.isModule);
+            }
+            fs.writeFileSync(regModuleFile, regContent, 'utf-8');
+            return true;
+        } else
+            return false;
+    };
 
     let _fileName = '', _curFile = '';
     context.subscriptions.push(commands.registerCommand('ngsiphelper.quickpicks', (args) => {
@@ -418,13 +438,13 @@ export function activate(context: ExtensionContext) {
         let files = FindUpwardModuleFiles(rootPath, curFile);
         let routingRegex = /\-routing\./i;
         files = files.filter((file) => {
-            if (p.module && p.routing) return true;
             if (p.routing) return routingRegex.test(file);
-            if (p.module || p.both) return !routingRegex.test(file);
+            if (p.module) return true;
+            if (p.both) return !routingRegex.test(file);
 
-            if (p.cleanmodule && p.cleanrouting) return true;
             if (p.cleanrouting) return routingRegex.test(file);
-            if (p.cleanmodule || p.cleanboth) return !routingRegex.test(file);
+            if (p.cleanmodule) return true;
+            if (p.cleanboth) return !routingRegex.test(file);
         });
         let picks = files.map(file => path.relative(curPath, file));
         window.showQuickPick(picks).then(file => {

@@ -1,7 +1,7 @@
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
+import { CalcImportPath, ContentBase, GenerateParam, MakeClassName, PushToExport, PushToImport, PushToModuleDeclarations, PushToModuleEntryComponents, PushToModuleExports, PushToModuleImports, PushToModuleProviders, PushToModuleRouting, RemoveFromExport, RemoveFromImport, RemoveFromModuleDeclarations, RemoveFromModuleExports, RemoveFromModuleImports, RemoveFromModuleProviders, RemoveFromModuleRouting, RemoveModuleEntryComponents } from "./content-base";
 
-import { ContentBase, GenerateParam, MakeFileName, MakeClassName, PushToModuleDeclarations, PushToImport, CalcPath, CalcImportPath, PushToModuleExports, PushToModuleRouting, IsInModuel, PushToModuleProviders, PushToModuleImports, RemoveFromImport, RemoveFromModuleDeclarations, RemoveFromModuleExports, RemoveFromModuleImports, RemoveFromModuleProviders, RemoveModuleEntryComponents, PushToExport, RemoveFromModuleRouting, PushToModuleEntryComponents, RemoveFromExport } from "./content-base";
 
 export class SipRegModule implements ContentBase {
 
@@ -85,25 +85,25 @@ export class SipRegModule implements ContentBase {
             let isRouting = /\-routing/i.test(fsFile);
 
             if (params.module) {
-                if (isRouting) {
-                    content = PushToModuleRouting(content, name, className, importPath, true);
-                } else {
+                // if (isRouting) {
+                //     content = PushToModuleRouting(content, name, className, importPath, true);
+                // } else {
                     content = PushToImport(content, className, importPath);
                     content = PushToModuleImports(content, className);
                     // content = PushToExport(content, className, importPath);
                     content = PushToModuleExports(content, className);
-                }
+                // }
             }
 
             if (params.routing) {
                 // let isModuleSame = (moduleFile.replace('-routing', '') == fsFile);
 
-                if (isRouting)
+                // if (isRouting)
                     content = PushToModuleRouting(content, name, className, importPath, true);
-                else {
-                    content = PushToImport(content, className, importPath);
-                    content = PushToModuleImports(content, className);
-                }
+                // else {
+                //     content = PushToImport(content, className, importPath);
+                //     content = PushToModuleImports(content, className);
+                // }
             }
 
 
