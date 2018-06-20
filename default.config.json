@@ -11,12 +11,12 @@
             "params": [
                 {
                     "input": false,
-                    "param": "-- -e=dev",
+                    "param": "",
                     "terminal": "",
                     "title": "Dev"
                 },
                 {
-                    "param": "-- -e=dev -pc=\"proxy.conf.js\"",
+                    "param": "-- -pc=\"proxy.conf.js\"",
                     "title": "Dev Proxy"
                 },
                 {
