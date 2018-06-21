@@ -56,6 +56,24 @@ export class GenerateService {
         this.activeFile(this.files[len]);
     }
 
+    curEditTmpl:ITmplItem;
+    curEditTmplTitle:string;
+    editTmpl(tmpl:ITmplItem){
+        this.curEditTmplTitle = tmpl.title;
+        this.curEditTmpl = tmpl;
+        this.removeAll();
+        this.addFromTmpl(tmpl);
+    }
+    saveTmpl(){
+        if (this.curEditTmpl){
+            let files = this.files.slice().map((p) => {
+                return CloneFile(p);
+            });
+            this.curEditTmpl.files = files;
+            this.curEditTmpl.title = this.curEditTmplTitle;
+        }
+    }
+
     remove(file: IFileItem) {
         let files = this.files;
         let index = files.indexOf(file);
@@ -76,14 +94,14 @@ export class GenerateService {
         this.activeFile(null);
     }
 
-    saveToTmpl(title: string) {
+    addToTmpl(title: string) {
         let files = this.files.slice().map((p) => {
             return CloneFile(p);
         });
         this._genTmplSrv.add({
             title: title,
             files: files
-        })
+        });
     }
 
     genReports: string[] = [];

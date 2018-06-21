@@ -1,4 +1,5 @@
-<div class="row">
+<sip-generate *ngIf="isEditFileMode"></sip-generate>
+<div class="row" *ngIf="!isEditFileMode" style="margin-top: 10px;">
     <div class="col">
         <div class="card">
             <div class="card-header">
@@ -11,7 +12,7 @@
                     </div>
                 </ng-template>
                 <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent"
-                    popoverTitle="清空" #removeAllPop="ngbPopover" container="body" placement="right">清空</a>
+                    popoverTitle="清空" #removeAllPop="ngbPopover" container="body" placement="left">清空</a>
             </div>
             <div class="card-body" *ngIf="!hasTmpl">
                 暂无模板数据。
@@ -25,16 +26,21 @@
                             <a href="javascript:void(0)" class="card-link" (click)="removePop.close()">取消</a>
                         </div>
                     </ng-template>
-                    <a class="float-right" href="javascript:void(0)" [ngbPopover]="removeContent" popoverTitle="删除" #removePop="ngbPopover" placement="top"
+                    <a class="float-right" href="javascript:void(0)" [ngbPopover]="removeContent" popoverTitle="删除" #removePop="ngbPopover" placement="left"
                         container="body">删除</a>
                     <sip-popclose [pops]="[removePop]"></sip-popclose>
                     <ng-template #tipFileNameContent>{{tmpl.title}}</ng-template>
-                    <a href="javascript:void(0)" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">{{tmpl.title}}</a>
+                    <input style="width: 30px;
+                        margin-right: 10px;
+                        border: 0px;" [(ngModel)]="tmpl.index" [ngModelOptions]="{updateOn: 'blur'}" (ngModelChange)="sortTmpl()" />
+                    <a href="javascript:void(0)" style="display: inline" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">
+                        {{tmpl.title}}</a>
+                    <a class="float-right" href="javascript:void(0)" style="margin-right: 5px;" (click)="edit(tmpl)">修改</a>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="col">
+    <!-- <div class="col">
         <div class="card">
             <div class="card-header">
                 文件列表
@@ -60,6 +66,6 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div> -->
     <sip-popclose [pops]="[removeAllPop]"></sip-popclose>
 </div>

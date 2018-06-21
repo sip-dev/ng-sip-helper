@@ -9,9 +9,10 @@ import { VscodeMessageService } from './core/services/vscode-message.service';
 })
 export class AppComponent {
   title = 'app';
-  navIndex = 1;
 
   vscodeOptions: IVscodeOption;
+
+  isEditFileMode = false;
 
   constructor(vsMsg: VscodeMessageService) {
     this.vscodeOptions = vsMsg.options;

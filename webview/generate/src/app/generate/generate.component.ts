@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
+import { AppComponent } from '../app.component';
 import { GetFileFullName, IFileItem, IGenTypeInfo, ITmplItem, VARS } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
@@ -15,9 +16,16 @@ export class GenerateComponent {
 
   constructor(public genSrv: GenerateService,
     private _genTmplSrv: GenerateTmplService,
-    private _vsMsg: VscodeMessageService) {
+    private _vsMsg: VscodeMessageService,
+    private _app: AppComponent) {
   }
 
+  public get isEditFileMode() {
+    return this._app.isEditFileMode;
+  }
+  public set isEditFileMode(value) {
+    this._app.isEditFileMode = value;
+  }
   vars: string = VARS.join(', ');
   editContentType = 0;
 
@@ -117,9 +125,9 @@ export class GenerateComponent {
   }
 
   tmplTitle = "";
-  saveToTmpl() {
+  addToTmpl() {
     if (!this.tmplTitle) return;
-    this.genSrv.saveToTmpl(this.tmplTitle);
+    this.genSrv.addToTmpl(this.tmplTitle);
     this.showFormType = 'list';
   }
 
@@ -127,11 +135,11 @@ export class GenerateComponent {
     return this.genSrv.genReports;
   }
 
-  get generating():number{
+  get generating(): number {
     return this.genSrv.generating;
   }
 
-  set generating(p:number){
+  set generating(p: number) {
     this.genSrv.generating = p;
   }
 
@@ -140,7 +148,7 @@ export class GenerateComponent {
     this.genSrv.generate();
   }
 
-  close(){
+  close() {
     this._vsMsg.close();
   }
 
@@ -171,13 +179,17 @@ export class GenerateComponent {
       map(term => (term === '' ? this.modules
         : this.modules.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
     );
-}
 
-const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
-  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
-  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
-  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
-  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+  public get curEditTmplTitle(): string {
+    return this.genSrv.curEditTmplTitle;
+  }
+  public set curEditTmplTitle(value: string) {
+    this.genSrv.curEditTmplTitle = value;
+  }
+
+  saveTmpl(){
+    // this.genSrv.curEditTmpl.title = this.curEditTmplTitle;
+    this.genSrv.saveTmpl();
+    this.isEditFileMode = false;
+  }
+}

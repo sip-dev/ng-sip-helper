@@ -218,6 +218,7 @@ export interface IVscodeOption {
 
 export interface ITmplItem {
     title: string;
+    index?: number;
     active?: boolean;
     files: IFileItem[];
 }
@@ -239,8 +240,21 @@ export function CloneTmpl(tmpl: ITmplItem): ITmplItem {
     return tmplTemp;
 }
 
-export const DEFAULT_TMPLS:ITmplItem[] = [{
+export function MakeTmplIndex(tmpls: ITmplItem[]): ITmplItem[] {
+    if (tmpls && tmpls.length > 0) {
+        tmpls = tmpls.sort((item1, item2) => {
+            item1.index = ~~item1.index;
+            item2.index = ~~item2.index;
+            return item1.index == item2.index ? 0 : (item1.index > item2.index ? 1 : -1);
+        });
+        tmpls.forEach((item, idx)=>{ item.index = idx;});
+    }
+    return tmpls;
+}
+
+export const DEFAULT_TMPLS: ITmplItem[] = [{
     "active": false,
+    "index": 0,
     "files": [
         {
             "active": true,

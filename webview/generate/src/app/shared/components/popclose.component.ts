@@ -8,7 +8,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 export class PopcloseComponent implements OnDestroy {
 
 	constructor() {
-        document.body.addEventListener('click',this.bodyclick);
+        document.documentElement.addEventListener('click',this.bodyclick);
     }
 
 
@@ -22,7 +22,7 @@ export class PopcloseComponent implements OnDestroy {
     }
 
     ngOnDestroy(){
-        document.body.removeEventListener('click',this.bodyclick);
+        document.documentElement.removeEventListener('click',this.bodyclick);
     }
     
     @Input() pops:any[];

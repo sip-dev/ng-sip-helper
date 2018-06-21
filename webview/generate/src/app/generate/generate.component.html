@@ -1,3 +1,10 @@
+<div class="alert alert-info" role="alert" style="margin-top: 10px;">
+模板名称：<input [(ngModel)]="curEditTmplTitle" />
+<a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" (click)="isEditFileMode = false">返回</a>
+<!-- <a href="javascript:void(0)" class="card-link float-right" (click)="generating = 0;showFormType = 'build'">生成</a> -->
+<a href="javascript:void(0)" class="card-link float-right" (click)="saveTmpl()">保存</a>
+
+</div>
 <div class="row">
     <div class="col">
         <div class="card">
@@ -25,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label"></label>
-                        <button type="button" class="btn btn-primary" (click)="saveToTmpl()">保存为模板</button>
+                        <button type="button" class="btn btn-primary" (click)="addToTmpl()">保存为模板</button>
                         <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
                     </div>
                 </form>

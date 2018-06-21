@@ -5,6 +5,7 @@
 ul.list-group>li.active>a {
     color: white;
 }
+
 .popover {
     max-width:800px !important;
 }

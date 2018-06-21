@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IFileItem, ITmplItem, GetFileFullName } from '../core/lib';
+import { AppComponent } from '../app.component';
+import { GetFileFullName, IFileItem, ITmplItem } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
+import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
 
 @Component({
@@ -10,7 +12,16 @@ import { VscodeMessageService } from '../core/services/vscode-message.service';
 })
 export class GenrateTmplComponent {
 
-    constructor(private _tmplSrv: GenerateTmplService, private _vsMsg: VscodeMessageService) { }
+    constructor(private _tmplSrv: GenerateTmplService, private _vsMsg: VscodeMessageService,
+        public genSrv: GenerateService,
+        private _app: AppComponent) { }
+
+    public get isEditFileMode() {
+        return this._app.isEditFileMode;
+    }
+    public set isEditFileMode(value) {
+        this._app.isEditFileMode = value;
+    }
 
     get tmpls(): ITmplItem[] {
         return this._tmplSrv.tmpls;
@@ -54,7 +65,7 @@ export class GenrateTmplComponent {
         return GetFileFullName(file);
     }
 
-    removeFile(file:IFileItem){
+    removeFile(file: IFileItem) {
         let files = this.curTmpl.files;
         let index = files.indexOf(file);
         if (index >= 0) {
@@ -69,7 +80,15 @@ export class GenrateTmplComponent {
         }
     }
 
-    report(){
+    report() {
         console.log(JSON.stringify(this.tmpls));
+    }
+
+    edit(tmpl: ITmplItem) {
+        this.genSrv.editTmpl(tmpl);
+        this.isEditFileMode = true;
+    }
+    sortTmpl(){
+        this._tmplSrv.sort();
     }
 }
