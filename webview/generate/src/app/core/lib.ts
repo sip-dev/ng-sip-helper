@@ -239,3 +239,26 @@ export function CloneTmpl(tmpl: ITmplItem): ITmplItem {
     return tmplTemp;
 }
 
+export const DEFAULT_TMPLS:ITmplItem[] = [{
+    "active": false,
+    "files": [
+        {
+            "active": true,
+            "className": "@{#fileName}",
+            "fileName": "@{input}.@{type}",
+            "htmlContent": "",
+            "importToModue": "",
+            "input": "list",
+            "path": "",
+            "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  it('should create an instance', () => {\n    expect(new @{className}()).toBeTruthy();\n  });\n});\n",
+            "styleContent": "",
+            "tsContent": "export class @{className} {\n}\n",
+            "type": "class",
+            "typeInfo": {
+                "spec": true,
+                "ts": true
+            }
+        }
+    ],
+    "title": "class"
+}];

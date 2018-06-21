@@ -1,5 +1,10 @@
 ## ng-sip-helper Changelog
 
+# 2.1.0 (2018-6-x)
+
+* Change：Generate 使用方式
+* 更新: 支持sip-alain 0.4.0
+
 # 2.0.0 (2018-5-25)
 
 * 添加: jsonic 代替 JSON.parse，增强容错
