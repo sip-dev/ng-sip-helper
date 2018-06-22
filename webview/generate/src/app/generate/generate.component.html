@@ -10,7 +10,7 @@
         <div class="card">
             <div class="card-header">
                 文件列表
-                <span [style.display]="hasFile ? '' : 'none'">
+                <span>
                     <ng-template #removeAllContent>
                         <div sipCancelclick>
                             确定要清空文件列表吗？
@@ -20,22 +20,7 @@
                     </ng-template>
                     <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" [ngbPopover]="removeAllContent"
                         popoverTitle="清空" #removeAllPop="ngbPopover" container="body" placement="right">清空</a>
-                    <!-- <a href="javascript:void(0)" class="card-link float-right" (click)="generating = 0;showFormType = 'build'">生成</a> -->
-                    <a href="javascript:void(0)" class="card-link float-right" (click)="showFormType = 'savetmpl'">保存为模板</a>
                 </span>
-            </div>
-            <div class="card-body" *ngIf="showFormType == 'savetmpl'">
-                <form>
-                    <div class="form-group">
-                        <label class="col-form-label">模板名称：</label>
-                        <input type="input" class="form-control" name="tmplTitle" [(ngModel)]="tmplTitle">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label"></label>
-                        <button type="button" class="btn btn-primary" (click)="addToTmpl()">保存为模板</button>
-                        <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
-                    </div>
-                </form>
             </div>
             <ul class="list-group list-group-flush" *ngIf="generating == 0 && hasFile">
                 <li class="list-group-item" *ngFor="let file of files" [class.active]="file.active" (click)="activeFice(file)">
@@ -59,7 +44,7 @@
                         <div class="col-sm-8 my-1">
                             <label class="sr-only" for="inlineFormInputName">模板：</label>
                             <select class="form-control form-control-sm" name="addgenType" [(ngModel)]="tmplIndex">
-                                <option value="-1">选择模板</option>
+                                <option value="-1">默认模板</option>
                                 <option *ngFor="let tmpl of tmpls;let i=index" value="{{i}}">{{tmpl.title}}</option>
                             </select>
                         </div>
@@ -116,7 +101,7 @@
                     </div>
                     <a href="javascript:void(0)" class="card-link" (click)="helpPop.close()">关闭</a>
                 </ng-template>
-                <a href="javascript:void(0)" class="card-link float-right" [ngbPopover]="helpContent" popoverTitle="变量说明" #helpPop="ngbPopover"
+                <a href="javascript:void(0)" class="card-link float-right" [ngbPopover]="helpContent" #helpPop="ngbPopover"
                     placement="left">变量说明</a>
             </div>
             <ul class="nav nav-tabs" style="margin-top: 5px;">

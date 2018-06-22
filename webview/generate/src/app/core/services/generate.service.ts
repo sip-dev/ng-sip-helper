@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { CloneFile, GetDefaultFile, GetFileFullList, IFileItem, IGenTypeInfo, ITmplItem, STYLES, TYPES } from '../lib';
 import { GenerateTmplService } from './generate-tmpl.service';
 import { VscodeMessageService } from './vscode-message.service';
@@ -48,7 +48,7 @@ export class GenerateService {
         return file;
     }
 
-    addFromTmpl(tmpl: ITmplItem) {
+    addFileFromTmpl(tmpl: ITmplItem) {
         let files = tmpl.files.map((p) => { return CloneFile(p); });
         if (files.length == 0) return;
         let len = this.files.length;
@@ -56,22 +56,26 @@ export class GenerateService {
         this.activeFile(this.files[len]);
     }
 
-    curEditTmpl:ITmplItem;
-    curEditTmplTitle:string;
-    editTmpl(tmpl:ITmplItem){
+    curEditTmpl: ITmplItem;
+    curEditTmplTitle: string;
+    private _onEdit: EventEmitter<any>;
+    editTmpl(tmpl: ITmplItem): EventEmitter<any> {
         this.curEditTmplTitle = tmpl.title;
         this.curEditTmpl = tmpl;
         this.removeAll();
-        this.addFromTmpl(tmpl);
+        this.addFileFromTmpl(tmpl);
+        return this._onEdit = new EventEmitter<any>();
     }
-    saveTmpl(){
-        if (this.curEditTmpl){
+    saveTmpl() {
+        if (this.curEditTmpl) {
             let files = this.files.slice().map((p) => {
                 return CloneFile(p);
             });
             this.curEditTmpl.files = files;
             this.curEditTmpl.title = this.curEditTmplTitle;
+            this._onEdit && this._onEdit.emit(this.curEditTmpl);
         }
+        this._onEdit = null;
     }
 
     remove(file: IFileItem) {
@@ -113,13 +117,13 @@ export class GenerateService {
             fileName: string;
             content?: string;
             className?: string;
-            isModule?:boolean;
+            isModule?: boolean;
             isImportToModue?: boolean;
             importToModue?: string;
             isImportToRouting?: boolean;
             importToRouting?: string;
             typeInfo?: any;
-            routePath?:string;
+            routePath?: string;
         }[] = [];
         this.files.forEach((file) => {
             saveList = saveList.concat(GetFileFullList(file));
@@ -147,8 +151,8 @@ export class GenerateService {
         importToModue?: string;
         isImportToRouting?: boolean;
         importToRouting?: string;
-        routePath?:string;
-        isModule?:boolean;
+        routePath?: string;
+        isModule?: boolean;
         typeInfo?: any;
     }[]) {
         let count = 0;
@@ -170,7 +174,7 @@ export class GenerateService {
             if (file.isImportToRouting && file.importToRouting) {
                 has = true;
                 count++;
-                this._vsMsg.importToModule(file.fileName, file.importToRouting, file.className, { moduleRouting: true, routePath:file.routePath, isModule:file.isModule }).subscribe((res) => {
+                this._vsMsg.importToModule(file.fileName, file.importToRouting, file.className, { moduleRouting: true, routePath: file.routePath, isModule: file.isModule }).subscribe((res) => {
                     this.genReports.push(res || (file.fileName + '注册成功！！'));
                     setTimeout(() => {
                         count--;

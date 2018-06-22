@@ -1,7 +1,7 @@
 'use strict';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ExtensionContext, Position, Range, Terminal, TextDocument, Uri, ViewColumn, commands, window, workspace } from 'vscode';
+import { commands, ExtensionContext, Position, Range, Terminal, TextDocument, Uri, ViewColumn, window, workspace } from 'vscode';
 import { CalcImportPath, CalcPath, ContentBase, FindModuleFile, FindPathUpward, FindUpwardModuleFiles, IsDirectory, IsEmptyDirectory, MakeClassName, PushToImport, PushToModuleDeclarations, PushToModuleEntryComponents, PushToModuleExports, PushToModuleImports, PushToModuleProviders, PushToModuleRouting } from './contents/content-base';
 import { SipRegModule } from './contents/sip-reg-module';
 import { Lib } from './lib';
@@ -519,7 +519,7 @@ export function activate(context: ExtensionContext) {
             if (!title) return;
             let item: any = scriptList.find(item => item.title == title);
             if (!item) return;
-            send_terminal('npm-ngsiphelper', _getRootPath(), item.command);
+            send_terminal('sip-npm-' + title, _getRootPath(), item.command);
         });
     };
 

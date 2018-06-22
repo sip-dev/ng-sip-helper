@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AppComponent } from '../app.component';
-import { GetFileFullName, IFileItem, ITmplItem } from '../core/lib';
+import { CloneTmpl, GetFileFullName, IFileItem, ITmplItem } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
@@ -38,10 +38,6 @@ export class GenrateTmplComponent {
     activeTmpl(tmpl: ITmplItem) {
         this._tmplSrv.activeTmpl(tmpl);
         this.activeFile(tmpl.files[0]);
-    }
-
-    add(tmpl: ITmplItem): ITmplItem {
-        return this._tmplSrv.add(tmpl);
     }
 
     remove(tmpl: ITmplItem) {
@@ -87,6 +83,31 @@ export class GenrateTmplComponent {
     edit(tmpl: ITmplItem) {
         this.genSrv.editTmpl(tmpl);
         this.isEditFileMode = true;
+    }
+    add(){
+        let tmpl:ITmplItem = {
+            title: 'new_tmpl',
+            files: []
+        };
+        this.genSrv.editTmpl(tmpl).subscribe((tmpl)=>{
+            this._tmplSrv.add(tmpl);
+        });
+        this.isEditFileMode = true;
+    }
+    copy(tmpl: ITmplItem){
+        let index = this.tmpls.indexOf(tmpl);
+        if (index < 0) return;
+        tmpl = CloneTmpl(tmpl);
+        tmpl.title += '_copy';
+        this.tmpls.splice(index+1, 0, tmpl);
+        this._tmplSrv.sort();
+        setTimeout(()=>{
+            this._tmplSrv.activeTmpl(tmpl);
+        });
+        // this.genSrv.editTmpl(tmpl).subscribe((p)=>{
+        //     this._tmplSrv.add(tmpl);
+        // });
+        // this.isEditFileMode = true;
     }
     sortTmpl(){
         this._tmplSrv.sort();

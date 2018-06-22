@@ -3,7 +3,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
 import { AppComponent } from '../app.component';
-import { GetFileFullName, IFileItem, IGenTypeInfo, ITmplItem, VARS } from '../core/lib';
+import { CloneTmpl, DEFAULT_TMPLS, GetFileFullName, IFileItem, IGenTypeInfo, ITmplItem, VARS } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
@@ -102,10 +102,9 @@ export class GenerateComponent {
 
   add() {
     let index = ~~this.tmplIndex;
-    if (index < 0) return;
-    let tmpl = this.tmpls[index];
+    let tmpl = (index < 0) ? CloneTmpl(DEFAULT_TMPLS[0]) : this.tmpls[index];
     if (tmpl)
-      this.genSrv.addFromTmpl(tmpl);
+      this.genSrv.addFileFromTmpl(tmpl);
     this.showFormType = 'list';
   }
 
@@ -122,13 +121,6 @@ export class GenerateComponent {
   tmplIndex: string = "-1";
   get tmpls(): ITmplItem[] {
     return this._genTmplSrv.tmpls;
-  }
-
-  tmplTitle = "";
-  addToTmpl() {
-    if (!this.tmplTitle) return;
-    this.genSrv.addToTmpl(this.tmplTitle);
-    this.showFormType = 'list';
   }
 
   get genReports(): string[] {
@@ -187,7 +179,7 @@ export class GenerateComponent {
     this.genSrv.curEditTmplTitle = value;
   }
 
-  saveTmpl(){
+  saveTmpl() {
     // this.genSrv.curEditTmpl.title = this.curEditTmplTitle;
     this.genSrv.saveTmpl();
     this.isEditFileMode = false;
