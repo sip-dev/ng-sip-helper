@@ -81,7 +81,9 @@ export class GenrateTmplComponent {
     }
 
     edit(tmpl: ITmplItem) {
-        this.genSrv.editTmpl(tmpl);
+        this.genSrv.editTmpl(tmpl).subscribe((p)=>{
+            this._tmplSrv.save();
+        });
         this.isEditFileMode = true;
     }
     add(){

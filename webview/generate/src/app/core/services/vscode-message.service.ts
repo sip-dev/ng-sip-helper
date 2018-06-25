@@ -62,7 +62,7 @@ export class VscodeMessageService {
     private _inited = false;
     _startUP(callback: () => void) {
         if (this._inited) { callback(); return }
-        this._sendMsg('options').subscribe((p) => {
+        this._sendMsg('options').subscribe(async (p) => {
             this.options = Object.assign({
                 curPath: "d:\\root\\demo",
                 curFile: "",
@@ -76,14 +76,15 @@ export class VscodeMessageService {
                 modules: []
             }, p);
             this.options.modules = this.options.modules.slice();
-            this.readConfig().subscribe((p: string) => {
-                let config: IConfig = p ? JSON.parse(p) : null;
+            this.readConfig().subscribe((readConfig) => {
+                let config: IConfig = readConfig ? JSON.parse(readConfig) : null;
                 this.config = config;
                 if (config) {
                     this.options.prefix = config.prefix;
                 }
                 SetVarObject(this.options);
                 callback();
+
             });
         });
     }
@@ -108,6 +109,10 @@ export class VscodeMessageService {
         return this._sendMsg('readFile', { basePath: basePath, file: file });
     }
 
+    log(msg: any): Observable<void> {
+        return this._sendMsg('log', msg);
+    }
+
     private _config: IConfig;
     public get config(): IConfig {
         return this._config;
@@ -130,9 +135,9 @@ export class VscodeMessageService {
         moduleDeclaration?: boolean;
         moduleEntryComponent?: boolean;
         moduleProvider?: boolean;
-        moduleRouting?:boolean;
-        routePath?:string;
-        isModule?:boolean;
+        moduleRouting?: boolean;
+        routePath?: string;
+        isModule?: boolean;
     }, basePath?: string): Observable<string> {
         return this._sendMsg('importToModule', { basePath: basePath, file: file, moduleFile: moduleFile, className: className, regOpt: regOpt });
     }

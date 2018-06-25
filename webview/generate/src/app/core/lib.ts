@@ -1,6 +1,6 @@
 
 export interface IFileItem {
-    input: string;
+    input?: string;
     fileName: string;
     path: string;
     type: string;
@@ -214,6 +214,7 @@ export interface IVscodeOption {
     workspaceRoot?: string;
     extensionPath?: string;
     modules: string[];
+    generate?: { input: string; tmpl: string; };
 }
 
 export interface ITmplItem {
@@ -247,7 +248,7 @@ export function MakeTmplIndex(tmpls: ITmplItem[]): ITmplItem[] {
             item2.index = ~~item2.index;
             return item1.index == item2.index ? 0 : (item1.index > item2.index ? 1 : -1);
         });
-        tmpls.forEach((item, idx)=>{ item.index = idx;});
+        tmpls.forEach((item, idx) => { item.index = idx; });
     }
     return tmpls;
 }
@@ -262,7 +263,6 @@ export const DEFAULT_TMPLS: ITmplItem[] = [{
             "fileName": "@{input}.@{type}",
             "htmlContent": "",
             "importToModue": "",
-            "input": "list",
             "path": "",
             "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  it('should create an instance', () => {\n    expect(new @{className}()).toBeTruthy();\n  });\n});\n",
             "styleContent": "",

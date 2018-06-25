@@ -166,9 +166,21 @@
             ]
         },
         {
-            "builtin": true,
-            "command": "config",
-            "title": "设 置 >"
+            "builtin": false,
+            "command": "",
+            "title": "设 置 >",
+            "children":[
+                {
+                    "builtin": true,
+                    "command": "sip-generate-tmpl",
+                    "title": "设置模板"
+                },
+                {
+                    "builtin": true,
+                    "command": "config",
+                    "title": "编辑设置文件"
+                }
+            ]
         }
     ],
     "templates": [

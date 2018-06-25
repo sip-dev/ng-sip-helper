@@ -14,7 +14,12 @@ export class AppComponent {
 
   isEditFileMode = false;
 
+  get isGenerate():boolean{
+    return !!this.vscodeOptions.generate
+  }
+
   constructor(vsMsg: VscodeMessageService) {
+    vsMsg.log('aaaaa');
     this.vscodeOptions = vsMsg.options;
   }
 

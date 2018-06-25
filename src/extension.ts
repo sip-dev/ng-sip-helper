@@ -70,126 +70,27 @@ export function activate(context: ExtensionContext) {
         fs.mkdirSync(fsPath);
     };
     context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate', (args) => {
-        let inputFile = args ? getCurrentPath(args) : _curFile;
-        let isDir = IsDirectory(inputFile);
-        let fileName = path.basename(inputFile);
-        let curFile = isDir ? '' : inputFile;
-        let curPath = isDir ? inputFile : path.dirname(inputFile);
-        let isLinux: boolean = curPath.indexOf('/') >= 0;
-
-        let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html')
-        let htmlPath = path.dirname(htmlFile);
-        const panel = window.createWebviewPanel('sipgenerate', 'sip-generate', ViewColumn.One, {
-            enableScripts: true,
-            retainContextWhenHidden: true,
-            localResourceRoots: [Uri.file(htmlPath)]
+        let config = getConfig();
+        let picks = config.templates.map(tmpl => tmpl.title);
+        window.showQuickPick(picks).then(tmpl => {
+            if (!tmpl) return;
+            window.showInputBox({
+                prompt: '请输入文件名称/内容？',
+                value: _fileName
+            }).then((fileName) => {
+                if (fileName) {
+                    if (/[~`!#$%\^&*+=\[\]\\';,{}|\\":<>\?]/g.test(fileName)) {
+                        window.showInformationMessage('文件名称存在不合法字符!');
+                    } else {
+                        showSipGenerateUI(args, { tmpl: tmpl, input: path.basename(fileName), path:path.dirname(fileName) });
+                    }
+                }
+            },
+                (error) => console.error(error));
         });
-        const webview = panel.webview;
-        let html = fs.readFileSync(htmlFile, 'utf-8');
-        let basePath = Uri.file(htmlPath).with({
-            scheme: "vscode-resource"
-        }).toString();
-        html = html.replace('<base href=".">', `<base href="${basePath}/"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>const vscode = acquireVsCodeApi();window.isVscodeMode = true;</script>`)
-        webview.html = html;
-        let sendMsg = function (id: string, msg: string, data?: any, err?: any) {
-            webview.postMessage({ id: id, command: msg, data: data, err: err })
-            return msg + '_receive';
-        };
-        let receiveMsg = function (id: string, msg: string, data?: any, err?: any) {
-            return sendMsg(id, msg + '_receive', data, err);
-        };
-        let workspaceRoot = _getRootPath();
-        webview.onDidReceiveMessage(message => {
-            let data = message.data;
-            let cmd = message.command;
-            let id = message.id;
-            switch (cmd) {
-                case 'options':
-                    let input = isDir ? fileName : fileName.split('.')[0];
-                    let opt = {
-                        curPath: curPath,
-                        curFile: curFile,
-                        isDir: isDir,
-                        isLinux: isLinux,
-                        input: input,
-                        prefix: 'app',
-                        fileName: isDir ? '' : fileName,
-                        workspaceRoot: workspaceRoot,
-                        extensionPath: context.extensionPath,
-                        modules: FindUpwardModuleFiles(workspaceRoot, inputFile).map(file => ['@{curPath}', path.relative(curPath, file)].join(isLinux ? "/" : "\\"))
-                    };
-                    receiveMsg(id, cmd, opt);
-                    break;
-                case 'saveConfig':
-                    saveConfigTmpls(JSON.parse(data.templates));
-                    break;
-                case 'readConfig':
-                    receiveMsg(id, cmd, JSON.stringify(getConfig()));
-                    break;
-                case 'saveFile':
-                    /**data:{ file: 'demo/demo.ts', content: 'content', basePath:'' } */
-                    let file: string = path.join(data.basePath || curPath, data.file);
-                    let retFile = path.relative(workspaceRoot, file);
-                    let overWrite = data.flag && data.flag.indexOf('w') >= 0;
-                    if (file && (overWrite || !fs.existsSync(file))) {
-                        try {
-                            let content: string = data.content;
-                            let fsPath = path.dirname(file);
-                            if (!fs.existsSync(fsPath)) {
-                                mkdirSync(fsPath);
-                            }
-                            fs.writeFile(file, content, { encoding: 'utf-8', flag: 'w' }, (err) => {
-                                receiveMsg(id, cmd, [retFile, err ? err.message : '成功'].join(', '));
-                            });
-                        } catch (e) {
-                            receiveMsg(id, cmd, [retFile, e.message].join(', '));
-                        }
-                    } else
-                        receiveMsg(id, cmd, [retFile, '文件已存在！'].join(', '));
-                    break;
-                case 'readFile':
-                    let readFile: string = path.join(data.basePath || curPath, data.file);
-                    let readContent: string = '';
-                    if (readFile && fs.existsSync(readFile)) {
-                        readContent = fs.readFileSync(readFile, 'utf-8');
-                    }
-                    receiveMsg(id, cmd, readContent);
-                    break;
-                case 'importToModule':
-                    /**data: 
-                     * {
-                     *      file:'', module:'', basePath:'', className:'',
-                     *      regOpt:{
-                     *       moduleExport?: boolean;
-                     *       moduleImport?: boolean;
-                     *       moduleDeclaration?: boolean;
-                     *       moduleEntryComponent?: boolean;
-                     *       moduleProvider?: boolean;
-                     *       moduleRouting?: boolean;
-                     *       routePath:string;
-                     *   }
-                     * } */
-                    let regFile: string = path.join(data.basePath || curPath, data.file);
-                    let regFilePath: string = path.dirname(regFile);
-                    let retRegFile = path.relative(workspaceRoot, regFile);
-                    let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
-                    try {
-                        if (regModule(regFile, regModuleFile, data.className, data.regOpt)) {
-                            receiveMsg(id, cmd, ['注册', retRegFile, '成功'].join(', '));
-                        } else
-                            receiveMsg(id, cmd, ['注册', retRegFile, '文件不存在！'].join(', '));
-                    } catch (e) {
-                        receiveMsg(id, cmd, ['注册', retRegFile, e.message].join(', '));
-                    }
-                    break;
-                case 'importToRouting':
-                    break;
-                case 'close':
-                    panel.dispose();
-                    break;
-            }
-            // console.log(cmd, data);
-        }, undefined, context.subscriptions);
+    }));
+    context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate.tmpl', (args) => {
+        showSipGenerateUI(args);
     }));
 
     let regModule = (file: string, moduleFile: string, className: string, regOpt: {
@@ -310,6 +211,9 @@ export function activate(context: ExtensionContext) {
                 break;
             case 'sip-generate':
                 commands.executeCommand('ngsiphelper.sipgenerate');
+                break;
+            case 'sip-generate-tmpl':
+                commands.executeCommand('ngsiphelper.sipgenerate.tmpl');
                 break;
             case 'sip-regmodlue':
                 sipRegmodlue(new SipRegModule(), gParam);
@@ -627,5 +531,138 @@ ${props.join('\n')}
             textEditor.selection, text);
     }))
 
+    function showSipGenerateUI(args: any, generateOpt?: any) {
+        let inputFile = args ? getCurrentPath(args) : _curFile;
+        let isDir = IsDirectory(inputFile);
+        let fileName = path.basename(inputFile);
+        let curFile = isDir ? '' : inputFile;
+        let curPath = isDir ? inputFile : path.dirname(inputFile);
+        let isLinux: boolean = curPath.indexOf('/') >= 0;
+        let htmlFile = path.join(context.extensionPath, 'webview/generate/dist/generate/index.html');
+        let htmlPath = path.dirname(htmlFile);
+        const panel = window.createWebviewPanel('sipgenerate', 'sip-generate', ViewColumn.One, {
+            enableScripts: true,
+            retainContextWhenHidden: true,
+            localResourceRoots: [Uri.file(htmlPath)]
+        });
+        const webview = panel.webview;
+        let html = fs.readFileSync(htmlFile, 'utf-8');
+        let basePath = Uri.file(htmlPath).with({
+            scheme: "vscode-resource"
+        }).toString();
+        html = html.replace('<base href=".">', `<base href="${basePath}/"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>const vscode = acquireVsCodeApi();window.isVscodeMode = true;</script>`);
+        webview.html = html;
+        let sendMsg = function (id: string, msg: string, data?: any, err?: any) {
+            webview.postMessage({ id: id, command: msg, data: data, err: err });
+            return msg + '_receive';
+        };
+        let receiveMsg = function (id: string, msg: string, data?: any, err?: any) {
+            return sendMsg(id, msg + '_receive', data, err);
+        };
+        let workspaceRoot = _getRootPath();
+        if (generateOpt && generateOpt.path){
+            curPath = path.join(curPath, generateOpt.path);
+        }
+        webview.onDidReceiveMessage(message => {
+            let data = message.data;
+            let cmd = message.command;
+            let id = message.id;
+            switch (cmd) {
+                case 'options':
+                    let input = isDir ? fileName : fileName.split('.')[0];
+                    let opt = {
+                        curPath: curPath,
+                        curFile: curFile,
+                        isDir: isDir,
+                        isLinux: isLinux,
+                        input: input,
+                        prefix: 'app',
+                        fileName: isDir ? '' : fileName,
+                        workspaceRoot: workspaceRoot,
+                        extensionPath: context.extensionPath,
+                        modules: FindUpwardModuleFiles(workspaceRoot, inputFile).map(file => ['@{curPath}', path.relative(curPath, file)].join(isLinux ? "/" : "\\")),
+                        generate: generateOpt
+                    };
+                    receiveMsg(id, cmd, opt);
+                    break;
+                case 'saveConfig':
+                    saveConfigTmpls(JSON.parse(data.templates));
+                    break;
+                case 'readConfig':
+                    receiveMsg(id, cmd, JSON.stringify(getConfig()));
+                    break;
+                case 'saveFile':
+                    /**data:{ file: 'demo/demo.ts', content: 'content', basePath:'' } */
+                    let file: string = path.join(data.basePath || curPath, data.file);
+                    let retFile = path.relative(curPath, file);
+                    let overWrite = data.flag && data.flag.indexOf('w') >= 0;
+                    if (file && (overWrite || !fs.existsSync(file))) {
+                        try {
+                            let content: string = data.content;
+                            let fsPath = path.dirname(file);
+                            if (!fs.existsSync(fsPath)) {
+                                mkdirSync(fsPath);
+                            }
+                            fs.writeFile(file, content, { encoding: 'utf-8', flag: 'w' }, (err) => {
+                                receiveMsg(id, cmd, [retFile, err ? err.message : '成功'].join(', '));
+                            });
+                        }
+                        catch (e) {
+                            receiveMsg(id, cmd, [retFile, e.message].join(', '));
+                        }
+                    }
+                    else
+                        receiveMsg(id, cmd, [retFile, '文件已存在！'].join(', '));
+                    break;
+                case 'readFile':
+                    let readFile: string = path.join(data.basePath || curPath, data.file);
+                    let readContent: string = '';
+                    if (readFile && fs.existsSync(readFile)) {
+                        readContent = fs.readFileSync(readFile, 'utf-8');
+                    }
+                    receiveMsg(id, cmd, readContent);
+                    break;
+                case 'importToModule':
+                    /**data:
+                     * {
+                     *      file:'', module:'', basePath:'', className:'',
+                     *      regOpt:{
+                     *       moduleExport?: boolean;
+                     *       moduleImport?: boolean;
+                     *       moduleDeclaration?: boolean;
+                     *       moduleEntryComponent?: boolean;
+                     *       moduleProvider?: boolean;
+                     *       moduleRouting?: boolean;
+                     *       routePath:string;
+                     *   }
+                     * } */
+                    let regFile: string = path.join(data.basePath || curPath, data.file);
+                    let regFilePath: string = path.dirname(regFile);
+                    let retRegFile = path.relative(workspaceRoot, regFile);
+                    let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
+                    try {
+                        if (regModule(regFile, regModuleFile, data.className, data.regOpt)) {
+                            receiveMsg(id, cmd, ['注册', retRegFile, '成功'].join(', '));
+                        }
+                        else
+                            receiveMsg(id, cmd, ['注册', retRegFile, '文件不存在！'].join(', '));
+                    }
+                    catch (e) {
+                        receiveMsg(id, cmd, ['注册', retRegFile, e.message].join(', '));
+                    }
+                    break;
+                case 'importToRouting':
+                    break;
+                case 'log':
+                    console.log(data);
+                    receiveMsg(id, cmd);
+                    break;
+                case 'close':
+                    panel.dispose();
+                    break;
+            }
+            // console.log(cmd, data);
+        }, undefined, context.subscriptions);
+    }
 }
 

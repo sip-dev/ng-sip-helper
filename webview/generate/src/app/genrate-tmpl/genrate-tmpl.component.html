@@ -34,7 +34,7 @@
                     <input style="width: 30px;
                         margin-right: 10px;
                         border: 0px;" [(ngModel)]="tmpl.index" [ngModelOptions]="{updateOn: 'blur'}" (ngModelChange)="sortTmpl()" />
-                    <a href="javascript:void(0)" style="display: inline" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">
+                    <a href="javascript:void(0)" style="display: inline;width:70%;" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">
                         {{tmpl.title}}</a>
                     <a class="float-right" href="javascript:void(0)" style="margin-right: 5px;" (click)="copy(tmpl)">复制</a>
                     <a class="float-right" href="javascript:void(0)" style="margin-right: 5px;" (click)="edit(tmpl)">修改</a>

@@ -12,7 +12,6 @@
   </ul>
   <sip-generate *ngIf="navIndex == 1"></sip-generate>
   <sip-genrate-tmpl *ngIf="navIndex == 2"></sip-genrate-tmpl> -->
-  
-  <sip-generate-log></sip-generate-log>
-  <!-- <sip-genrate-tmpl></sip-genrate-tmpl> -->
+  <sip-generate-log *ngIf="isGenerate"></sip-generate-log>
+  <sip-genrate-tmpl *ngIf="!isGenerate"></sip-genrate-tmpl>
 </div>

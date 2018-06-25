@@ -6,16 +6,21 @@ import { VscodeMessageService } from './vscode-message.service';
 export class GenerateTmplService {
 
     constructor(private _vsMsg: VscodeMessageService) {
-        let config  = this._vsMsg.config;
-        this.tmpls = config ? config.templates : [];
+        let config = this._vsMsg.config;
+        this.tmpls = config ? MakeTmplIndex(config.templates) : [];
         this.activeTmpl(this.tmpls[0]);
-        if (!config) this._save();
+        if (!config) this.save();
     }
 
     tmpls: ITmplItem[];
     curTmpl: ITmplItem;
 
-    private _save() {
+    getTmpl(title: string): ITmplItem {
+        let tmpls = this.tmpls.filter((p) => { return p.title == title; });
+        return tmpls[0];
+    }
+
+    save() {
         this._vsMsg.saveConfig(this.tmpls).subscribe();
     }
 
@@ -31,7 +36,7 @@ export class GenerateTmplService {
         tmpl.index = this.tmpls.length;
         this.tmpls.push(tmpl);
         this.activeTmpl(tmpl);
-        this._save();
+        this.save();
         return tmpl;
     }
 
@@ -41,7 +46,7 @@ export class GenerateTmplService {
         if (index >= 0) {
             tmpls.splice(index, 1);
         }
-        this._save();
+        this.save();
         if (tmpl == this.curTmpl) {
             let len = tmpls.length;
             if (len <= index)
@@ -53,11 +58,12 @@ export class GenerateTmplService {
 
     removeAll() {
         this.tmpls = [];
-        this._save();
+        this.save();
         this.activeTmpl(null);
     }
 
-    sort(){
+    sort() {
         this.tmpls = MakeTmplIndex(this.tmpls);
+        this.save();
     }
 }

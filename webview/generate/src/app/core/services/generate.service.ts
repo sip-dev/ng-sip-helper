@@ -125,13 +125,16 @@ export class GenerateService {
             typeInfo?: any;
             routePath?: string;
         }[] = [];
+        let input = this._vsMsg.input;
         this.files.forEach((file) => {
+            file = CloneFile(file);
+            file.input = input;
             saveList = saveList.concat(GetFileFullList(file));
         });
         let count = 0;
         saveList.forEach((file) => {
             count++;
-            this._vsMsg.saveFile(file.fileName, file.content).subscribe((res) => {
+            this._vsMsg.saveFile(file.fileName, file.content).subscribe((res)=>{
                 this.genReports.push(res || (file.fileName + '生成成功！！'));
                 setTimeout(() => {
                     count--;
@@ -161,7 +164,7 @@ export class GenerateService {
             if (file.isImportToModue && file.importToModue) {
                 has = true;
                 count++;
-                this._vsMsg.importToModule(file.fileName, file.importToModue, file.className, file.typeInfo).subscribe((res) => {
+                this._vsMsg.importToModule(file.fileName, file.importToModue, file.className, file.typeInfo).subscribe((res)=>{
                     this.genReports.push(res || (file.fileName + '注册成功！！'));
                     setTimeout(() => {
                         count--;
@@ -174,7 +177,7 @@ export class GenerateService {
             if (file.isImportToRouting && file.importToRouting) {
                 has = true;
                 count++;
-                this._vsMsg.importToModule(file.fileName, file.importToRouting, file.className, { moduleRouting: true, routePath: file.routePath, isModule: file.isModule }).subscribe((res) => {
+                this._vsMsg.importToModule(file.fileName, file.importToRouting, file.className, { moduleRouting: true, routePath: file.routePath, isModule: file.isModule }).subscribe((res)=>{
                     this.genReports.push(res || (file.fileName + '注册成功！！'));
                     setTimeout(() => {
                         count--;
