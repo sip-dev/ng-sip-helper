@@ -139,7 +139,7 @@ export function GetFileFullList(file: IFileItem): { fileName: string, content: s
     }
     if (typeInfo.spec) {
         fileList.push({
-            fileName: [fileName, 'spec'].join('.'),
+            fileName: [fileName, 'spec.ts'].join('.'),
             content: GetVar(file, file.specContent)
         });
     }

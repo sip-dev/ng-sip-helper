@@ -195,7 +195,7 @@
                     "importToModue": "",
                     "input": "demo",
                     "path": "@{input}",
-                    "specContent": "import { async, ComponentFixture, TestBed } from '@angular/core/testing';\n\nimport { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  let component: @{className};\n  let fixture: ComponentFixture<@{className}>;\n\n  beforeEach(async(() => {\n    TestBed.configureTestingModule({\n      declarations: [ @{className}]\n    })\n    .compileComponents();\n  }));\n\n  beforeEach(() => {\n    fixture = TestBed.createComponent(AaaaComponent);\n    component = fixture.componentInstance;\n    fixture.detectChanges();\n  });\n\n  it('should create', () => {\n    expect(component).toBeTruthy();\n  });\n});\n",
+                    "specContent": "import { async, ComponentFixture, TestBed } from '@angular/core/testing';\n\nimport { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  let component: @{className};\n  let fixture: ComponentFixture<@{className}>;\n\n  beforeEach(async(() => {\n    TestBed.configureTestingModule({\n      declarations: [ @{className}]\n    })\n    .compileComponents();\n  }));\n\n  beforeEach(() => {\n    fixture = TestBed.createComponent(@{className});\n    component = fixture.componentInstance;\n    fixture.detectChanges();\n  });\n\n  it('should create', () => {\n    expect(component).toBeTruthy();\n  });\n});\n",
                     "styleContent": "",
                     "tsContent": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: '@{prefix}-@{input}',\n  templateUrl: './@{fileName}.html',\n  styleUrls: ['./@{fileName}.@{styleType}']\n})\nexport class @{className} implements OnInit {\n\n  constructor() { }\n\n  ngOnInit() {\n  }\n\n}\n",
                     "type": "component",
@@ -211,6 +211,7 @@
                     }
                 }
             ],
+            "index": 0,
             "title": "component"
         },
         {
@@ -222,21 +223,23 @@
                     "fileName": "@{input}.@{type}",
                     "htmlContent": "",
                     "importToModue": "",
-                    "input": "demo",
+                    "input": "test",
                     "path": "",
-                    "specContent": "import { TestBed, inject } from '@angular/core/testing';\n\nimport { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  beforeEach(() => {\n    TestBed.configureTestingModule({\n      providers: [@{className}]\n    });\n  });\n\n  it('should be created', inject([@{className}], (service: @{className}) => {\n    expect(service).toBeTruthy();\n  }));\n});",
+                    "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  it('should create an instance', () => {\n    const directive = new @{className}();\n    expect(directive).toBeTruthy();\n  });\n});\n",
                     "styleContent": "",
-                    "tsContent": "import { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class @{className} {\n\n  constructor() { }\n}\n",
-                    "type": "service",
+                    "tsContent": "import { Directive } from \"@angular/core\";\n\n@Directive({\n  selector: '[@{prefix}@{#input}]'\n})\nexport class @{className} {\n\n  constructor() { }\n\n}\n",
+                    "type": "directive",
                     "typeInfo": {
                         "importToModue": true,
-                        "moduleProvider": true,
+                        "importToRouting": true,
+                        "moduleDeclaration": true,
                         "spec": true,
                         "ts": true
                     }
                 }
             ],
-            "title": "service"
+            "index": 1,
+            "title": "directive"
         },
         {
             "active": false,
@@ -262,6 +265,7 @@
                     }
                 }
             ],
+            "index": 2,
             "title": "module"
         },
         {
@@ -288,6 +292,7 @@
                     }
                 }
             ],
+            "index": 3,
             "title": "routing"
         },
         {
@@ -334,6 +339,7 @@
                     }
                 }
             ],
+            "index": 4,
             "title": "module & routing"
         },
         {
@@ -344,23 +350,23 @@
                     "className": "@{#fileName}",
                     "fileName": "@{input}.@{type}",
                     "htmlContent": "",
-                    "importToModue": "./@{input}.@{type}.ts",
+                    "importToModue": "",
                     "input": "demo",
                     "path": "",
-                    "specContent": "import { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  it('should create an instance', () => {\n    const directive = new @{className}();\n    expect(directive).toBeTruthy();\n  });\n});\n",
+                    "specContent": "import { TestBed, inject } from '@angular/core/testing';\n\nimport { @{className} } from './@{fileName}';\n\ndescribe('@{className}', () => {\n  beforeEach(() => {\n    TestBed.configureTestingModule({\n      providers: [@{className}]\n    });\n  });\n\n  it('should be created', inject([@{className}], (service: @{className}) => {\n    expect(service).toBeTruthy();\n  }));\n});",
                     "styleContent": "",
-                    "tsContent": "@Directive({\n  selector: '[@{prefix}@{#input}]'\n})\nexport class @{className} {\n\n  constructor() { }\n\n}\n",
-                    "type": "directive",
+                    "tsContent": "import { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class @{className} {\n\n  constructor() { }\n}\n",
+                    "type": "service",
                     "typeInfo": {
                         "importToModue": true,
-                        "importToRouting": true,
-                        "moduleDeclaration": true,
+                        "moduleProvider": true,
                         "spec": true,
                         "ts": true
                     }
                 }
             ],
-            "title": "directive"
+            "index": 5,
+            "title": "service"
         },
         {
             "active": false,
@@ -386,6 +392,7 @@
                     }
                 }
             ],
+            "index": 6,
             "title": "pipe"
         },
         {
@@ -409,6 +416,7 @@
                     }
                 }
             ],
+            "index": 7,
             "title": "guard"
         },
         {
@@ -420,7 +428,7 @@
                     "fileName": "@{input}",
                     "htmlContent": "",
                     "importToModue": "",
-                    "input": "demo",
+                    "input": "test",
                     "path": "",
                     "specContent": "",
                     "styleContent": "",
@@ -433,6 +441,7 @@
                     }
                 }
             ],
+            "index": 8,
             "title": "interface"
         },
         {
@@ -456,6 +465,7 @@
                     }
                 }
             ],
+            "index": 9,
             "title": "class"
         },
         {
@@ -464,10 +474,10 @@
                 {
                     "active": true,
                     "className": "@{#fileName}",
-                    "fileName": "@{input}",
+                    "fileName": "@{input}.@{type}",
                     "htmlContent": "",
                     "importToModue": "",
-                    "input": "demo",
+                    "input": "test",
                     "path": "",
                     "specContent": "",
                     "styleContent": "",
@@ -478,6 +488,7 @@
                     }
                 }
             ],
+            "index": 10,
             "title": "enum"
         }
     ]

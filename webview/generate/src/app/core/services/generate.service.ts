@@ -110,6 +110,7 @@ export class GenerateService {
 
     genReports: string[] = [];
     generating = 0;
+    generateFirstFile:string;
     generate() {
         this.genReports = [];
         this.generating = 1;
@@ -125,6 +126,7 @@ export class GenerateService {
             typeInfo?: any;
             routePath?: string;
         }[] = [];
+        this.generateFirstFile = '';
         let input = this._vsMsg.input;
         this.files.forEach((file) => {
             file = CloneFile(file);
@@ -134,6 +136,7 @@ export class GenerateService {
         let count = 0;
         saveList.forEach((file) => {
             count++;
+            this.generateFirstFile || (this.generateFirstFile = file.fileName);
             this._vsMsg.saveFile(file.fileName, file.content).subscribe((res)=>{
                 this.genReports.push(res || (file.fileName + '生成成功！！'));
                 setTimeout(() => {

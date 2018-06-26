@@ -109,6 +109,11 @@ export class VscodeMessageService {
         return this._sendMsg('readFile', { basePath: basePath, file: file });
     }
 
+    openFile(file: string, basePath?: string): Observable<string> {
+        return this._sendMsg('openFile', { basePath: basePath, file: file });
+    }
+
+
     log(msg: any): Observable<void> {
         return this._sendMsg('log', msg);
     }

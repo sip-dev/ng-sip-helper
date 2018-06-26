@@ -77,11 +77,21 @@
       "explorer/context": [
         {
           "when": "",
+          "command": "ngsiphelper.sipgenerate",
+          "group": "ng-sip-helper"
+        },
+        {
+          "when": "",
           "command": "ngsiphelper.quickpicks",
           "group": "ng-sip-helper"
         }
       ],
       "editor/context": [
+        {
+          "when": "",
+          "command": "ngsiphelper.sipgenerate",
+          "group": "ng-sip-helper"
+        },
         {
           "when": "",
           "command": "ngsiphelper.quickpicks",

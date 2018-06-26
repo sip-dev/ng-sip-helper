@@ -123,23 +123,6 @@ export class GenerateComponent {
     return this._genTmplSrv.tmpls;
   }
 
-  get genReports(): string[] {
-    return this.genSrv.genReports;
-  }
-
-  get generating(): number {
-    return this.genSrv.generating;
-  }
-
-  set generating(p: number) {
-    this.genSrv.generating = p;
-  }
-
-  generate() {
-    if (!this.input) return;
-    this.genSrv.generate();
-  }
-
   close() {
     this._vsMsg.close();
   }

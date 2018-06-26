@@ -14,7 +14,7 @@ export class GenerateLogComponent implements OnInit {
     private _genTmplSrv: GenerateTmplService) {
     this.vscodeOptions = _vsMsg.options;
     let generateOpt = this.vscodeOptions.generate;
-    if (generateOpt){
+    if (generateOpt) {
       this._vsMsg.input = generateOpt.input || 'demo';
       let title = generateOpt.tmpl;
       let tmpl = this._genTmplSrv.getTmpl(title);
@@ -22,7 +22,9 @@ export class GenerateLogComponent implements OnInit {
         this.genSrv.addFileFromTmpl(tmpl);
         this.genSrv.generate();
       }
-  
+      document.documentElement.addEventListener('keypress', (e) => {
+        if (e.keyCode == 13) this.close();
+      });
     }
   }
 
@@ -36,6 +38,9 @@ export class GenerateLogComponent implements OnInit {
   }
 
   close() {
+    if (this.genSrv.generateFirstFile) {
+      this._vsMsg.openFile(this.genSrv.generateFirstFile).subscribe();
+    }
     this._vsMsg.close();
   }
   ngOnInit() {

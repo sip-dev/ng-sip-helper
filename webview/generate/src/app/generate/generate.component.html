@@ -1,7 +1,6 @@
 <div class="alert alert-info" role="alert" style="margin-top: 10px;">
 模板名称：<input [(ngModel)]="curEditTmplTitle" />
 <a href="javascript:void(0)" class="card-link float-right" style="margin-left: 1.25rem;" (click)="isEditFileMode = false">返回</a>
-<!-- <a href="javascript:void(0)" class="card-link float-right" (click)="generating = 0;showFormType = 'build'">生成</a> -->
 <a href="javascript:void(0)" class="card-link float-right" (click)="saveTmpl()">保存</a>
 
 </div>
@@ -22,7 +21,7 @@
                         popoverTitle="清空" #removeAllPop="ngbPopover" container="body" placement="right">清空</a>
                 </span>
             </div>
-            <ul class="list-group list-group-flush" *ngIf="generating == 0 && hasFile">
+            <ul class="list-group list-group-flush" *ngIf="hasFile">
                 <li class="list-group-item" *ngFor="let file of files" [class.active]="file.active" (click)="activeFice(file)">
                     <ng-template #removeContent>
                         <div style="width:180px;color:black !important;" sipCancelclick>
@@ -55,34 +54,8 @@
                     </div>
                 </form>
             </div>
-            <div *ngIf="showFormType == 'build'">
-                <div class="card-body" *ngIf="generating == 0">
-                    <form>
-                        <div class="form-row align-items-center">
-                            <div class="col-sm-8 my-1">
-                                <label class="sr-only">input：</label>
-                                <input type="input" class="form-control" name="input" [(ngModel)]="input">
-                            </div>
-                            <div class="col-auto my-1">
-                                    <button type="button" class="btn btn-primary" (click)="generate()">生成</button>
-                                    <button type="button" class="btn btn-secondary" style="margin-left: 10px;" (click)="showFormType = 'list'">取消</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <ul class="list-group list-group-flush" *ngIf="generating > 0">
-                    <li class="list-group-item" *ngFor="let item of genReports" [class.list-group-item-success]="(item||'').indexOf('成功')>=0"
-                        [class.list-group-item-danger]="(item||'').indexOf('成功')<0">{{item}}</li>
-                    <li class="list-group-item" *ngIf="generating == 2">
-                        生成完成！！
-                        <a class="card-link" href="javascript:void(0)" (click)="generating = 0; showFormType = 'list'">返回列表</a>
-                        <a class="card-link" href="javascript:void(0)" (click)="close()">完成</a>
-                    </li>
-                </ul>
-            </div>
             <div class="card-body" *ngIf="showFormType == 'list'">
                 <button type="submit" class="btn btn-primary" (click)="showFormType = 'add'">添加文件</button>
-                <button type="submit" class="btn btn-danger" style="margin-left: 10px;" *ngIf="hasFile" (click)="generating = 0;showFormType = 'build'">生成文件</button>
             </div>
         </div>
     </div>

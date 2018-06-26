@@ -70,6 +70,7 @@ export function activate(context: ExtensionContext) {
         fs.mkdirSync(fsPath);
     };
     context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate', (args) => {
+        let curPath = _preDoneRegisterCommand(args);
         let config = getConfig();
         let picks = config.templates.map(tmpl => tmpl.title);
         window.showQuickPick(picks).then(tmpl => {
@@ -82,7 +83,7 @@ export function activate(context: ExtensionContext) {
                     if (/[~`!#$%\^&*+=\[\]\\';,{}|\\":<>\?]/g.test(fileName)) {
                         window.showInformationMessage('文件名称存在不合法字符!');
                     } else {
-                        showSipGenerateUI(args, { tmpl: tmpl, input: path.basename(fileName), path:path.dirname(fileName) });
+                        showSipGenerateUI(args, { tmpl: tmpl, input: path.basename(fileName), path: path.dirname(fileName) });
                     }
                 }
             },
@@ -90,6 +91,7 @@ export function activate(context: ExtensionContext) {
         });
     }));
     context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate.tmpl', (args) => {
+        let curPath = _preDoneRegisterCommand(args);
         showSipGenerateUI(args);
     }));
 
@@ -139,9 +141,7 @@ export function activate(context: ExtensionContext) {
 
     let _fileName = '', _curFile = '';
     context.subscriptions.push(commands.registerCommand('ngsiphelper.quickpicks', (args) => {
-        let curPath = _curFile = getCurrentPath(args),
-            defaultName = path.basename(curPath);
-        _fileName = defaultName.split('.')[0];
+        let curPath = _preDoneRegisterCommand(args);
 
         _calcRootPath(curPath);
 
@@ -178,9 +178,9 @@ export function activate(context: ExtensionContext) {
         text = text.replace(/\%params\%/gi, params.params);
         return text;
     };
-    let openFile = (file: string): PromiseLike<TextDocument> => {
+    let _openFile = (file: string): PromiseLike<TextDocument> => {
         return file ? workspace.openTextDocument(file).then(r => {
-            window.showTextDocument(r);
+            window.showTextDocument(r, { preview: false });
             return r;
         }) : Promise.resolve<any>(null);
     };
@@ -531,6 +531,12 @@ ${props.join('\n')}
             textEditor.selection, text);
     }))
 
+    function _preDoneRegisterCommand(args: any) {
+        let curPath = _curFile = getCurrentPath(args), defaultName = path.basename(curPath);
+        _fileName = defaultName.split('.')[0];
+        return curPath;
+    }
+
     function showSipGenerateUI(args: any, generateOpt?: any) {
         let inputFile = args ? getCurrentPath(args) : _curFile;
         let isDir = IsDirectory(inputFile);
@@ -560,7 +566,7 @@ ${props.join('\n')}
             return sendMsg(id, msg + '_receive', data, err);
         };
         let workspaceRoot = _getRootPath();
-        if (generateOpt && generateOpt.path){
+        if (generateOpt && generateOpt.path) {
             curPath = path.join(curPath, generateOpt.path);
         }
         webview.onDidReceiveMessage(message => {
@@ -638,11 +644,11 @@ ${props.join('\n')}
                      * } */
                     let regFile: string = path.join(data.basePath || curPath, data.file);
                     let regFilePath: string = path.dirname(regFile);
-                    let retRegFile = path.relative(workspaceRoot, regFile);
+                    let retRegFile = path.relative(curPath, regFile);
                     let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
                     try {
                         if (regModule(regFile, regModuleFile, data.className, data.regOpt)) {
-                            receiveMsg(id, cmd, ['注册', retRegFile, '成功'].join(', '));
+                            receiveMsg(id, cmd, [retRegFile, '注册到', path.relative(curPath, regModuleFile), '成功'].join(', '));
                         }
                         else
                             receiveMsg(id, cmd, ['注册', retRegFile, '文件不存在！'].join(', '));
@@ -654,11 +660,13 @@ ${props.join('\n')}
                 case 'importToRouting':
                     break;
                 case 'log':
-                    console.log(data);
                     receiveMsg(id, cmd);
                     break;
                 case 'close':
                     panel.dispose();
+                    break;
+                case 'openFile':
+                    _openFile(path.join(data.basePath || curPath, data.file));
                     break;
             }
             // console.log(cmd, data);
