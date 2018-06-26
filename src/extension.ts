@@ -70,7 +70,7 @@ export function activate(context: ExtensionContext) {
         fs.mkdirSync(fsPath);
     };
     context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate', (args) => {
-        let curPath = _preDoneRegisterCommand(args);
+        _preDoneRegisterCommand(args);
         let config = getConfig();
         let picks = config.templates.map(tmpl => tmpl.title);
         window.showQuickPick(picks).then(tmpl => {
@@ -91,7 +91,7 @@ export function activate(context: ExtensionContext) {
         });
     }));
     context.subscriptions.push(commands.registerCommand('ngsiphelper.sipgenerate.tmpl', (args) => {
-        let curPath = _preDoneRegisterCommand(args);
+        _preDoneRegisterCommand(args);
         showSipGenerateUI(args);
     }));
 
@@ -201,19 +201,19 @@ export function activate(context: ExtensionContext) {
                 npm();
                 break;
             case 'snippet-text':
-                commands.executeCommand('ngsiphelper.tosnippettext');
+                commands.executeCommand('ngsiphelper.tosnippettext', args);
                 break;
             case 'json-class':
-                commands.executeCommand('ngsiphelper.jsontoclass');
+                commands.executeCommand('ngsiphelper.jsontoclass', args);
                 break;
             case 'region':
-                commands.executeCommand('ngsiphelper.region');
+                commands.executeCommand('ngsiphelper.region', args);
                 break;
             case 'sip-generate':
-                commands.executeCommand('ngsiphelper.sipgenerate');
+                commands.executeCommand('ngsiphelper.sipgenerate', args);
                 break;
             case 'sip-generate-tmpl':
-                commands.executeCommand('ngsiphelper.sipgenerate.tmpl');
+                commands.executeCommand('ngsiphelper.sipgenerate.tmpl', args);
                 break;
             case 'sip-regmodlue':
                 sipRegmodlue(new SipRegModule(), gParam);

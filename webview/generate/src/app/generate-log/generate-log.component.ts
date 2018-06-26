@@ -22,8 +22,9 @@ export class GenerateLogComponent implements OnInit {
         this.genSrv.addFileFromTmpl(tmpl);
         this.genSrv.generate();
       }
-      document.documentElement.addEventListener('keypress', (e) => {
-        if (e.keyCode == 13) this.close();
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode == 13 ||
+          e.keyCode == 27) this.close();
       });
     }
   }
