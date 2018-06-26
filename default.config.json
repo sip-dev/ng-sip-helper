@@ -191,7 +191,7 @@
                     "active": true,
                     "className": "@{#fileName}",
                     "fileName": "@{input}.@{type}",
-                    "htmlContent": "<p>\n  aaaa works!\n</p>\n",
+                    "htmlContent": "<p>\n  @{input} works!\n</p>\n",
                     "importToModue": "",
                     "input": "demo",
                     "path": "@{input}",
