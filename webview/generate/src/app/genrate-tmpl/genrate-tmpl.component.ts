@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AppComponent } from '../app.component';
-import { CloneTmpl, GetFileFullName, IFileItem, ITmplItem } from '../core/lib';
+import { GetFileFullName, IFileItem, ITmplItem } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
@@ -14,7 +14,11 @@ export class GenrateTmplComponent {
 
     constructor(private _tmplSrv: GenerateTmplService, private _vsMsg: VscodeMessageService,
         public genSrv: GenerateService,
-        private _app: AppComponent) { }
+        private _app: AppComponent) {
+            document.addEventListener('keydown', (e) => {
+                if (e.keyCode == 27) this._vsMsg.close();
+              });
+         }
 
     public get isEditFileMode() {
         return this._app.isEditFileMode;
@@ -97,19 +101,7 @@ export class GenrateTmplComponent {
         this.isEditFileMode = true;
     }
     copy(tmpl: ITmplItem){
-        let index = this.tmpls.indexOf(tmpl);
-        if (index < 0) return;
-        tmpl = CloneTmpl(tmpl);
-        tmpl.title += '_copy';
-        this.tmpls.splice(index+1, 0, tmpl);
-        this._tmplSrv.sort();
-        setTimeout(()=>{
-            this._tmplSrv.activeTmpl(tmpl);
-        });
-        // this.genSrv.editTmpl(tmpl).subscribe((p)=>{
-        //     this._tmplSrv.add(tmpl);
-        // });
-        // this.isEditFileMode = true;
+        this._tmplSrv.copy(tmpl);
     }
     sortTmpl(){
         this._tmplSrv.sort();

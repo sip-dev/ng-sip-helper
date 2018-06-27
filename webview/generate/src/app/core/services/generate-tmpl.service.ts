@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GetDefaultTmpl, ITmplItem, MakeTmplIndex } from '../lib';
+import { CloneTmpl, GetDefaultTmpl, ITmplItem, MakeTmplIndex } from '../lib';
 import { VscodeMessageService } from './vscode-message.service';
 
 @Injectable()
@@ -33,10 +33,10 @@ export class GenerateTmplService {
     }
 
     add(tmpl: ITmplItem): ITmplItem {
-        tmpl.index = this.tmpls.length;
+        tmpl.index = 99999;
         this.tmpls.push(tmpl);
+        this.sort();
         this.activeTmpl(tmpl);
-        this.save();
         return tmpl;
     }
 
@@ -45,6 +45,7 @@ export class GenerateTmplService {
         let index = tmpls.indexOf(tmpl);
         if (index >= 0) {
             tmpls.splice(index, 1);
+            this.sort();
         }
         this.save();
         if (tmpl == this.curTmpl) {
@@ -60,6 +61,18 @@ export class GenerateTmplService {
         this.tmpls = [];
         this.save();
         this.activeTmpl(null);
+    }
+    copy(tmpl: ITmplItem){
+        let index = this.tmpls.indexOf(tmpl);
+        if (index < 0) return;
+        tmpl = CloneTmpl(tmpl);
+        tmpl.title += '_copy';
+        tmpl.index += 0.5;
+        this.tmpls.splice(index+1, 0, tmpl);
+        this.sort();
+        setTimeout(()=>{
+            this.activeTmpl(tmpl);
+        });
     }
 
     sort() {

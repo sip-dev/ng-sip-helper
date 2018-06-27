@@ -244,8 +244,8 @@ export function CloneTmpl(tmpl: ITmplItem): ITmplItem {
 export function MakeTmplIndex(tmpls: ITmplItem[]): ITmplItem[] {
     if (tmpls && tmpls.length > 0) {
         tmpls = tmpls.sort((item1, item2) => {
-            item1.index = ~~item1.index;
-            item2.index = ~~item2.index;
+            item1.index = parseFloat(item1.index as any);
+            item2.index = parseFloat(item2.index as any);
             return item1.index == item2.index ? 0 : (item1.index > item2.index ? 1 : -1);
         });
         tmpls.forEach((item, idx) => { item.index = idx; });
