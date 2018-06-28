@@ -2,55 +2,6 @@
     "prefix": "app",
     "commands": [
         {
-            "builtin": false,
-            "command": "npm run start %params%",
-            "input": false,
-            "path": "%workspaceRoot%",
-            "terminal": "serve-ngsiphelper",
-            "title": "Serve >",
-            "params": [
-                {
-                    "input": false,
-                    "param": "",
-                    "terminal": "",
-                    "title": "Dev"
-                },
-                {
-                    "param": "-- -pc=\"proxy.conf.js\"",
-                    "title": "Dev Proxy"
-                },
-                {
-                    "param": "-- --hmr -e=hmr",
-                    "title": "HMR"
-                },
-                {
-                    "param": "-- --hmr -e=hmr -pc=\"proxy.conf.js\"",
-                    "title": "HMR Proxy"
-                },
-                {
-                    "param": "-- --prod -e=prod -pc=\"proxy.conf.js\"",
-                    "title": "PROD Proxy"
-                }
-            ]
-        },
-        {
-            "command": "npm run build %params%",
-            "input": false,
-            "path": "%workspaceRoot%",
-            "terminal": "build-ngsiphelper",
-            "title": "Build >",
-            "params": [
-                {
-                    "param": "",
-                    "title": "Build"
-                },
-                {
-                    "param": "-- -prod -e=prod --build-optimizer",
-                    "title": "Build PROD"
-                }
-            ]
-        },
-        {
             "builtin": true,
             "command": "sip-generate",
             "title": "Generate >"
