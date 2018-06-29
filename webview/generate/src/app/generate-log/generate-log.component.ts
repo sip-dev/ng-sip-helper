@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IVscodeOption } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
@@ -8,7 +8,7 @@ import { VscodeMessageService } from '../core/services/vscode-message.service';
   selector: 'sip-generate-log',
   templateUrl: './generate-log.component.html'
 })
-export class GenerateLogComponent implements OnInit {
+export class GenerateLogComponent implements OnInit, OnDestroy {
 
   constructor(public genSrv: GenerateService, private _vsMsg: VscodeMessageService,
     private _genTmplSrv: GenerateTmplService) {
@@ -22,11 +22,24 @@ export class GenerateLogComponent implements OnInit {
         this.genSrv.addFileFromTmpl(tmpl);
         this.genSrv.generate();
       }
-      document.addEventListener('keydown', (e) => {
-        if (e.keyCode == 13 ||
-          e.keyCode == 27) this.close();
-      });
+      document.addEventListener('keydown', this.keydown);
     }
+  }
+
+  keydown = (e) => {
+    switch (e.keyCode) {
+      case 13:
+      case 27:
+        e.stopPropagation();
+        e.preventDefault();
+        this.close();
+        return false;
+
+    }
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('keydown', this.keydown)
   }
 
   vscodeOptions: IVscodeOption;

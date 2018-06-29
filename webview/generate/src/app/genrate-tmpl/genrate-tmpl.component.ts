@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AppComponent } from '../app.component';
-import { GetFileFullName, IFileItem, ITmplItem } from '../core/lib';
+import { ITmplItem } from '../core/lib';
 import { GenerateTmplService } from '../core/services/generate-tmpl.service';
 import { GenerateService } from '../core/services/generate.service';
 import { VscodeMessageService } from '../core/services/vscode-message.service';
@@ -10,15 +10,44 @@ import { VscodeMessageService } from '../core/services/vscode-message.service';
     templateUrl: './genrate-tmpl.component.html',
     styles: []
 })
-export class GenrateTmplComponent {
+export class GenrateTmplComponent implements OnDestroy {
 
     constructor(private _tmplSrv: GenerateTmplService, private _vsMsg: VscodeMessageService,
         public genSrv: GenerateService,
         private _app: AppComponent) {
-            document.addEventListener('keydown', (e) => {
-                if (e.keyCode == 27) this._vsMsg.close();
-              });
-         }
+        document.addEventListener('keydown', this.keydown);
+    }
+
+    keydown = (e) => {
+        if (this.isEditFileMode) return;
+        switch (e.keyCode) {
+            case 27:
+                e.stopPropagation();
+                e.preventDefault();
+                this._vsMsg.close();
+                return false;
+            case 13:
+                e.stopPropagation();
+                e.preventDefault();
+                if (this.curTmpl)
+                    this.edit(this.curTmpl);
+                return false;
+            case 40://down
+                e.stopPropagation();
+                e.preventDefault();
+                this.next();
+                return false;
+            case 38:
+                e.stopPropagation();
+                e.preventDefault();
+                this.pre();
+                return false;
+        }
+    }
+
+    ngOnDestroy() {
+        document.removeEventListener('keydown', this.keydown)
+    }
 
     public get isEditFileMode() {
         return this._app.isEditFileMode;
@@ -41,7 +70,26 @@ export class GenrateTmplComponent {
 
     activeTmpl(tmpl: ITmplItem) {
         this._tmplSrv.activeTmpl(tmpl);
-        this.activeFile(tmpl.files[0]);
+    }
+
+    get curIndex(): number {
+        return this.tmpls.indexOf(this.curTmpl);
+    }
+
+    next() {
+        let index = this.curIndex;
+        let lastIndex = this.tmpls.length - 1;
+        if (index < lastIndex) {
+            this.activeTmpl(this.tmpls[index + 1]);
+        }
+    }
+
+    pre() {
+        let index = this.curIndex;
+        if (index > 0) {
+            this.activeTmpl(this.tmpls[index - 1]);
+        }
+
     }
 
     remove(tmpl: ITmplItem) {
@@ -53,57 +101,30 @@ export class GenrateTmplComponent {
     }
 
 
-    activeFile(file: IFileItem) {
-        if (!file) return;
-        this.curTmpl.files.forEach((p) => {
-            p.active = (p == file);
-        });
-    }
-
-    getFileFullName(file: IFileItem) {
-        file.input = this._vsMsg.input;
-        return GetFileFullName(file);
-    }
-
-    removeFile(file: IFileItem) {
-        let files = this.curTmpl.files;
-        let index = files.indexOf(file);
-        if (index >= 0) {
-            files.splice(index, 1);
-        }
-        if (file.active) {
-            let len = files.length;
-            if (len <= index)
-                this.activeFile(files[len - 1]);
-            else
-                this.activeFile(files[index]);
-        }
-    }
-
     report() {
         console.log(JSON.stringify(this.tmpls));
     }
 
     edit(tmpl: ITmplItem) {
-        this.genSrv.editTmpl(tmpl).subscribe((p)=>{
+        this.genSrv.editTmpl(tmpl).subscribe((p) => {
             this._tmplSrv.save();
         });
         this.isEditFileMode = true;
     }
-    add(){
-        let tmpl:ITmplItem = {
+    add() {
+        let tmpl: ITmplItem = {
             title: 'new_tmpl',
             files: []
         };
-        this.genSrv.editTmpl(tmpl).subscribe((tmpl)=>{
+        this.genSrv.editTmpl(tmpl).subscribe((tmpl) => {
             this._tmplSrv.add(tmpl);
         });
         this.isEditFileMode = true;
     }
-    copy(tmpl: ITmplItem){
+    copy(tmpl: ITmplItem) {
         this._tmplSrv.copy(tmpl);
     }
-    sortTmpl(){
+    sortTmpl() {
         this._tmplSrv.sort();
     }
 }

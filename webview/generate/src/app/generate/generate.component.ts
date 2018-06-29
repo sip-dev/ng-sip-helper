@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, merge } from 'rxjs/operators';
@@ -12,14 +12,40 @@ import { VscodeMessageService } from '../core/services/vscode-message.service';
   templateUrl: './generate.component.html',
   styles: []
 })
-export class GenerateComponent {
+export class GenerateComponent implements OnDestroy {
 
   constructor(public genSrv: GenerateService,
     private _genTmplSrv: GenerateTmplService,
     private _vsMsg: VscodeMessageService,
     private _app: AppComponent) {
+    document.addEventListener('keydown', this.keydown);
   }
 
+  keydown = (e) => {
+    if (!this.isEditFileMode) return;
+    switch (e.keyCode) {
+      case 27:
+        e.stopPropagation();
+        e.preventDefault();
+        this.back();
+        return false;
+      case 83:
+        if (!e.ctrlKey) return;
+        e.stopPropagation();
+        e.preventDefault();
+        this.saveTmpl();
+        return false;
+
+    }
+  }
+
+  back() {
+    this.isEditFileMode = false;
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('keydown', this.keydown)
+  }
   public get isEditFileMode() {
     return this._app.isEditFileMode;
   }

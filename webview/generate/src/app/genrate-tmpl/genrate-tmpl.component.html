@@ -42,32 +42,5 @@
             </ul>
         </div>
     </div>
-    <!-- <div class="col">
-        <div class="card">
-            <div class="card-header">
-                文件列表
-            </div>
-            <div class="card-body" *ngIf="!hasTmpl">
-                无文件数据。
-            </div>
-            <ul class="list-group list-group-flush" *ngIf="hasTmpl">
-                <li class="list-group-item" *ngFor="let file of curTmpl.files" [class.active]="file.active" (click)="activeFile(file)">
-                    <ng-template #removeContent>
-                        <div style="width:180px;color:black !important;" sipCancelclick>
-                            确定要删除吗？
-                            <a href="javascript:void(0)" class="card-link" (click)="removeFile(file);removePop.close()">确定</a>
-                            <a href="javascript:void(0)" class="card-link" (click)="removePop.close()">取消</a>
-                        </div>
-                    </ng-template>
-                    <a class="float-right" href="javascript:void(0)" [ngbPopover]="removeContent" popoverTitle="删除" #removePop="ngbPopover" placement="top"
-                        container="body">删除</a>
-                    <sip-popclose [pops]="[removePop]"></sip-popclose>
-                        
-                    <ng-template #tipFileNameContent>{{getFileFullName(file)}}</ng-template>
-                    <a href="javascript:void(0)" class="file-title" [ngbTooltip]="tipFileNameContent" container="body">{{getFileFullName(file)}}</a>
-                </li>
-            </ul>
-        </div>
-    </div> -->
     <sip-popclose [pops]="[removeAllPop]"></sip-popclose>
 </div>
