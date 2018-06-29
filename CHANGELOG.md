@@ -1,8 +1,8 @@
 ## ng-sip-helper Changelog
 
-# 2.1.0 (2018-6-x)
+# 2.1.0 (2018-6-26)
 
-* Change：Generate 使用方式
+* 重构：Generate 使用方式
 * 更新: 支持sip-alain 0.4.0
 
 # 2.0.0 (2018-5-25)
