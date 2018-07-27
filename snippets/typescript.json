@@ -15,7 +15,7 @@
     "sip-lambda": {
         "prefix": "sip-lambda",
         "body": [
-            "(${p})=>{$0}"
+            "(${p}) => $0"
         ],
         "description": "lambda"
     },

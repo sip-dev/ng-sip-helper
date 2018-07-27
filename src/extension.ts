@@ -506,7 +506,7 @@ export class ${className} {
 
 ${props.join('\n')}
 
-    constructor(p?:${className}) {
+    constructor(p?: Partial<${className}>) {
         if (p){
             Object.assign(this, p);
         }
