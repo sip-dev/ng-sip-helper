@@ -1,148 +1,11 @@
 {
-    "sip-minitable": {
-        "prefix": "sip-minitable",
-        "body": [
-            "<sip-minitable [manager]=\"${tableManager}\">",
-            "\t<sip-minicolumn name=\"Status\" title=\"状态\" width=\"80px\">",
-            "\t\t<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
-            "\t\t\t{{column.getFilterText(data.Status)}}",
-            "\t\t</ng-template>",
-            "\t\t<ng-template #editor let-row=\"row\" let-column=\"column\" let-data=\"data\">",
-            "\t\t\t<nz-input [(ngModel)]=\"data.Status\"></nz-input>",
-            "\t\t</ng-template>",
-            "\t</sip-minicolumn>",
-            "\t<sip-minicolumn name=\"regionName\" title=\"区域\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\"></sip-minicolumn>",
-            "</sip-minitable>$0"
-        ],
-        "description": "minitable"
-    },
-    "sip-minicolumn": {
-        "prefix": "sip-minicolumn",
-        "body": [
-            "<sip-minicolumn name=\"regionName\" title=\"区域\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\"></sip-minicolumn>$0"
-        ],
-        "description": "minicolumn"
-    },
-    "sip-minicolumn-formatter": {
-        "prefix": "sip-minicolumn-formatter",
-        "body": [
-            "<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
-            "\t{{column.getFilterText(data.Status)}}",
-            "</ng-template>$0"
-        ],
-        "description": "minicolumn-formatter"
-    },
-    "sip-minicolumn-editor": {
-        "prefix": "sip-minicolumn-editor",
-        "body": [
-            "<ng-template #editor let-row=\"row\" let-column=\"column\" let-data=\"data\">",
-            "\t<nz-input [(ngModel)]=\"data.Status\"></nz-input>",
-            "</ng-template>$0"
-        ],
-        "description": "minicolumn-editor"
-    },
-    "sip-minicolumn-title": {
-        "prefix": "sip-minicolumn-title",
-        "body": [
-            "<ng-template #title let-column=\"column\">",
-            "    <span>",
-            "        <a [sipRouterLink]=\"['/ui-demo/list-detail']\">{{column?.title}}</a>",
-            "    </span>",
-            "</ng-template>$0"
-        ],
-        "description": "minicolumn-title"
-    },
-    "sip-minicolumn.full": {
-        "prefix": "sip-minicolumn.full",
-        "body": [
-            "<sip-minicolumn name=\"Status\" title=\"状态\" [sortable]=\"true\" sortOrder=\"desc\" width=\"100px\">",
-            "\t<ng-template #formatter let-row=\"row\" let-column=\"column\" let-data=\"data\">",
-            "\t\t{{column.getFilterText(data.Status)}}",
-            "\t</ng-template>",
-            "\t<ng-template #editor let-row=\"row\" let-column=\"column\" let-data=\"data\">",
-            "\t\t<nz-input [(ngModel)]=\"data.Status\"></nz-input>",
-            "\t</ng-template>",
-            "</sip-minicolumn>$0"
-        ],
-        "description": "<minicolumn>...</minicolumn>"
-    },
     "sip-contextmenu": {
         "prefix": "sip-contextmenu",
         "body": [
             "<sip-contextmenu>",
-            "\t<sip-menu width=\"140px\">",
-            "\t\t<sip-menu-sub title=\"aaaa\" icon=\"anticon anticon-mail\">",
-            "\t\t\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
-            "\t\t\t<sip-menu-item-divider></sip-menu-item-divider>",
-            "\t\t\t<sip-menu-item title=\"aaaa2\" icon=\"anticon anticon-mail\"></sip-menu-item>",
-            "\t\t\t<sip-menu-group title=\"group1\">",
-            "\t\t\t\t<sip-menu-item title=\"group1111\" icon=\"anticon anticon-mail\"></sip-menu-item>",
-            "\t\t\t\t<sip-menu-item title=\"group2222\" icon=\"anticon anticon-mail\"></sip-menu-item>",
-            "\t\t\t</sip-menu-group>",
-            "\t\t</sip-menu-sub>",
-            "\t\t<sip-menu-sub title=\"bbbb\" icon=\"anticon anticon-appstore\"></sip-menu-sub>",
-            "\t</sip-menu>",
             "</sip-contextmenu>$0"
         ],
         "description": "contextmenu"
-    },
-    "sip-contextmenu-tag": {
-        "prefix": "sip-contextmenu-tag",
-        "body": [
-            "<sip-contextmenu>",
-            "</sip-contextmenu>$0"
-        ],
-        "description": "contextmenu-tag"
-    },
-    "sip-menu": {
-        "prefix": "sip-menu",
-        "body": [
-            "<sip-menu width=\"140px\">",
-            "\t<sip-menu-sub title=\"aaaa\" icon=\"anticon anticon-mail\">",
-            "\t\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
-            "\t\t<sip-menu-item-divider></sip-menu-item-divider>",
-            "\t\t<sip-menu-item title=\"aaaa2\" icon=\"anticon anticon-mail\"></sip-menu-item>",
-            "\t\t<sip-menu-group title=\"group1\">",
-            "\t\t\t<sip-menu-item title=\"group1111\" icon=\"anticon anticon-mail\"></sip-menu-item>",
-            "\t\t\t<sip-menu-item title=\"group2222\" icon=\"anticon anticon-mail\"></sip-menu-item>",
-            "\t\t</sip-menu-group>",
-            "\t</sip-menu-sub>",
-            "\t<sip-menu-sub title=\"bbbb\" icon=\"anticon anticon-appstore\"></sip-menu-sub>",
-            "</sip-menu>$0"
-        ],
-        "description": "menu"
-    },
-    "sip-menu-sub": {
-        "prefix": "sip-menu-sub",
-        "body": [
-            "<sip-menu-sub title=\"text\" icon=\"anticon anticon-appstore\">",
-            "\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
-            "</sip-menu-sub>$0"
-        ],
-        "description": "menu-sub"
-    },
-    "sip-menu-group": {
-        "prefix": "sip-menu-group",
-        "body": [
-            "<sip-menu-group title=\"group1\">",
-            "\t<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>",
-            "</sip-menu-group>$0"
-        ],
-        "description": "menu-group"
-    },
-    "sip-menu-item": {
-        "prefix": "sip-menu-item",
-        "body": [
-            "<sip-menu-item title=\"aaaa1\" icon=\"anticon anticon-mail\" (click)=\"ctxTest()\" ></sip-menu-item>$0"
-        ],
-        "description": "menu-item"
-    },
-    "sip-menu-item-divider": {
-        "prefix": "sip-menu-item-divider",
-        "body": [
-            "<sip-menu-item-divider></sip-menu-item-divider>$0"
-        ],
-        "description": "menu-item-divider"
     },
     "sip-template": {
         "prefix": "sip-template",
@@ -360,152 +223,6 @@
         ],
         "description": "<sip-tabset>..header..body..</sip-tabset>"
     },
-    "sip-card": {
-        "prefix": "sip-card",
-        "body": [
-            "<sip-card [bordered]=\"true\" [hoverable]=\"false\" [loading]=\"false\" [bodyStyle]=\"\" [type]=\"\">",
-            "\t$0",
-            "</sip-card>"
-        ],
-        "description": "<sip-card>"
-    },
-    "sip-card.full": {
-        "prefix": "sip-card.full",
-        "body": [
-            "<sip-card [bordered]=\"true\" [hoverable]=\"false\" [loading]=\"false\">",
-            "\t<sip-card-title>title</sip-card-title>",
-            "\t<sip-card-extra>",
-            "\t\t<a href=\"javascript:void(0)\">extra</a>",
-            "\t</sip-card-extra>",
-            "\t<sip-card-body>",
-            "\t\tsip-card-body",
-            "\t</sip-card-body>",
-            "\t<sip-card-action>act1</sip-card-action>",
-            "\t<sip-card-action>act2</sip-card-action>",
-            "\t<sip-card-action>act3</sip-card-action>",
-            "</sip-card>$0"
-        ],
-        "description": "<sip-card>..header..body.</sip-card>"
-    },
-    "sip-card-title": {
-        "prefix": "sip-card-title",
-        "body": [
-            "<sip-card-title>${title}</sip-card-title>$0"
-        ],
-        "description": "<sip-card-title>"
-    },
-    "sip-card-extra": {
-        "prefix": "sip-card-extra",
-        "body": [
-            "<sip-card-extra>",
-            "\t<a href=\"javascript:void(0)\">extra</a>",
-            "</sip-card-extra>"
-        ],
-        "description": "<sip-card-extra>"
-    },
-    "sip-card-body": {
-        "prefix": "sip-card-body",
-        "body": [
-            "<sip-card-body>",
-            "\t$0sip-card-body",
-            "</sip-card-body>"
-        ],
-        "description": "<sip-card-body>"
-    },
-    "sip-card-action": {
-        "prefix": "sip-card-action",
-        "body": [
-            "<sip-card-action>",
-            "\t$0action",
-            "</sip-card-action>"
-        ],
-        "description": "<sip-card-action>"
-    },
-    "sip-card-cover": {
-        "prefix": "sip-card-cover",
-        "body": [
-            "<sip-card-cover>",
-            "\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
-            "</sip-card-cover>"
-        ],
-        "description": "<sip-card-cover>"
-    },
-    "sip-card-meta": {
-        "prefix": "sip-card-meta",
-        "body": [
-            "<sip-card-meta>",
-            "\t<sip-card-meta-title>$0title</sip-card-meta-title>",
-            "\t<!-- <sip-card-meta-avatar>",
-            "\t\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
-            "\t</sip-card-meta-avatar> -->",
-            "\t<sip-card-meta-desc>desc</sip-card-meta-desc>",
-            "</sip-card-meta>"
-        ],
-        "description": "<sip-card-meta>"
-    },
-    "sip-card-meta.full": {
-        "prefix": "sip-card-meta.full",
-        "body": [
-            "<sip-card [bordered]=\"true\">",
-            "\t<sip-card-cover>",
-            "\t\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
-            "\t</sip-card-cover>",
-            "\t<sip-card-meta>",
-            "\t\t<sip-card-meta-title>title</sip-card-meta-title>",
-            "\t\t<!-- <sip-card-meta-avatar>",
-            "\t\t\t<img alt=\"example\" src=\"./QBnOOoLaAfKPirc.png\" />",
-            "\t\t</sip-card-meta-avatar> -->",
-            "\t\t<sip-card-meta-desc>desc</sip-card-meta-desc>",
-            "\t</sip-card-meta>",
-            "</sip-card>$0"
-        ],
-        "description": "<sip-card>..meta..cover.</sip-card>"
-    },
-    "sip-card-grid": {
-        "prefix": "sip-card-grid",
-        "body": [
-            "<sip-card-grid [gridStyle]=\"{width:'50%', textAlign: 'center'}\">grid1</sip-card-grid>"
-        ],
-        "description": "<sip-card-grid>"
-    },
-    "sip-card-grid.full": {
-        "prefix": "sip-card-grid.full",
-        "body": [
-            "<sip-card [bordered]=\"true\">",
-            "\t<sip-card-grid [gridStyle]=\"{width:'50%', textAlign: 'center'}\">grid1</sip-card-grid>",
-            "\t<sip-card-grid>grid2</sip-card-grid>",
-            "\t<sip-card-grid>grid3</sip-card-grid>",
-            "\t<sip-card-grid>grid3</sip-card-grid>",
-            "</sip-card>$0"
-        ],
-        "description": "<sip-card>..grid1..grid2...</sip-card>"
-    },
-    "sip-card-tab": {
-        "prefix": "sip-card-tab",
-        "body": [
-            "<sip-card-tab>",
-            "</sip-card-tab>$0"
-        ],
-        "description": "<sip-card-tab>"
-    },
-    "sip-card-tab.full": {
-        "prefix": "sip-card-tab.full",
-        "body": [
-            "<sip-card-tab>",
-            "\t<sip-tabset>",
-            "\t\t<sip-tabset-header>",
-            "\t\t\t<sip-tabset-title>$0tab11</sip-tabset-title>",
-            "\t\t\t<sip-tabset-title>tab21</sip-tabset-title>",
-            "\t\t</sip-tabset-header>",
-            "\t\t<sip-tabset-body>",
-            "\t\t\t<sip-tabset-content>content11</sip-tabset-content>",
-            "\t\t\t<sip-tabset-content>content21</sip-tabset-content>",
-            "\t\t</sip-tabset-body>",
-            "\t</sip-tabset>",
-            "</sip-card-tab>"
-        ],
-        "description": "<sip-card-tab>"
-    },
     "sip-form": {
         "prefix": "sip-form",
         "body": [
@@ -514,61 +231,37 @@
         ],
         "description": "<form>"
     },
-    "sip-form-row": {
-        "prefix": "sip-form-row",
+    "nz-form-item": {
+        "prefix": "nz-form-item",
         "body": [
-            "<div nz-form-item nz-row>$0",
-            "</div>"
+            "<nz-form-item>$0",
+            "</nz-form-item>"
         ],
-        "description": "<form nz-form-item nz-row>"
+        "description": "<nz-form-item>"
     },
-    "sip-form-row-label": {
-        "prefix": "sip-form-row-label",
-        "body": [
-            "<div nz-form-label nz-col [nzSm]=\"4\" [nzXs]=\"24\">",
-            "    <label nz-form-item-required>${label}</label>",
-            "</div>$0"
-        ],
-        "description": "<div nz-form-label>"
+    "sip-form-label": {
+        "prefix": "sip-form-label",
+        "body": ["<nz-form-label nzXs=\"24\" nzSm=\"4\" nzRequired>${label}</nz-form-label>$0"],
+        "description": "<nz-form-label>"
     },
-    "sip-form-row-container": {
-        "prefix": "sip-form-row-container",
-        "body": [
-            "<div nz-form-control nz-col [nzSm]=\"18\" [nzXs]=\"24\">",
+    "sip-form-control": {
+        "prefix": "sip-form-control",
+        "body": ["<nz-form-control nzXs=\"24\" nzSm=\"18\">",
             "   ${container}$0",
-            "</div>"
-        ],
-        "description": "<div nz-form-container>"
+            "</nz-form-control>"],
+        "description": "<form-control>"
     },
-    "sip-form-validator-container": {
-        "prefix": "sip-form-validator-container",
+    "sip-form-explain": {
+        "prefix": "sip-form-explain",
         "body": [
-            "<ng-container *ngIf=\"${form}?.\\$${name}.dirty || ${form}?.\\$${name}.touched\">",
-            "   ${container}$0",
-            "</ng-container>"
+            "<nz-form-explain *ngIf=\"form.get('${name}').dirty && form.get('${name}').errors\">${请输入}</nz-form-explain>$0"
         ],
-        "description": "validator-container"
-    },
-    "sip-form-validator": {
-        "prefix": "sip-form-validator",
-        "body": [
-            "<span nz-form-explain *ngIf=\"${form}.\\$${name}.errors?.${required}\">{{${form}.\\$${name}.errors.${required}Text}}</span>$0"
-        ],
-        "description": "validator"
-    },
-    "sip-form-validator-only": {
-        "prefix": "sip-form-validator-only",
-        "body": [
-            "<span nz-form-explain *ngIf=\"(${form}?.\\$${name}.dirty || ${form}?.\\$${name}.touched) && ${form}?.\\$${name}.errors?.${required}\">",
-            "   {{${form}.\\$${name}.errors.${required}Text}}",
-            "</span>$0"
-        ],
-        "description": "validator-only"
+        "description": "<form-explain>"
     },
     "sip-form-input": {
         "prefix": "sip-form-input",
         "body": [
-            "<nz-input formControlName=\"${num}\" nzType=\"text\"></nz-input>$0"
+            "<input nz-input formControlName=\"${name}\" placeholder=\"${给目标起个名字}\">$0"
         ],
         "description": "input"
     },
@@ -646,9 +339,16 @@
     "sip-form-datepicker": {
         "prefix": "sip-form-datepicker",
         "body": [
-            "<nz-datepicker formControlName=\"${name}\"></nz-datepicker>"
+            "<nz-date-picker formControlName=\"${name}\"></nz-date-picker>"
         ],
-        "description": "datepicker"
+        "description": "<nz-date-picker>"
+    },
+    "sip-form-datepicker-range": {
+        "prefix": "sip-datepicker-range",
+        "body": [
+            "<nz-range-picker formControlName=\"${name}\"></nz-range-picker>"
+        ],
+        "description": "<nz-range-picker>"
     },
     "sip-form-textarea": {
         "prefix": "sip-form-textarea",
