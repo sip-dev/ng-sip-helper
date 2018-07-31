@@ -206,6 +206,9 @@ export function activate(context: ExtensionContext) {
             case 'json-class':
                 commands.executeCommand('ngsiphelper.jsontoclass', args);
                 break;
+            case 'json-interface':
+                commands.executeCommand('ngsiphelper.jsontointerface', args);
+                break;
             case 'region':
                 commands.executeCommand('ngsiphelper.region', args);
                 break;
@@ -511,6 +514,65 @@ ${props.join('\n')}
             Object.assign(this, p);
         }
     }
+}`;
+
+        return classText;
+    };
+
+    context.subscriptions.push(commands.registerTextEditorCommand('ngsiphelper.jsontointerface', (textEditor, edit) => {
+        let fsFile: string = textEditor.document.fileName;
+        _calcRootPath(fsFile);
+
+        let { document, selection } = textEditor
+
+        let isEmpty = textEditor.selection.isEmpty;
+
+        let text = isEmpty ?
+            document.getText() :
+            document.getText(textEditor.selection);
+        try {
+
+            text = jsonToInterface(jsonic(text), fsFile);
+            edit.replace(isEmpty ? new Range(new Position(0, 0), new Position(100000, 100000)) :
+                textEditor.selection, text);
+        } catch (e) {
+            window.showErrorMessage(e.message);
+        }
+    }))
+
+    let jsonToInterface = (json: object, fsFile: string): string => {
+        let props = [], item, defName;
+        Object.keys(json).forEach(key => {
+            item = json[key];
+            key += '?';
+            if (Lib.isString(item)) {
+                defName = key + ': string';
+                props.push('    ' + defName + ';');
+            } else if (Lib.isBoolean(item)) {
+                defName = key + ': boolean';
+                props.push('    ' + defName + ';');
+            } else if (Lib.isNumeric(item)) {
+                defName = key + ': number';
+                props.push('    ' + defName + ';');
+            } else if (Lib.isArray(item)) {
+                defName = key + ': any[]';
+                props.push('    ' + defName + ';');
+            } else if (Lib.isObject(item)) {
+                defName = key + ': object';
+                props.push('    ' + defName + ';');
+            } else {
+                defName = key + ': any';
+                props.push('    ' + defName + ';');
+            }
+        });
+
+        let fInfo = path.parse(fsFile);
+        let className = MakeClassName(fInfo.name, '');
+        let classText = `//定义模型(model)
+export interface ${className} {
+
+${props.join('\n')}
+
 }`;
 
         return classText;

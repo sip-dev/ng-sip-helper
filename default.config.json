@@ -101,6 +101,11 @@
             "children": [
                 {
                     "builtin": true,
+                    "command": "json-interface",
+                    "title": "JSON To Interface"
+                },
+                {
+                    "builtin": true,
                     "command": "json-class",
                     "title": "JSON To Class"
                 },

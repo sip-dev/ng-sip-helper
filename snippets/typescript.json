@@ -216,34 +216,34 @@
     "sip-def-rest": {
         "prefix": "sip-def-rest",
         "body": [
-            "@SipRestDef<${Class}>({",
+            "@SipRestDef<${Model}>({",
             "    url: 'api/getdata',",
             "    method: SipRestMethod.GET,",
             "    cache: true,",
-            "    map: function (rs) {",
-            "        return rs;",
+            "    map: function (datas, rs) {",
+            "        return datas;",
             "    }",
             "})",
-            "${getData}: SipRestFunction<${Class}, ${Class}>;$0"
+            "${getData}: SipRestFunction<${Model}, ${Model}>;$0"
         ],
         "description": "@SipRestDef"
     },
     "sip-def-rest-sql": {
         "prefix": "sip-def-rest-sql",
         "body": [
-            "@SipRestSqlDef<${Class}[]>({",
+            "@SipRestSqlDef<${Model}[]>({",
             "    sqlType: SipRestSqlType.List,",
             "    connstr: 'iaas',",
             "    sqlId: 'Iaas_Instance.List.GetByOwnerID',",
             "    searchparam: { \"content\": \"\" },",
             "    cache: true,",
-            "    map: function (rs) {",
-            "        return rs;",
+            "    map: function (datas, rs) {",
+            "        return datas;",
             "    }",
             "})",
             "${getList}: SipRestSqlFunction<{",
             "    \"content\"?: string",
-            "}, ${Class}[]>;$0"
+            "}, ${Model}[]>;$0"
         ],
         "description": "@SipRestSqlDef"
     },

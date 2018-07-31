@@ -1,5 +1,11 @@
 ## ng-sip-helper Changelog
 
+# 2.2.0 (2018-8-x)
+
+* 更新：代码片段
+* 更新: 支持sip-alain 0.5.0
+* 添加：JSON To Interface
+
 # 2.1.0 (2018-6-29)
 
 * 重构：Generate 使用方式
