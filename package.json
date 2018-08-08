@@ -64,8 +64,7 @@
       {
         "command": "ngsiphelper.quickpicks",
         "key": "ctrl+k ctrl+h",
-        "mac": "cmd+k cmd+h",
-        "when": "editorTextFocus"
+        "mac": "cmd+k cmd+h"
       },
       {
         "command": "ngsiphelper.sipgenerate",

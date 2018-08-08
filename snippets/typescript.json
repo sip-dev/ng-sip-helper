@@ -15,7 +15,7 @@
     "sip-lambda": {
         "prefix": "sip-lambda",
         "body": [
-            "(${p}) => $0"
+            "(${1}) => ${2}"
         ],
         "description": "lambda"
     },
@@ -51,9 +51,9 @@
     "sip-access-item": {
         "prefix": "sip-access-item",
         "body": [
-            "@SipAccessItem<${TableComponent}>('${access}', {",
+            "@SipAccessItem('${access}', {",
             "\tmulti: false, hasData: true,",
-            "\tcheck: function () {",
+            "\tcheck: function (datas: any[], target: any) {",
             "\t\treturn true;",
             "\t}",
             "})",
@@ -220,7 +220,7 @@
             "    url: 'api/getdata',",
             "    method: SipRestMethod.GET,",
             "    cache: true,",
-            "    map: function (datas, rs) {",
+            "    map: function (rs, target) {",
             "        return datas;",
             "    }",
             "})",
@@ -237,7 +237,7 @@
             "    sqlId: 'Iaas_Instance.List.GetByOwnerID',",
             "    searchparam: { \"content\": \"\" },",
             "    cache: true,",
-            "    map: function (datas, rs) {",
+            "    map: function (rs, target) {",
             "        return datas;",
             "    }",
             "})",
@@ -415,15 +415,22 @@
     },
     "sip-form-group": {
         "prefix": "sip-form-group",
-        "body": ["@SipFormGroup<${ThisClass}>(function () {",
-            "    return new ${Model}();",
-            "}, function () {",
+        "body": [
+            "@SipFormGroup((target) => {",
             "    return {",
-            "        num: [SipValidators.rangeLength(1, 20)],",
-            "        name: [SipValidators.required]",
+            "        model:{",
+            "            \"num\": \"\",",
+            "            \"name\": \"\"",
+            "        },",
+            "        validators:{",
+            "            num: [SipValidators.rangeLength(1, 20)],",
+            "            name: [SipValidators.required]",
+            "        },",
+            "        extra:null",
             "    };",
             "})",
-            "form: ISipFormGroup<${Model}>;$0"],
+            "form: ISipFormGroup<${Model}>;$0"
+        ],
         "description": "form-group"
     }
 }
