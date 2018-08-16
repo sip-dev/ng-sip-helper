@@ -220,7 +220,7 @@
             "    url: 'api/getdata',",
             "    method: SipRestMethod.GET,",
             "    cache: true,",
-            "    map: function (rs, target) {",
+            "    map: function (rs, target: any) {",
             "        return datas;",
             "    }",
             "})",
@@ -237,7 +237,7 @@
             "    sqlId: 'Iaas_Instance.List.GetByOwnerID',",
             "    searchparam: { \"content\": \"\" },",
             "    cache: true,",
-            "    map: function (rs, target) {",
+            "    map: function (rs, target: any) {",
             "        return datas;",
             "    }",
             "})",
@@ -416,7 +416,7 @@
     "sip-form-group": {
         "prefix": "sip-form-group",
         "body": [
-            "@SipFormGroup((target) => {",
+            "@SipFormGroup((target: any) => {",
             "    return {",
             "        model:{",
             "            \"num\": \"\",",

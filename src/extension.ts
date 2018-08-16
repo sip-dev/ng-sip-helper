@@ -94,6 +94,29 @@ export function activate(context: ExtensionContext) {
         _preDoneRegisterCommand(args);
         showSipGenerateUI(args);
     }));
+    context.subscriptions.push(commands.registerCommand('ngsiphelper.component.switchfile', (args) => {
+        let curFile = getCurrentPath(args);
+        let tsRegex = /\.ts$/i;
+        if (tsRegex.test(curFile)) {
+            let cssFile = curFile.replace(tsRegex, '.css');
+            if (fs.existsSync(cssFile))
+                _openFile(cssFile);
+            else {
+                cssFile = curFile.replace(tsRegex, '.less');
+                if (fs.existsSync(cssFile))
+                    _openFile(cssFile);
+                else {
+                    cssFile = curFile.replace(tsRegex, '.sass');
+                    if (fs.existsSync(cssFile))
+                        _openFile(cssFile);
+                }
+            }
+        } else {
+            let tsFile = curFile.replace(/\.(?:css|less|sass)/i, '.ts');
+            if (fs.existsSync(tsFile)) _openFile(tsFile);
+        }
+        // console.log(curFile, path.extname(curFile), path.dirname(curFile));
+    }));
 
     let regModule = (file: string, moduleFile: string, className: string, regOpt: {
         moduleExport?: boolean;
