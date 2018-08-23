@@ -198,31 +198,6 @@
         ],
         "description": "[sipShow]"
     },
-    "sip-tabset": {
-        "prefix": "sip-tabset",
-        "body": [
-            "<sip-tabset>",
-            "\t$0",
-            "</sip-tabset>"
-        ],
-        "description": "<sip-tabset ...>"
-    },
-    "sip-tabset.normal": {
-        "prefix": "sip-tabset.normal",
-        "body": [
-            "<sip-tabset>",
-            "\t<sip-tabset-header>",
-            "\t\t<sip-tabset-title>$0tab11</sip-tabset-title>",
-            "\t\t<sip-tabset-title>tab21</sip-tabset-title>",
-            "\t</sip-tabset-header>",
-            "\t<sip-tabset-body>",
-            "\t\t<sip-tabset-content>content11</sip-tabset-content>",
-            "\t\t<sip-tabset-content>content21</sip-tabset-content>",
-            "\t</sip-tabset-body>",
-            "</sip-tabset>"
-        ],
-        "description": "<sip-tabset>..header..body..</sip-tabset>"
-    },
     "sip-form": {
         "prefix": "sip-form",
         "body": [
