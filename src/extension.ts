@@ -96,26 +96,18 @@ export function activate(context: ExtensionContext) {
     }));
     context.subscriptions.push(commands.registerCommand('ngsiphelper.component.switchfile', (args) => {
         let curFile = getCurrentPath(args);
-        let tsRegex = /\.ts$/i;
-        if (tsRegex.test(curFile)) {
-            let cssFile = curFile.replace(tsRegex, '.css');
-            if (fs.existsSync(cssFile))
-                _openFile(cssFile);
-            else {
-                cssFile = curFile.replace(tsRegex, '.less');
-                if (fs.existsSync(cssFile))
-                    _openFile(cssFile);
-                else {
-                    cssFile = curFile.replace(tsRegex, '.sass');
-                    if (fs.existsSync(cssFile))
-                        _openFile(cssFile);
-                }
-            }
-        } else {
-            let tsFile = curFile.replace(/\.(?:css|less|sass)/i, '.ts');
-            if (fs.existsSync(tsFile)) _openFile(tsFile);
+        let curPath = path.dirname(curFile);
+        let curFileName = path.basename(curFile);
+        let curFileList = fs.readdirSync(curPath);
+        if (curFileList && curFileList.length >  0){
+            let picks = curFileList.filter((fileName) => fileName != curFileName && !IsDirectory(path.join(curPath, fileName)));
+
+                window.showQuickPick(picks).then(file => {
+                    if (!file) return;
+                    file = path.join(curPath, file);
+                    _openFile(file);
+                });
         }
-        // console.log(curFile, path.extname(curFile), path.dirname(curFile));
     }));
 
     let regModule = (file: string, moduleFile: string, className: string, regOpt: {

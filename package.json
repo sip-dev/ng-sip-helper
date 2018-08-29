@@ -3,7 +3,7 @@
   "displayName": "ng-sip-helper",
   "description": "Run ng-sip-helper from vscode commandline.",
   "icon": "images/logo.png",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "publisher": "winpzs",
   "bugs": {
     "url": "https://github.com/sip-dev/ng-sip-helper/issues",
