@@ -206,24 +206,28 @@
         ],
         "description": "<form>"
     },
-    "nz-form-item": {
-        "prefix": "nz-form-item",
+    "sip-form-item": {
+        "prefix": "sip-form-item",
         "body": [
             "<nz-form-item>$0",
             "</nz-form-item>"
         ],
-        "description": "<nz-form-item>"
+        "description": "<sip-form-item>"
     },
     "sip-form-label": {
         "prefix": "sip-form-label",
-        "body": ["<nz-form-label nzXs=\"24\" nzSm=\"4\" nzRequired>${label}</nz-form-label>$0"],
+        "body": [
+            "<nz-form-label nzXs=\"24\" nzSm=\"4\" nzRequired>${label}</nz-form-label>$0"
+        ],
         "description": "<nz-form-label>"
     },
     "sip-form-control": {
         "prefix": "sip-form-control",
-        "body": ["<nz-form-control nzXs=\"24\" nzSm=\"18\">",
+        "body": [
+            "<nz-form-control nzXs=\"24\" nzSm=\"18\">",
             "   ${container}$0",
-            "</nz-form-control>"],
+            "</nz-form-control>"
+        ],
         "description": "<form-control>"
     },
     "sip-form-explain": {
@@ -257,8 +261,7 @@
         "prefix": "sip-form-select",
         "body": [
             "<nz-select formControlName=\"${name}\" [nzAllowClear]=\"false\" nzShowSearch>",
-            "    <nz-option *ngFor=\"let item of statuList\" [nzLabel]=\"item.text\" [nzValue]=\"item.value\">",
-            "    </nz-option>$0",
+            "    <nz-option *ngFor=\"let item of statuList\" [nzLabel]=\"item.text\" [nzValue]=\"item.value\"></nz-option>$0",
             "</nz-select>"
         ],
         "description": "select"
@@ -267,8 +270,7 @@
         "prefix": "sip-form-select-multiple",
         "body": [
             "<nz-select formControlName=\"${name}\" [nzAllowClear]=\"false\" nzMode=\"multiple\" nzNotFoundContent=\"无法找到\">",
-            "    <nz-option *ngFor=\"let item of statuList\" [nzLabel]=\"item.text\" [nzValue]=\"item.value\">",
-            "    </nz-option>$0",
+            "    <nz-option *ngFor=\"let item of statuList\" [nzLabel]=\"item.text\" [nzValue]=\"item.value\"></nz-option>$0",
             "</nz-select>"
         ],
         "description": "select-multiple"
@@ -328,7 +330,7 @@
     "sip-form-textarea": {
         "prefix": "sip-form-textarea",
         "body": [
-            "<nz-input formControlName=\"${name}\" nzType=\"textarea\" nzRows=\"4\" nzPlaceHolder=\"\"></nz-input>$0"
+            "<textarea nz-input formControlName=\"${name}\" [nzAutosize]=\"{minRows: 4}\" placeholder=\"${placeholder}\"></textarea>$0"
         ],
         "description": "textarea"
     },

@@ -221,7 +221,7 @@
             "    method: SipRestMethod.GET,",
             "    cache: true,",
             "    map: function (rs, target: any) {",
-            "        return datas;",
+            "        return rs.datas;",
             "    }",
             "})",
             "${getData}: SipRestFunction<${Model}, ${Model}>;$0"
@@ -238,7 +238,7 @@
             "    searchparam: { \"content\": \"\" },",
             "    cache: true,",
             "    map: function (rs, target: any) {",
-            "        return datas;",
+            "        return rs.datas;",
             "    }",
             "})",
             "${getList}: SipRestSqlFunction<{",
@@ -416,7 +416,7 @@
     "sip-form-group": {
         "prefix": "sip-form-group",
         "body": [
-            "@SipFormGroup((target: any) => {",
+            "@SipFormGroup<${Model}>((target: any) => {",
             "    return {",
             "        model:{",
             "            \"num\": \"\",",
