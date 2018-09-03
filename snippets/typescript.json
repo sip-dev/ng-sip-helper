@@ -432,5 +432,15 @@
             "form: ISipFormGroup<${Model}>;$0"
         ],
         "description": "form-group"
+    },
+    "sip-form-submit": {
+        "prefix": "sip-form-submit",
+        "body": [
+            "@SipFormSubmit({ form: 'this.form', message: true })",
+            "save() {",
+            "    let data = this.form.\\$toJSONObject();$0",
+            "}"
+        ],
+        "description": "form-submit"
     }
 }

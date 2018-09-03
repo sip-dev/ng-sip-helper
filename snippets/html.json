@@ -194,7 +194,7 @@
     "sip-show": {
         "prefix": "sip-show",
         "body": [
-            "[sipShow]=\"true"
+            "[sipShow]=\"true\""
         ],
         "description": "[sipShow]"
     },

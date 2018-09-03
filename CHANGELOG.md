@@ -2,7 +2,8 @@
 
 # 2.3.0 (none)
 
-*更新：同目录文件切换(ctrl+k ctrl+k)
+* 更新：同目录文件切换(ctrl+k ctrl+k)
+* OPT: sinppets
 
 # 2.2.0 (2018-8-24)
 
