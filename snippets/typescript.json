@@ -442,5 +442,57 @@
             "}"
         ],
         "description": "form-submit"
+    },
+    "sip-table-columns": {
+        "prefix": "sip-table-columns",
+        "body": [
+            "let columns: SipTableColumn[] = [",
+            "  { title: '用户名称', name: 'userName', frozen: true, filter: false, cellTemplate: this.templateName },",
+            "  { title: '登录帐号', name: 'userLoginId', filter: false },",
+            "  { title: '云平台帐号', name: 'loginId', filter: false },",
+            "  { title: '邮件地址', name: 'email', filter: false },",
+            "  { title: '所属客户', name: 'custName', filter: false },",
+            "  { title: '状态', name: 'status', options: this._userSrv.status },",
+            "  { title: '客户类型', name: 'custType', options: custType }",
+            "];$0"
+        ],
+        "description": "let columns"
+    },
+    "sip-table-settings": {
+        "prefix": "sip-table-settings",
+        "body": [
+            "let tableSettings: SipTableSettings = new SipTableSettings({",
+            "  sortName: '', sortOrder: '',",
+            "  restSrv: (param) => this._userSrv.pageList(null, param),",
+            "  selectionMultiple: true,",
+            "  contextmenuAction: (e, row) => {",
+            "    return {",
+            "      width: '100px',",
+            "      items: [{",
+            "        title: '修改',",
+            "        disabled: !this.\\$access.hasAccess('edit'),",
+            "        onClick: (p) => {",
+            "          this.edit();",
+            "        }",
+            "      },",
+            "      {",
+            "        title: '删除',",
+            "        disabled: !this.\\$access.hasAccess('remove'),",
+            "        onClick: (p) => {",
+            "          this.del();",
+            "        }",
+            "      }]",
+            "    };",
+            "  }",
+            "});$0"
+        ],
+        "description": "new SipTableSettings"
+    },
+    "sip-tableManager": {
+        "prefix": "sip-tableManager",
+        "body": [
+            "this.tableManager = new SipTableServerManager(this.\\$injector(), columns, tableSettings);$0"
+        ],
+        "description": "new SipTableServerManager"
     }
 }

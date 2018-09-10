@@ -133,7 +133,7 @@ export function GetFileFullList(file: IFileItem): { fileName: string, content: s
             importToModue: file.importToModue ? GetVar(file, file.importToModue) : '',
             isImportToRouting: file.typeInfo.importToRouting,
             importToRouting: file.importToRouting ? GetVar(file, file.importToRouting) : '',
-            routePath: GetVar(file, '@{input}'),
+            routePath: GetVar(file, '@{fileName}').split('.')[0],
             typeInfo: Object.assign({}, file.typeInfo)
         });
     }

@@ -1,9 +1,11 @@
 ## ng-sip-helper Changelog
 
-# 2.3.0 (none)
+# 2.3.0
 
 * 更新：同目录文件切换(ctrl+k ctrl+k)
 * OPT: sinppets
+* 注册route path不正确
+* table 模板
 
 # 2.2.0 (2018-8-24)
 

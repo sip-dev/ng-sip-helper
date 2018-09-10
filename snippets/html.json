@@ -145,6 +145,13 @@
         ],
         "description": "page-toolbar"
     },
+    "sip-table": {
+        "prefix": "sip-table",
+        "body": [
+            "<sip-table [manager]=\"tableManager\"></sip-table>$0"
+        ],
+        "description": "<sip-table>"
+    },
     "sip-modal-header": {
         "prefix": "sip-modal-header",
         "body": [

@@ -124,7 +124,7 @@ export function activate(context: ExtensionContext) {
         let regFile: string = file;
         let regFilePath: string = path.dirname(regFile);
         let regModuleFile: string = moduleFile;
-        let regImportFile: string = CalcImportPath(regModuleFile, regFile);;
+        let regImportFile: string = CalcImportPath(regModuleFile, regFile);
         let regClassName = className;
 
         if (fs.existsSync(regFile) && fs.existsSync(regModuleFile)) {
@@ -724,7 +724,7 @@ ${props.join('\n')}
                     let retRegFile = path.relative(curPath, regFile);
                     let regModuleFile: string = fs.existsSync(data.moduleFile) ? data.moduleFile : path.join(regFilePath, data.moduleFile);
                     try {
-                        if (regModule(regFile, regModuleFile, data.className, data.regOpt)) {
+                    if (regModule(regFile, regModuleFile, data.className, data.regOpt)) {
                             receiveMsg(id, cmd, [retRegFile, '注册到', path.relative(curPath, regModuleFile), '成功'].join(', '));
                         }
                         else
