@@ -447,7 +447,7 @@
         "prefix": "sip-table-columns",
         "body": [
             "let columns: SipTableColumn[] = [",
-            "  { title: '用户名称', name: 'userName', frozen: true, filter: false, cellTemplate: this.templateName },",
+            "  { title: '用户名称', name: 'userName', frozen: true, filter: false, cellTemplate: this.tmplName },",
             "  { title: '登录帐号', name: 'userLoginId', filter: false },",
             "  { title: '云平台帐号', name: 'loginId', filter: false },",
             "  { title: '邮件地址', name: 'email', filter: false },",
