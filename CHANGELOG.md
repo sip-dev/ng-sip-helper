@@ -1,5 +1,9 @@
 ## ng-sip-helper Changelog
 
+# 2.4.0 (none)
+
+* 更新：sinppets
+
 # 2.3.0
 
 * 更新：同目录文件切换(ctrl+k ctrl+k)
