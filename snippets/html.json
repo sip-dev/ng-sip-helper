@@ -152,6 +152,15 @@
         ],
         "description": "<sip-table>"
     },
+    "sip-table-template": {
+        "prefix": "sip-table-template",
+        "body": [
+            "<ng-template #tmplName let-row=\"row\" let-value=\"value\" let-column=\"column\">",
+            "  <a [sipRouterLink]=\"['/sip-online/user/user-form', {id:row.\\$\\$data.id}]\">{{value}}</a>",
+            "</ng-template>$0"
+        ],
+        "description": "<template>"
+    },
     "sip-modal-header": {
         "prefix": "sip-modal-header",
         "body": [
