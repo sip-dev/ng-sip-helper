@@ -291,11 +291,30 @@
         ],
         "description": "@SipOnShow"
     },
+    "sip-prepare-data": {
+        "prefix": "sip-prepare-data",
+        "body": [
+            "@SipPrepareData()",
+            "private _${prepareData}() {$0",
+            "  return of(list);",
+            "}"
+        ],
+        "description": "@SipPrepareData"
+    },
+    "sip-init": {
+        "prefix": "sip-init",
+        "body": [
+            "@SipInit()",
+            "private _${init}() {$0",
+            "}"
+        ],
+        "description": "@SipInit"
+    },
     "sip-ng-init": {
         "prefix": "sip-ng-init",
         "body": [
             "@SipNgInit()",
-            "private _${init}() {$0",
+            "private _${ngInit}() {$0",
             "}"
         ],
         "description": "@SipNgInit"
