@@ -452,6 +452,17 @@
         ],
         "description": "form-group"
     },
+    "sip-form-watch": {
+        "prefix": "sip-form-watch",
+        "body": [
+            "@SipFormWatch('this.form', 'regionid')",
+            "private _storageWatch(p: ISipFormGroupWatchValue[]) {",
+            "  var regionId = p[0].value;",
+            "}",
+            "$0"
+        ],
+        "description": "form-watch"
+    },
     "sip-form-submit": {
         "prefix": "sip-form-submit",
         "body": [

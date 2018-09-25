@@ -1,5 +1,9 @@
 ## ng-sip-helper Changelog
 
+# 2.3.2
+
+* 更新：sinppets
+
 # 2.3.1
 
 * 更新：sinppets
